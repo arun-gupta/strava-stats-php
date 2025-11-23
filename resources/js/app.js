@@ -221,17 +221,7 @@ function initDurationChart() {
                     }
                 },
                 datalabels: {
-                    color: '#ffffff',
-                    font: {
-                        weight: 'bold',
-                        size: 14
-                    },
-                    formatter: function(value, context) {
-                        const hours = Math.floor(value / 3600);
-                        const minutes = Math.round((value % 3600) / 60);
-                        const percentage = ((value / totalSeconds) * 100).toFixed(1);
-                        return `${hours}h ${minutes}m\n(${percentage}%)`;
-                    }
+                    display: false // Hide data labels to reduce clutter
                 }
             }
         }
