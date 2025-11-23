@@ -185,26 +185,26 @@
 
 **Goal:** User sees a working pie chart showing their activity distribution by sport type.
 
-### 2.1 Basic Strava API Client
-- [ ] Create StravaClient service
-- [ ] Implement getActivities() method with pagination
-- [ ] Add authorization header injection
-- [ ] Configure timeout and error handling
-- [ ] Test fetching activities
+### 2.1 Basic Strava API Client ✅
+- [x] Create StravaClient service
+- [x] Implement getActivities() method with pagination
+- [x] Add authorization header injection
+- [x] Configure timeout and error handling
+- [x] Test fetching activities
 
-### 2.2 Activity Model & Data Parsing
-- [ ] Create Activity model class
-- [ ] Map Strava API response to Activity objects
-- [ ] Parse: id, type, name, start_date, distance, moving_time
-- [ ] Handle missing/optional fields
-- [ ] Test with sample Strava data
+### 2.2 Activity Model & Data Parsing ✅
+- [x] Create Activity model class
+- [x] Map Strava API response to Activity objects
+- [x] Parse: id, type, name, start_date, distance, moving_time
+- [x] Handle missing/optional fields
+- [x] Test with sample Strava data
 
-### 2.3 Activity Fetching for Dashboard
-- [ ] Fetch user's recent activities (last 30 days by default)
-- [ ] Store activities in session or cache
-- [ ] Handle pagination to get all activities in range
-- [ ] Pass activities to dashboard view
-- [ ] Test with real Strava account
+### 2.3 Activity Fetching for Dashboard ✅
+- [x] Fetch user's recent activities (last 30 days by default)
+- [x] Store activities in session or cache
+- [x] Handle pagination to get all activities in range
+- [x] Pass activities to dashboard view
+- [x] Test with real Strava account
 
 ### 2.4 Activity Count Aggregation
 - [ ] Create AggregationService
