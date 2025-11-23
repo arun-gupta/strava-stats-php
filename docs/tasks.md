@@ -277,12 +277,12 @@
 - [x] Create simple Chart.js bar chart
 - [x] **VISIBLE:** User sees bar chart with time breakdown
 
-### 3.4 Style & Polish Duration Chart
-- [ ] Style bars with Strava colors
-- [ ] Add tooltips with formatted times
-- [ ] Make responsive
-- [ ] Add chart title and axis labels
-- [ ] **VISIBLE:** User sees polished, readable time chart
+### 3.4 Style & Polish Duration Chart ✅
+- [x] Style bars with Strava colors
+- [x] Add tooltips with formatted times
+- [x] Make responsive
+- [x] Add chart title and axis labels
+- [x] **VISIBLE:** User sees polished, readable time chart
 
 ### 3.5 Add Insights Summary
 - [ ] Highlight longest duration activity
