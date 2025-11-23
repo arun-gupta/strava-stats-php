@@ -292,11 +292,11 @@
 
 ---
 
-## Phase 4 — Third Widget: Training Heatmap (Deliver: Consistency View)
+## Phase 4 — Third Widget: Training Heatmap (Deliver: Heatmap View)
 
 **Goal:** User sees calendar heatmap showing workout consistency, streaks, and gaps.
 
-### 4.1 Show Basic Streak Stats First ✅
+### 4.1 Show Basic Streak Stats First (in Heatmap Tab) ✅
 - [x] Calculate and display current streak (consecutive days with activity)
 - [x] Show longest streak achieved
 - [x] Display total active days vs rest days

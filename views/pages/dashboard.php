@@ -76,10 +76,10 @@
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 ⏱️ Duration
             </button>
-            <button id="consistencyTab" class="tab-button" onclick="switchTab('consistency')"
+            <button id="heatmapTab" class="tab-button" onclick="switchTab('heatmap')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                🔥 Consistency
+                🔥 Heatmap
             </button>
         </div>
     </div>
@@ -276,8 +276,8 @@
         </div>
     </div>
 
-    <!-- Consistency Tab Content -->
-    <div id="consistencyContent" class="tab-content" style="display: none;">
+    <!-- Heatmap Tab Content -->
+    <div id="heatmapContent" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalActivities > 0): ?>
                 <!-- Streak Statistics Cards -->
