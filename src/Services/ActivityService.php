@@ -55,14 +55,18 @@ class ActivityService
             foreach ($response as $activityData) {
                 $activity = Activity::fromStravaApi($activityData);
 
-                // Apply date filters
+                // If activity is too old (before $after date), stop fetching entirely
+                // Activities are returned in reverse chronological order, so if we hit one that's too old,
+                // all remaining activities will also be too old
                 if ($after !== null && $activity->startDate < $after) {
-                    Logger::info('Activity filtered out (too old)', ['activity_date' => $activity->startDate->format('Y-m-d'), 'after_date' => $after->format('Y-m-d')]);
-                    continue;
+                    Logger::info('Activity too old, stopping pagination', [
+                        'activity_date' => $activity->startDate->format('Y-m-d'),
+                        'after_date' => $after->format('Y-m-d')
+                    ]);
+                    break 2; // Break out of both foreach and while loops
                 }
 
                 if ($before !== null && $activity->startDate > $before) {
-                    Logger::info('Activity filtered out (too new)', ['activity_date' => $activity->startDate->format('Y-m-d'), 'before_date' => $before->format('Y-m-d')]);
                     continue;
                 }
 
