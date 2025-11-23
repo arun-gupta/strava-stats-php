@@ -45,8 +45,11 @@ class ActivityService
 
             // No more activities
             if ($response === null || empty($response)) {
+                Logger::info('No more activities from API', ['page' => $page]);
                 break;
             }
+
+            Logger::info('Fetched activities from API', ['page' => $page, 'count' => count($response)]);
 
             // Parse activities
             foreach ($response as $activityData) {
@@ -54,10 +57,12 @@ class ActivityService
 
                 // Apply date filters
                 if ($after !== null && $activity->startDate < $after) {
+                    Logger::info('Activity filtered out (too old)', ['activity_date' => $activity->startDate->format('Y-m-d'), 'after_date' => $after->format('Y-m-d')]);
                     continue;
                 }
 
                 if ($before !== null && $activity->startDate > $before) {
+                    Logger::info('Activity filtered out (too new)', ['activity_date' => $activity->startDate->format('Y-m-d'), 'before_date' => $before->format('Y-m-d')]);
                     continue;
                 }
 
