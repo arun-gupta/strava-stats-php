@@ -169,6 +169,12 @@ return function (App $app) {
             $mostActiveDay = array_key_first($dayOfWeekCounts);
         }
 
+        // Calculate date range for the display window (last 7 days)
+        if (!isset($endDate)) {
+            $endDate = new DateTime();
+            $startDate = (new DateTime())->modify('-6 days'); // -6 days + today = 7 days
+        }
+
         // Calculate streak statistics
         $currentStreak = 0;
         $longestStreak = 0;
@@ -178,11 +184,16 @@ return function (App $app) {
         $totalGapDays = 0;
 
         if (count($activities) > 0) {
-            // Group activities by date (Y-m-d format)
+            // Group activities by date (Y-m-d format) within the 7-day window
             $activityDates = [];
             foreach ($activities as $activity) {
                 $dateStr = $activity->startDate->format('Y-m-d');
-                $activityDates[$dateStr] = true;
+                $activityDate = $activity->startDate;
+
+                // Only count activities within our 7-day display window
+                if ($activityDate >= $startDate && $activityDate <= $endDate) {
+                    $activityDates[$dateStr] = true;
+                }
             }
             $totalActiveDays = count($activityDates);
 
@@ -240,12 +251,7 @@ return function (App $app) {
             }
         }
 
-        // Calculate rest days
-        if (!isset($endDate)) {
-            $endDate = new DateTime();
-            $startDate = (new DateTime())->modify('-7 days');
-        }
-        // Last 7 days means 7 days total (not 8)
+        // Calculate rest days (dates are already set above)
         $totalDays = 7;
         $restDays = $totalDays - $totalActiveDays;
 
@@ -343,11 +349,7 @@ return function (App $app) {
             ];
         }
 
-        // Calculate date range (last 7 days)
-        if (!isset($endDate)) {
-            $endDate = new DateTime();
-            $startDate = (new DateTime())->modify('-7 days');
-        }
+        // Date range already set above
 
         $html = View::render('pages/dashboard', [
             'layout' => 'main',
