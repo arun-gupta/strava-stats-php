@@ -33,4 +33,40 @@ class Logger
 
         return self::$instance;
     }
+
+    /**
+     * Log an info message
+     *
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public static function info(string $message, array $context = []): void
+    {
+        self::getInstance()->info($message, $context);
+    }
+
+    /**
+     * Log a warning message
+     *
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public static function warning(string $message, array $context = []): void
+    {
+        self::getInstance()->warning($message, $context);
+    }
+
+    /**
+     * Log an error message
+     *
+     * @param string $message
+     * @param array $context
+     * @return void
+     */
+    public static function error(string $message, array $context = []): void
+    {
+        self::getInstance()->error($message, $context);
+    }
 }
