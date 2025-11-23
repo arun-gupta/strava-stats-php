@@ -278,119 +278,117 @@
 
     <!-- Heatmap Tab Content -->
     <div id="heatmapContent" class="tab-content" style="display: none;">
-        <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #1a1d29; border-radius: 8px;">
             <?php if ($totalActivities > 0): ?>
-                <!-- Streak Statistics Cards -->
-                <div style="margin-top: 1rem;">
-                    <h4 style="margin-bottom: 1rem; text-align: center;">🔥 Training Streak Stats</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                        <!-- Current Streak -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                                Current Streak
-                            </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
-                                <?= $currentStreak ?>
-                            </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                <?= $currentStreak === 1 ? 'day' : 'days' ?> in a row
-                            </div>
-                        </div>
-
-                        <!-- Longest Streak -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                                Longest Streak
-                            </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #2d3748;">
-                                <?= $longestStreak ?>
-                            </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                <?= $longestStreak === 1 ? 'day' : 'days' ?> personal best
-                            </div>
-                        </div>
-
-                        <!-- Active Days -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                                Active Days
-                            </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #48bb78;">
-                                <?= $totalActiveDays ?>
-                            </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                out of 7 days
-                            </div>
-                        </div>
-
-                        <!-- Rest Days -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                                Rest Days
-                            </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #9f7aea;">
-                                <?= $restDays ?>
-                            </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                days of recovery
-                            </div>
+                <!-- Activity Calendar Section -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h4 style="margin: 0; color: #fff;">Activity Calendar</h4>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                All Activities
+                            </button>
+                            <button style="padding: 0.5rem 1rem; background: #2d3748; color: #9ca3af; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                Running Only
+                            </button>
                         </div>
                     </div>
-                </div>
 
-                <!-- Simple Calendar Grid -->
-                <div style="margin-top: 2rem;">
-                    <h4 style="margin-bottom: 1rem; text-align: center;">📅 Last 7 Days</h4>
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; max-width: 600px; margin: 0 auto;">
+                    <!-- Legend -->
+                    <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.875rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 16px; height: 16px; background: #2d3748; border-radius: 2px;"></div>
+                            <span style="color: #9ca3af;">No Activity</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 16px; height: 16px; background: #fbbf24; border-radius: 2px;"></div>
+                            <span style="color: #9ca3af;">&lt; 1h</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 16px; height: 16px; background: #f97316; border-radius: 2px;"></div>
+                            <span style="color: #9ca3af;">1-2h</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 16px; height: 16px; background: #fc4c02; border-radius: 2px;"></div>
+                            <span style="color: #9ca3af;">2h+</span>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
-                            <div style="text-align: center;">
-                                <!-- Day label -->
-                                <div style="font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; font-weight: 500;">
-                                    <?= $day['date']->format('D') ?>
-                                </div>
-                                <!-- Date number and activity indicator -->
-                                <div style="padding: 1rem 0.5rem; background: <?= $day['hasActivity'] ? '#d4f4dd' : '#f7fafc' ?>;
-                                            border: 2px solid <?= $day['hasActivity'] ? '#48bb78' : '#e2e8f0' ?>;
-                                            border-radius: 8px; min-height: 80px; display: flex; flex-direction: column;
-                                            align-items: center; justify-content: center;">
-                                    <div style="font-size: 1.25rem; font-weight: 600; color: #333; margin-bottom: 0.25rem;">
-                                        <?= $day['date']->format('j') ?>
-                                    </div>
-                                    <?php if ($day['hasActivity']): ?>
-                                        <div style="font-size: 1.5rem; color: #48bb78;">✓</div>
-                                        <?php if ($day['activityCount'] > 1): ?>
-                                            <div style="font-size: 0.7rem; color: #48bb78; margin-top: 0.25rem;">
-                                                <?= $day['activityCount'] ?> activities
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                        <div style="font-size: 1.5rem; color: #e2e8f0;">—</div>
-                                    <?php endif; ?>
-                                </div>
+                            <div style="width: 60px; height: 60px; background: <?= $day['hasActivity'] ? '#fbbf24' : '#2d3748' ?>;
+                                        border-radius: 4px; display: flex; align-items: center; justify-content: center;
+                                        position: relative; cursor: pointer;">
                             </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
 
-                <!-- Motivation Message -->
-                <div style="margin-top: 2rem; padding: 1.5rem; background: #fff9e6; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
-                    <?php if ($currentStreak === 0): ?>
-                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
-                            💪 Time to start a new streak! Get out there and log an activity.
-                        </p>
-                    <?php elseif ($currentStreak === 1): ?>
-                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
-                            🎯 Great start! Keep the momentum going.
-                        </p>
-                    <?php elseif ($currentStreak < 7): ?>
-                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
-                            🔥 You're on a <?= $currentStreak ?>-day streak! Keep it up!
-                        </p>
-                    <?php else: ?>
-                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
-                            🏆 Amazing! <?= $currentStreak ?> days in a row. You're crushing it!
-                        </p>
-                    <?php endif; ?>
+                <!-- Workout Statistics Section -->
+                <div>
+                    <h4 style="margin: 0 0 1.5rem 0; color: #fff;">Workout Statistics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 2rem;">
+                        <!-- Workout Days -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Workout Days
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                <?= $totalActiveDays ?>
+                            </div>
+                        </div>
+
+                        <!-- Missed Days -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Missed Days
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                <?= $restDays ?>
+                            </div>
+                        </div>
+
+                        <!-- Current Streak -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Current Streak
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                <?= $currentStreak ?>
+                            </div>
+                        </div>
+
+                        <!-- Days Since Last -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Days Since Last
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                0
+                            </div>
+                        </div>
+
+                        <!-- Longest Gap -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Longest Gap
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                0
+                            </div>
+                        </div>
+
+                        <!-- Total Gap Days -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Total Gap Days
+                            </div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #fff;">
+                                0
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php else: ?>
                 <div style="text-align: center; padding: 3rem; color: #666;">
