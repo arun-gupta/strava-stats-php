@@ -149,7 +149,12 @@ class StravaClient
 
             // Handle 404 Not Found - Resource doesn't exist (don't retry)
             if ($statusCode === 404) {
-                Logger::warning("Resource not found for $requestName");
+                $responseBody = $e->getResponse()->getBody()->getContents();
+                Logger::warning("Resource not found for $requestName", [
+                    'status' => 404,
+                    'response' => $responseBody,
+                    'token_prefix' => substr($accessToken, 0, 10) . '...',
+                ]);
                 return null;
             }
 
