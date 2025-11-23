@@ -340,11 +340,11 @@
 
 **Goal:** Runners see detailed statistics, PRs, and distance distribution histogram.
 
-### 5.1 Show Basic Running Stats First
-- [ ] Filter running activities only
-- [ ] Display: total runs, total distance, average pace
-- [ ] Show in simple text format with cards
-- [ ] **VISIBLE:** User sees their running summary stats
+### 5.1 Show Basic Running Stats First ✅
+- [x] Filter running activities only
+- [x] Display: total runs, total distance, average pace
+- [x] Show in simple text format with cards
+- [x] **VISIBLE:** User sees their running summary stats
 
 ### 5.2 Add Personal Records (PRs)
 - [ ] Calculate fastest pace from all runs

@@ -233,6 +233,27 @@ return function (App $app) {
         $totalDays = $endDate->diff($startDate)->days + 1;
         $restDays = $totalDays - $totalActiveDays;
 
+        // Filter running activities and calculate running stats
+        $runningActivities = array_filter($activities, function($activity) {
+            return $activity->type === 'Run';
+        });
+
+        $totalRuns = count($runningActivities);
+        $totalRunningDistance = 0;
+        $totalRunningTime = 0;
+
+        foreach ($runningActivities as $run) {
+            $totalRunningDistance += $run->distance;
+            $totalRunningTime += $run->movingTime;
+        }
+
+        // Calculate average pace (min/km)
+        $averagePace = 0;
+        if ($totalRunningDistance > 0) {
+            // Pace in minutes per kilometer
+            $averagePace = ($totalRunningTime / 60) / ($totalRunningDistance / 1000);
+        }
+
         // Group activities by date for calendar display
         $activitiesByDate = [];
         foreach ($activities as $activity) {
@@ -332,6 +353,9 @@ return function (App $app) {
             'daysSinceLastActivity' => $daysSinceLastActivity,
             'longestGap' => $longestGap,
             'totalGapDays' => $totalGapDays,
+            'totalRuns' => $totalRuns,
+            'totalRunningDistance' => $totalRunningDistance,
+            'averagePace' => $averagePace,
         ]);
 
         $response->getBody()->write($html);

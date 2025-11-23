@@ -81,6 +81,11 @@
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🔥 Heatmap
             </button>
+            <button id="runningTab" class="tab-button" onclick="switchTab('running')"
+                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                           color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                🏃 Running Stats
+            </button>
         </div>
     </div>
 
@@ -426,12 +431,72 @@
         </div>
     </div>
 
+    <!-- Running Stats Tab Content -->
+    <div id="runningContent" class="tab-content" style="display: none;">
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
+            <?php if ($totalRuns > 0): ?>
+                <!-- Running Summary Stats -->
+                <div style="margin-top: 1rem;">
+                    <h4 style="margin-bottom: 1rem; text-align: center;">🏃 Running Summary</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <!-- Total Runs -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Total Runs
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
+                                <?= $totalRuns ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                <?= $totalRuns === 1 ? 'run' : 'runs' ?> completed
+                            </div>
+                        </div>
+
+                        <!-- Total Distance -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Total Distance
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #2d3748;">
+                                <?= number_format($totalRunningDistance / 1000, 1) ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                kilometers
+                            </div>
+                        </div>
+
+                        <!-- Average Pace -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Average Pace
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #48bb78;">
+                                <?php
+                                $paceMinutes = floor($averagePace);
+                                $paceSeconds = round(($averagePace - $paceMinutes) * 60);
+                                echo $paceMinutes . ':' . str_pad($paceSeconds, 2, '0', STR_PAD_LEFT);
+                                ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                min/km
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div style="text-align: center; padding: 3rem; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏃</div>
+                    <h3 style="color: #333; margin-bottom: 0.5rem;">No Running Data Yet</h3>
+                    <p style="font-size: 1.1rem;">Start logging runs to see your running statistics!</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #999;">
         <h3 style="margin-top: 0;">🚧 Coming Soon</h3>
         <ul style="margin-top: 1rem; line-height: 1.8;">
-            <li><strong>Heatmap</strong> - Training consistency and streaks calendar</li>
             <li><strong>Trends</strong> - Mileage and pace trends over time</li>
-            <li><strong>Running Stats</strong> - Personal records and distance distribution</li>
         </ul>
     </div>
 
