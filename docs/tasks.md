@@ -131,20 +131,20 @@
 - [x] Add "Sign Out" link in header
 - [x] **VISIBLE:** User sees their Strava profile info in the app header
 
-### 1.5 Dashboard Page Scaffold
-- [ ] Create views/pages/dashboard.php
-- [ ] Implement GET /dashboard route (protected)
-- [ ] Show welcome message with user's name
-- [ ] Add placeholder sections for future widgets
-- [ ] Style dashboard layout
-- [ ] **VISIBLE:** User lands on personalized dashboard after login
+### 1.5 Dashboard Page Scaffold ✅
+- [x] Create views/pages/dashboard.php
+- [x] Implement GET /dashboard route (protected)
+- [x] Show welcome message with user's name
+- [x] Add placeholder sections for future widgets
+- [x] Style dashboard layout
+- [x] **VISIBLE:** User lands on personalized dashboard after login
 
-### 1.6 Sign Out Flow
-- [ ] Implement GET /signout route
-- [ ] Clear session and stored tokens
-- [ ] Redirect to home page with success message
-- [ ] Test complete login → logout cycle
-- [ ] **VISIBLE:** User can sign out and return to home page
+### 1.6 Sign Out Flow ✅
+- [x] Implement GET /signout route
+- [x] Clear session and stored tokens
+- [x] Redirect to home page with success message
+- [x] Test complete login → logout cycle
+- [x] **VISIBLE:** User can sign out and return to home page
 
 ### 1.7 Authentication Middleware & Route Protection
 - [ ] Create AuthMiddleware to check for valid session
