@@ -1,5 +1,6 @@
 # Dependencies
 /vendor/
+/node_modules/
 
 # Environment variables
 .env
@@ -18,6 +19,10 @@
 composer.phar
 composer.lock
 
+# NPM
+package-lock.json
+yarn.lock
+
 # Cache and logs
 *.log
 /cache/
@@ -27,6 +32,7 @@ composer.lock
 # Build artifacts
 /build/
 /dist/
+/public/build/
 
 # Testing
 /coverage/
