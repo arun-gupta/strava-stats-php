@@ -526,12 +526,20 @@
         // Heatmap mode switching
         function switchHeatmapMode(mode) {
             if (mode === 'all') {
-                // Reload page without running_only parameter
-                window.location.href = '/dashboard';
+                // Reload page without running_only parameter, stay on heatmap tab
+                window.location.href = '/dashboard#heatmap';
             } else if (mode === 'running') {
-                // Reload page with running_only parameter
-                window.location.href = '/dashboard?running_only=true';
+                // Reload page with running_only parameter, stay on heatmap tab
+                window.location.href = '/dashboard?running_only=true#heatmap';
             }
         }
+
+        // On page load, check if there's a hash and switch to that tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1); // Remove the #
+            if (hash && ['overview', 'duration', 'heatmap', 'running'].includes(hash)) {
+                switchTab(hash);
+            }
+        });
     </script>
 </div>
