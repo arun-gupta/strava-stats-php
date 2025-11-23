@@ -12,11 +12,21 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
                 Your personalized activity dashboard
             </p>
         </div>
-        <a href="/signout"
-           style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
-                  border-radius: 4px; font-weight: 600; white-space: nowrap;">
-            Sign Out
-        </a>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <?php if (!empty($athlete['profile'])): ?>
+                <img src="<?= htmlspecialchars($athlete['profile']) ?>"
+                     alt="<?= htmlspecialchars($firstName) ?>"
+                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fc4c02;">
+            <?php endif; ?>
+            <span style="color: #333; font-size: 0.9rem; font-weight: 500;">
+                <?= htmlspecialchars($firstName) ?>
+            </span>
+            <a href="/signout"
+               style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
+                      border-radius: 4px; font-weight: 600; white-space: nowrap;">
+                Sign Out
+            </a>
+        </div>
     </div>
 
     <!-- Error Message -->
