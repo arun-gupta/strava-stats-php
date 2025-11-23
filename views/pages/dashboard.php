@@ -1,34 +1,4 @@
-<?php
-// Get athlete data from session
-$athlete = $_SESSION['athlete'] ?? null;
-$firstName = $athlete['firstname'] ?? 'Athlete';
-?>
-
 <div style="padding: 1rem 0;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <div>
-            <h2 style="margin: 0;">Strava Activity Analyzer</h2>
-            <p style="color: #666; margin-top: 0.5rem;">
-                Your personalized activity dashboard
-            </p>
-        </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <?php if (!empty($athlete['profile'])): ?>
-                <img src="<?= htmlspecialchars($athlete['profile']) ?>"
-                     alt="<?= htmlspecialchars($firstName) ?>"
-                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fc4c02;">
-            <?php endif; ?>
-            <span style="color: #333; font-size: 0.9rem; font-weight: 500;">
-                <?= htmlspecialchars($firstName) ?>
-            </span>
-            <a href="/signout"
-               style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
-                      border-radius: 4px; font-weight: 600; white-space: nowrap;">
-                Sign Out
-            </a>
-        </div>
-    </div>
-
     <!-- Error Message -->
     <?php if (isset($error) && $error): ?>
         <div style="margin-top: 2rem; padding: 1.5rem; background: #fff3f3; border-radius: 8px; border-left: 4px solid #e53e3e;">
