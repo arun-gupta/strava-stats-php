@@ -188,11 +188,56 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
     <!-- Duration Tab Content -->
     <div id="durationContent" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
-            <h3 style="margin-top: 0;">⏱️ Activity Duration</h3>
-            <div style="text-align: center; padding: 3rem; color: #666;">
-                <p style="font-size: 1.1rem;">Duration analysis coming soon...</p>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem;">See how much time you spend on each activity type</p>
-            </div>
+            <?php if ($totalActivities > 0): ?>
+                <!-- Duration Breakdown Cards -->
+                <div style="margin-top: 1rem;">
+                    <h4 style="margin-bottom: 1rem;">Time Spent by Activity Type:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <?php foreach ($movingTimeByType as $type => $seconds): ?>
+                            <?php
+                            $hours = floor($seconds / 3600);
+                            $minutes = floor(($seconds % 3600) / 60);
+                            ?>
+                            <div style="padding: 1rem; background: white; border-radius: 6px; border: 1px solid #ddd;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">
+                                    <?= htmlspecialchars($type) ?>
+                                </div>
+                                <div style="font-size: 1.5rem; color: #fc4c02; font-weight: 700;">
+                                    <?= $hours ?>h <?= $minutes ?>m
+                                </div>
+                                <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                    Moving time
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Total Time Summary -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                            Total Moving Time
+                        </div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
+                            <?php
+                            $totalHours = floor($totalMovingTime / 3600);
+                            $totalMinutes = floor(($totalMovingTime % 3600) / 60);
+                            echo $totalHours . 'h ' . $totalMinutes . 'm';
+                            ?>
+                        </div>
+                        <div style="font-size: 0.875rem; color: #666; margin-top: 0.5rem;">
+                            Across all <?= $totalActivities ?> activities
+                        </div>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div style="text-align: center; padding: 3rem; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">⏱️</div>
+                    <h3 style="color: #333; margin-bottom: 0.5rem;">No Duration Data</h3>
+                    <p style="font-size: 1.1rem;">Start logging activities to see your time breakdown</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 

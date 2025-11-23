@@ -265,11 +265,11 @@
 - [x] Style tabs with Strava theme
 - [x] **VISIBLE:** User sees organized tab navigation
 
-### 3.2 Display Duration Data as Text First
-- [ ] Calculate total moving time by activity type
-- [ ] Display time in "Xh Ym" format in Duration tab
-- [ ] Show total time across all activities
-- [ ] **VISIBLE:** User sees time spent on each activity type
+### 3.2 Display Duration Data as Text First ✅
+- [x] Calculate total moving time by activity type
+- [x] Display time in "Xh Ym" format in Duration tab
+- [x] Show total time across all activities
+- [x] **VISIBLE:** User sees time spent on each activity type
 
 ### 3.3 Add Duration Bar Chart
 - [ ] Add canvas for bar chart in Duration section

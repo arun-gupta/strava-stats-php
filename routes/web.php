@@ -87,6 +87,7 @@ return function (App $app) {
         $accessToken = $_SESSION['access_token'] ?? null;
         $activities = [];
         $activityCounts = [];
+        $movingTimeByType = [];
         $error = null;
 
         // Fetch activities if we have a token
@@ -95,6 +96,7 @@ return function (App $app) {
                 $activityService = new ActivityService();
                 $activities = $activityService->fetchRecentActivities($accessToken);
                 $activityCounts = $activityService->getCountsByType($activities);
+                $movingTimeByType = $activityService->getMovingTimeByType($activities);
             } catch (\Exception $e) {
                 // Log the error
                 \App\Services\Logger::error('Failed to fetch activities', [
@@ -122,6 +124,7 @@ return function (App $app) {
             'title' => 'Dashboard - Strava Activity Analyzer',
             'activities' => $activities,
             'activityCounts' => $activityCounts,
+            'movingTimeByType' => $movingTimeByType,
             'totalActivities' => count($activities),
             'totalMovingTime' => $totalMovingTime,
             'startDate' => $startDate,
