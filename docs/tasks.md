@@ -1,6 +1,8 @@
 # Tasks — Strava Activity Analyzer (PHP)
 
-Generated from docs/plan.md on 2025-11-23. Do not implement tasks here; this file is a checklist only.
+Generated from docs/plan.md on 2025-11-23. This file provides a high-level overview.
+
+**For detailed, granular task breakdown, see [tasks-detailed.md](tasks-detailed.md)** which breaks each phase into 10-12 sub-phases for a more modular approach.
 
 1. Phase 0 — Project setup & foundations ✅ COMPLETE
    - [x] Decide framework (Slim or Laravel) and record the decision and rationale in README.
