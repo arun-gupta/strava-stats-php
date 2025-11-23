@@ -21,7 +21,7 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
 
     <!-- Activity Summary -->
     <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
-        <h3 style="margin-top: 0;">📊 Your Recent Activities (Last 30 Days)</h3>
+        <h3 style="margin-top: 0;">📊 Your Recent Activities (Last 7 Days)</h3>
 
         <?php if ($totalActivities > 0): ?>
             <p style="font-size: 1.2rem; margin: 1rem 0;">
@@ -45,7 +45,7 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
             </div>
         <?php else: ?>
             <p style="color: #666;">
-                No activities found in the last 30 days. Go log some activities on Strava and refresh this page!
+                No activities found in the last 7 days. Go log some activities on Strava and refresh this page!
             </p>
         <?php endif; ?>
     </div>

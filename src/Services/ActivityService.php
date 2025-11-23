@@ -95,14 +95,14 @@ class ActivityService
     }
 
     /**
-     * Fetch recent activities (last 30 days)
+     * Fetch recent activities (last 7 days)
      *
      * @param string $accessToken
      * @return Activity[]
      */
     public function fetchRecentActivities(string $accessToken): array
     {
-        $after = new DateTime('-30 days');
+        $after = new DateTime('-7 days');
         return $this->fetchActivities($accessToken, $after);
     }
 
