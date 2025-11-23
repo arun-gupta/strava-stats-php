@@ -302,11 +302,11 @@
 - [x] Display total active days vs rest days
 - [x] **VISIBLE:** User sees their streak statistics
 
-### 4.2 Simple Calendar Grid (Text-Based)
-- [ ] Group activities by date
-- [ ] Display simple text calendar showing days with activities
-- [ ] Mark active days with ✓ or color
-- [ ] **VISIBLE:** User sees which days they were active
+### 4.2 Simple Calendar Grid (Text-Based) ✅
+- [x] Group activities by date
+- [x] Display simple text calendar showing days with activities
+- [x] Mark active days with ✓ or color
+- [x] **VISIBLE:** User sees which days they were active
 
 ### 4.3 Visual Heatmap with Colors
 - [ ] Create intensity buckets based on time spent (no activity, light, medium, heavy)

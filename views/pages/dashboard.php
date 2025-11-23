@@ -338,6 +338,40 @@
                     </div>
                 </div>
 
+                <!-- Simple Calendar Grid -->
+                <div style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem; text-align: center;">📅 Last 7 Days</h4>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; max-width: 600px; margin: 0 auto;">
+                        <?php foreach ($calendarDays as $day): ?>
+                            <div style="text-align: center;">
+                                <!-- Day label -->
+                                <div style="font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; font-weight: 500;">
+                                    <?= $day['date']->format('D') ?>
+                                </div>
+                                <!-- Date number and activity indicator -->
+                                <div style="padding: 1rem 0.5rem; background: <?= $day['hasActivity'] ? '#d4f4dd' : '#f7fafc' ?>;
+                                            border: 2px solid <?= $day['hasActivity'] ? '#48bb78' : '#e2e8f0' ?>;
+                                            border-radius: 8px; min-height: 80px; display: flex; flex-direction: column;
+                                            align-items: center; justify-content: center;">
+                                    <div style="font-size: 1.25rem; font-weight: 600; color: #333; margin-bottom: 0.25rem;">
+                                        <?= $day['date']->format('j') ?>
+                                    </div>
+                                    <?php if ($day['hasActivity']): ?>
+                                        <div style="font-size: 1.5rem; color: #48bb78;">✓</div>
+                                        <?php if ($day['activityCount'] > 1): ?>
+                                            <div style="font-size: 0.7rem; color: #48bb78; margin-top: 0.25rem;">
+                                                <?= $day['activityCount'] ?> activities
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <div style="font-size: 1.5rem; color: #e2e8f0;">—</div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
                 <!-- Motivation Message -->
                 <div style="margin-top: 2rem; padding: 1.5rem; background: #fff9e6; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
                     <?php if ($currentStreak === 0): ?>

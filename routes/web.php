@@ -222,6 +222,29 @@ return function (App $app) {
         $totalDays = $endDate->diff($startDate)->days + 1;
         $restDays = $totalDays - $totalActiveDays;
 
+        // Group activities by date for calendar display
+        $activitiesByDate = [];
+        foreach ($activities as $activity) {
+            $dateStr = $activity->startDate->format('Y-m-d');
+            if (!isset($activitiesByDate[$dateStr])) {
+                $activitiesByDate[$dateStr] = [];
+            }
+            $activitiesByDate[$dateStr][] = $activity;
+        }
+
+        // Generate calendar days (last 7 days)
+        $calendarDays = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = (clone $endDate)->modify("-{$i} days");
+            $dateStr = $date->format('Y-m-d');
+            $calendarDays[] = [
+                'date' => $date,
+                'dateStr' => $dateStr,
+                'hasActivity' => isset($activitiesByDate[$dateStr]),
+                'activityCount' => isset($activitiesByDate[$dateStr]) ? count($activitiesByDate[$dateStr]) : 0,
+            ];
+        }
+
         // Calculate date range (last 7 days)
         if (!isset($endDate)) {
             $endDate = new DateTime();
@@ -246,6 +269,7 @@ return function (App $app) {
             'longestStreak' => $longestStreak,
             'totalActiveDays' => $totalActiveDays,
             'restDays' => $restDays,
+            'calendarDays' => $calendarDays,
         ]);
 
         $response->getBody()->write($html);
