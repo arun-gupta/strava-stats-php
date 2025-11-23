@@ -160,12 +160,12 @@
 - [x] Log refresh events
 - [x] Test with expired token scenarios
 
-### 1.9 Error Handling & User Feedback
-- [ ] Create error page template for OAuth failures
-- [ ] Handle "access_denied" from Strava
-- [ ] Handle network/API errors with retry option
-- [ ] Display friendly error messages to user
-- [ ] **VISIBLE:** User sees helpful errors if OAuth fails
+### 1.9 Error Handling & User Feedback ✅
+- [x] Create error page template for OAuth failures
+- [x] Handle "access_denied" from Strava
+- [x] Handle network/API errors with retry option
+- [x] Display friendly error messages to user
+- [x] **VISIBLE:** User sees helpful errors if OAuth fails
 
 ### 1.10 Session Security
 - [ ] Configure secure session cookies (httpOnly, secure, sameSite)

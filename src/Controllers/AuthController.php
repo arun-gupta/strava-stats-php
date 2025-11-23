@@ -111,16 +111,17 @@ class AuthController
 
         // Handle error from Strava (user denied access)
         if ($error) {
-            // Redirect to home with error message
+            // Map error to user-friendly page
+            $errorType = $error === 'access_denied' ? 'access_denied' : 'api_error';
             return $response
-                ->withHeader('Location', '/?error=' . urlencode($error))
+                ->withHeader('Location', '/error?error=' . urlencode($errorType))
                 ->withStatus(302);
         }
 
         // Validate required parameters
         if (!$code || !$state) {
             return $response
-                ->withHeader('Location', '/?error=missing_parameters')
+                ->withHeader('Location', '/error?error=missing_parameters')
                 ->withStatus(302);
         }
 
@@ -130,7 +131,7 @@ class AuthController
             unset($_SESSION['oauth_state']);
             unset($_SESSION['oauth_code_verifier']);
             return $response
-                ->withHeader('Location', '/?error=invalid_state')
+                ->withHeader('Location', '/error?error=invalid_state')
                 ->withStatus(302);
         }
 
@@ -138,7 +139,7 @@ class AuthController
         $codeVerifier = $_SESSION['oauth_code_verifier'] ?? null;
         if (!$codeVerifier) {
             return $response
-                ->withHeader('Location', '/?error=missing_verifier')
+                ->withHeader('Location', '/error?error=missing_verifier')
                 ->withStatus(302);
         }
 
@@ -180,7 +181,7 @@ class AuthController
             // Log error and redirect with error message
             error_log('OAuth token exchange failed: ' . $e->getMessage());
             return $response
-                ->withHeader('Location', '/?error=token_exchange_failed')
+                ->withHeader('Location', '/error?error=token_exchange_failed')
                 ->withStatus(302);
         }
     }

@@ -21,6 +21,17 @@ return function (App $app) {
         return $response;
     });
 
+    // Error page
+    $app->get('/error', function (Request $request, Response $response) {
+        $html = View::render('pages/error', [
+            'layout' => 'main',
+            'title' => 'Error - Strava Activity Analyzer',
+        ]);
+
+        $response->getBody()->write($html);
+        return $response;
+    });
+
     // OAuth routes
     $authController = new AuthController();
     $app->get('/auth/strava', [$authController, 'authorize']);

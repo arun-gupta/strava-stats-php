@@ -36,23 +36,23 @@ class AuthMiddleware implements MiddlewareInterface
 
         // Check if user is authenticated
         if (!isset($_SESSION['access_token'])) {
-            // Create redirect response to home page
+            // Create redirect response to error page
             $response = new SlimResponse();
             return $response
-                ->withHeader('Location', '/?error=authentication_required')
+                ->withHeader('Location', '/error?error=authentication_required')
                 ->withStatus(302);
         }
 
         // Try to refresh token if needed
         $refreshSuccess = TokenRefreshService::refreshIfNeeded();
 
-        // If refresh failed, redirect to home
+        // If refresh failed, redirect to error page
         if (!$refreshSuccess) {
             // Clear session
             session_destroy();
             $response = new SlimResponse();
             return $response
-                ->withHeader('Location', '/?error=session_expired')
+                ->withHeader('Location', '/error?error=session_expired')
                 ->withStatus(302);
         }
 
