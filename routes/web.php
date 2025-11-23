@@ -193,8 +193,35 @@ return function (App $app) {
         if ($accessToken) {
             try {
                 $activityService = new ActivityService();
-                // Fetch activities from the start date of the selected range
-                $allActivities = $activityService->fetchActivities($accessToken, $startDate);
+
+                // Check if we have cached activities and if the cache is still valid
+                $cacheKey = 'activities_cache';
+                $cacheStartDateKey = 'activities_cache_start_date';
+                $needsRefetch = false;
+
+                if (!isset($_SESSION[$cacheKey]) || !isset($_SESSION[$cacheStartDateKey])) {
+                    // No cache exists
+                    $needsRefetch = true;
+                } else {
+                    // Check if cached start date is earlier than or equal to current start date
+                    $cachedStartDate = new DateTime($_SESSION[$cacheStartDateKey]);
+                    if ($cachedStartDate > $startDate) {
+                        // Cached data doesn't go back far enough
+                        $needsRefetch = true;
+                    }
+                }
+
+                if ($needsRefetch) {
+                    // Fetch activities from the start date of the selected range
+                    $allActivities = $activityService->fetchActivities($accessToken, $startDate);
+
+                    // Cache the activities and start date
+                    $_SESSION[$cacheKey] = $allActivities;
+                    $_SESSION[$cacheStartDateKey] = $startDate->format('Y-m-d');
+                } else {
+                    // Use cached activities
+                    $allActivities = $_SESSION[$cacheKey];
+                }
 
                 // Filter activities by date range
                 $activities = array_filter($allActivities, function($activity) use ($startDate, $endDate) {

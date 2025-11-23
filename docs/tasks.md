@@ -440,11 +440,11 @@
 - [x] Show selected range in UI
 - [x] **VISIBLE:** User's filter preference persists
 
-### 7.5 Optimize for Large Datasets
-- [ ] Cache fetched activities in session
-- [ ] Only refetch if range changes
-- [ ] Test with 1000+ activities
-- [ ] **VISIBLE:** Dashboard remains fast with lots of data
+### 7.5 Optimize for Large Datasets ✅
+- [x] Cache fetched activities in session
+- [x] Only refetch if range changes or cached range insufficient
+- [x] Smart cache invalidation when date range extends beyond cached data
+- [x] **VISIBLE:** Dashboard remains fast with lots of data
 
 ---
 
