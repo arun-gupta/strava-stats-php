@@ -200,58 +200,56 @@
 - [x] Test with sample Strava data
 
 ### 2.3 Activity Fetching for Dashboard ✅
-- [x] Fetch user's recent activities (last 30 days by default)
-- [x] Store activities in session or cache
+- [x] Fetch user's recent activities (last 7 days by default)
+- [x] Display activity counts by type on dashboard
 - [x] Handle pagination to get all activities in range
 - [x] Pass activities to dashboard view
 - [x] Test with real Strava account
+- [x] **VISIBLE:** User sees activity count breakdown by type
 
-### 2.4 Activity Count Aggregation
-- [ ] Create AggregationService
-- [ ] Implement groupByType() method (count activities by type)
-- [ ] Return data structure for charts: [{type, count, percentage}]
-- [ ] Handle edge case (no activities)
-- [ ] Test aggregation logic
+### 2.4 Simple Pie Chart with Chart.js
+- [ ] Add Chart.js library to project (via CDN or npm)
+- [ ] Add canvas element for pie chart to dashboard
+- [ ] Pass activity count data to JavaScript
+- [ ] Create simple pie chart showing activity distribution
+- [ ] **VISIBLE:** User sees a basic pie chart of their activities
 
-### 2.5 Dashboard: Overview Tab Structure
-- [ ] Add tab navigation to dashboard (Overview, Duration, Heatmap, Trends, Running Stats)
-- [ ] Create "Overview" tab content area
-- [ ] Add canvas element for Chart.js
-- [ ] Style tab navigation
-- [ ] **VISIBLE:** User sees tab structure in dashboard
-
-### 2.6 Chart.js: Activity Count Pie Chart
-- [ ] Pass aggregated data from backend to frontend
-- [ ] Create JavaScript module for Overview chart
-- [ ] Initialize Chart.js pie chart with activity counts
-- [ ] Add labels and colors for different activity types
-- [ ] **VISIBLE:** User sees pie chart with their activity distribution
-
-### 2.7 Chart Interactivity & Styling
+### 2.5 Chart Styling & Polish
+- [ ] Add Strava-themed colors to chart
 - [ ] Add tooltips showing count and percentage
-- [ ] Add legend below chart
-- [ ] Make chart responsive
-- [ ] Style chart colors (Strava orange theme)
-- [ ] **VISIBLE:** User can hover over chart segments for details
+- [ ] Add responsive sizing
+- [ ] Add legend
+- [ ] **VISIBLE:** User sees a polished, interactive chart
 
-### 2.8 Date Range Filter (Last 30 Days)
-- [ ] Add date range display above dashboard ("Showing: Last 30 days")
-- [ ] Implement basic date filtering in backend
-- [ ] Update chart when date range changes
-- [ ] **VISIBLE:** User sees what date range is displayed
+### 2.6 Date Range Display
+- [ ] Add date range indicator above chart ("Last 7 days")
+- [ ] Show total activities count prominently
+- [ ] **VISIBLE:** User knows what time period they're viewing
 
-### 2.9 Loading States & Empty States
-- [ ] Add loading spinner while fetching activities
-- [ ] Show "No activities found" message if empty
-- [ ] Handle API errors gracefully
-- [ ] **VISIBLE:** User sees loading feedback and helpful empty states
+### 2.7 Empty State Improvements
+- [ ] Improve "no activities" messaging
+- [ ] Add call-to-action to log activities
+- [ ] Show example chart when empty
+- [ ] **VISIBLE:** User sees helpful guidance when no data
 
-### 2.10 Rate Limiting (Basic)
-- [ ] Parse Strava rate limit headers
-- [ ] Log rate limit usage
-- [ ] Add basic exponential backoff on 429 errors
-- [ ] Display rate limit message to user if hit
-- [ ] Test rate limit handling
+### 2.8 Loading State
+- [ ] Add loading spinner while fetching
+- [ ] Show skeleton/placeholder for chart
+- [ ] Handle slow API responses gracefully
+- [ ] **VISIBLE:** User sees loading feedback
+
+### 2.9 Error Handling UI
+- [ ] Show user-friendly error messages on API failures
+- [ ] Add retry button for failed requests
+- [ ] Handle rate limiting visibly
+- [ ] **VISIBLE:** User understands when something goes wrong
+
+### 2.10 Chart Completion Polish
+- [ ] Test on different screen sizes
+- [ ] Verify all activity types display correctly
+- [ ] Add chart title and description
+- [ ] Ensure accessibility (screen readers)
+- [ ] **VISIBLE:** Chart works perfectly for all users
 
 ---
 
