@@ -1,4 +1,4 @@
-# Strava Stats PHP
+# Strava Activity Analyzer (PHP)
 
 A PHP application for analyzing and visualizing Strava activity statistics.
 
