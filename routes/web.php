@@ -84,6 +84,10 @@ return function (App $app) {
             session_start();
         }
 
+        // Check if running-only mode is enabled
+        $queryParams = $request->getQueryParams();
+        $runningOnly = isset($queryParams['running_only']) && $queryParams['running_only'] === 'true';
+
         $accessToken = $_SESSION['access_token'] ?? null;
         $activities = [];
         $activityCounts = [];
@@ -94,7 +98,18 @@ return function (App $app) {
         if ($accessToken) {
             try {
                 $activityService = new ActivityService();
-                $activities = $activityService->fetchRecentActivities($accessToken);
+                $allActivities = $activityService->fetchRecentActivities($accessToken);
+
+                // Filter to running activities if running-only mode is enabled
+                if ($runningOnly) {
+                    $activities = array_filter($allActivities, function($activity) {
+                        return $activity->type === 'Run';
+                    });
+                    $activities = array_values($activities); // Re-index array
+                } else {
+                    $activities = $allActivities;
+                }
+
                 $activityCounts = $activityService->getCountsByType($activities);
                 $movingTimeByType = $activityService->getMovingTimeByType($activities);
             } catch (\Exception $e) {
@@ -358,6 +373,7 @@ return function (App $app) {
             'totalRuns' => $totalRuns,
             'totalRunningDistance' => $totalRunningDistance,
             'averagePace' => $averagePace,
+            'runningOnly' => $runningOnly,
         ]);
 
         $response->getBody()->write($html);

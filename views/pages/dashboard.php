@@ -291,11 +291,11 @@
                         <h4 style="margin: 0; color: #fff;">Activity Calendar</h4>
                         <div style="display: flex; gap: 0.5rem;">
                             <button id="allActivitiesBtn" onclick="switchHeatmapMode('all')"
-                                    style="padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; transition: all 0.2s;">
+                                    style="padding: 0.5rem 1rem; background: <?= $runningOnly ? '#2d3748' : '#3b82f6' ?>; color: <?= $runningOnly ? '#9ca3af' : 'white' ?>; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; transition: all 0.2s;">
                                 All Activities
                             </button>
                             <button id="runningOnlyBtn" onclick="switchHeatmapMode('running')"
-                                    style="padding: 0.5rem 1rem; background: #2d3748; color: #9ca3af; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; transition: all 0.2s;">
+                                    style="padding: 0.5rem 1rem; background: <?= $runningOnly ? '#3b82f6' : '#2d3748' ?>; color: <?= $runningOnly ? 'white' : '#9ca3af' ?>; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; transition: all 0.2s;">
                                 Running Only
                             </button>
                         </div>
@@ -525,24 +525,12 @@
 
         // Heatmap mode switching
         function switchHeatmapMode(mode) {
-            const allBtn = document.getElementById('allActivitiesBtn');
-            const runningBtn = document.getElementById('runningOnlyBtn');
-
             if (mode === 'all') {
-                // Style active button
-                allBtn.style.background = '#3b82f6';
-                allBtn.style.color = 'white';
-                runningBtn.style.background = '#2d3748';
-                runningBtn.style.color = '#9ca3af';
+                // Reload page without running_only parameter
+                window.location.href = '/dashboard';
             } else if (mode === 'running') {
-                // Show coming soon message
-                alert('Running Only mode coming soon! This will filter the heatmap to show only running activities.');
-
-                // Keep "All Activities" selected
-                allBtn.style.background = '#3b82f6';
-                allBtn.style.color = 'white';
-                runningBtn.style.background = '#2d3748';
-                runningBtn.style.color = '#9ca3af';
+                // Reload page with running_only parameter
+                window.location.href = '/dashboard?running_only=true';
             }
         }
     </script>
