@@ -159,6 +159,11 @@
 - [x] Update session with new tokens
 - [x] Log refresh events
 - [x] Test with expired token scenarios
+- [x] Handle 429 rate limiting with Retry-After header
+- [x] Handle 403 forbidden (scope permission issues)
+- [x] Handle 404 not found (no retry)
+- [x] Handle 5xx server errors with exponential backoff
+- [x] Implement max retry limit (3 attempts)
 
 ### 1.9 Error Handling & User Feedback ✅
 - [x] Create error page template for OAuth failures
