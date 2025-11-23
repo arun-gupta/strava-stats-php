@@ -1,6 +1,8 @@
-# Detailed Task Breakdown — Strava Activity Analyzer (PHP)
+# Development Tasks — Strava Activity Analyzer (PHP)
 
-This document provides a granular, modular breakdown of implementation tasks organized into phases and sub-phases.
+**Philosophy:** This task list is organized to prioritize **visible, working features** in the application. Each phase delivers something users can see and interact with, following a vertical slice approach.
+
+---
 
 ## Phase 0 — Project Setup & Foundations ✅ COMPLETE
 
@@ -95,356 +97,413 @@ This document provides a granular, modular breakdown of implementation tasks org
 
 ---
 
-## Phase 1 — Authentication & Security (Requirements 1-2)
+## Phase 1 — End-to-End Authentication Flow (Deliver: Working Strava Login)
 
-### 1.1 OAuth2 Configuration
-- [ ] Research Strava OAuth2 flow and requirements
-- [ ] Create config/oauth.php configuration file
-- [ ] Define OAuth scopes needed (read, activity:read_all)
-- [ ] Configure OAuth redirect URI handling
-- [ ] Document OAuth app registration process
+**Goal:** User can click "Connect with Strava" and successfully authenticate, seeing their name/photo in the app.
 
-### 1.2 Session Management
-- [ ] Evaluate session storage options (native PHP sessions vs Redis)
-- [ ] Implement session configuration
-- [ ] Create SessionService for session handling
-- [ ] Configure secure session cookies (httpOnly, secure, sameSite)
-- [ ] Implement session regeneration for security
+### 1.1 OAuth Configuration & "Connect with Strava" Button
+- [ ] Create config/oauth.php with Strava OAuth settings
+- [ ] Update home page with styled "Connect with Strava" button
+- [ ] Create AuthController with placeholder methods
+- [ ] **VISIBLE:** User sees working button on home page
 
-### 1.3 OAuth Authorization Flow
-- [ ] Create OAuthController
-- [ ] Implement GET /auth/strava route
-- [ ] Generate OAuth authorization URL with state parameter
-- [ ] Implement CSRF protection with state validation
-- [ ] Add PKCE support (code_challenge, code_verifier)
+### 1.2 OAuth Authorization Flow (User → Strava)
+- [ ] Implement GET /auth/strava route in AuthController
+- [ ] Generate OAuth URL with state parameter and PKCE
+- [ ] Store state in session for validation
 - [ ] Redirect user to Strava authorization page
-- [ ] Test authorization initiation
+- [ ] **VISIBLE:** User is redirected to Strava when clicking button
 
-### 1.4 OAuth Callback Handler
+### 1.3 OAuth Callback & Token Exchange (Strava → App)
 - [ ] Implement GET /auth/callback route
-- [ ] Validate state parameter for CSRF protection
-- [ ] Exchange authorization code for access token
-- [ ] Handle OAuth errors (access_denied, invalid_grant, etc.)
-- [ ] Extract access_token, refresh_token, expires_at
-- [ ] Store tokens securely server-side
-- [ ] Test callback with mock Strava response
+- [ ] Validate state parameter (CSRF protection)
+- [ ] Exchange authorization code for access token using Guzzle
+- [ ] Store tokens in session (access_token, refresh_token, expires_at)
+- [ ] Redirect to dashboard on success
+- [ ] **VISIBLE:** User returns to app after Strava authorization
 
-### 1.5 Token Storage
-- [ ] Design token storage schema (session or database)
-- [ ] Implement TokenService for token management
-- [ ] Store access_token, refresh_token, expires_at, athlete_id
-- [ ] Ensure tokens never exposed to client-side JavaScript
-- [ ] Implement token retrieval methods
-- [ ] Add encryption for token storage (optional but recommended)
+### 1.4 User Profile Display
+- [ ] Create StravaClient service with getAthlete() method
+- [ ] Fetch user profile from Strava API after login
+- [ ] Store athlete name and profile photo URL in session
+- [ ] Update layout header to show user name and photo when logged in
+- [ ] Add "Sign Out" link in header
+- [ ] **VISIBLE:** User sees their Strava profile info in the app header
 
-### 1.6 Token Refresh Logic
-- [ ] Implement automatic token refresh on expiry
-- [ ] Create RefreshTokenMiddleware
-- [ ] Check token expiration before API calls
-- [ ] Handle 401 Unauthorized responses with refresh
-- [ ] Retry original request after token refresh
-- [ ] Handle refresh token expiration/revocation
-- [ ] Test refresh flow with expired tokens
+### 1.5 Dashboard Page Scaffold
+- [ ] Create views/pages/dashboard.php
+- [ ] Implement GET /dashboard route (protected)
+- [ ] Show welcome message with user's name
+- [ ] Add placeholder sections for future widgets
+- [ ] Style dashboard layout
+- [ ] **VISIBLE:** User lands on personalized dashboard after login
 
-### 1.7 Authentication Middleware
-- [ ] Create AuthMiddleware to protect routes
-- [ ] Check for valid session and tokens
-- [ ] Redirect unauthenticated users to home page
-- [ ] Apply middleware to protected routes (/dashboard, /api/*)
-- [ ] Handle token validation errors gracefully
-
-### 1.8 Sign Out Flow
+### 1.6 Sign Out Flow
 - [ ] Implement GET /signout route
-- [ ] Clear server session
-- [ ] Remove stored tokens
-- [ ] Redirect to home page
-- [ ] Display success message
-- [ ] Test complete sign-out flow
+- [ ] Clear session and stored tokens
+- [ ] Redirect to home page with success message
+- [ ] Test complete login → logout cycle
+- [ ] **VISIBLE:** User can sign out and return to home page
 
-### 1.9 User Profile Retrieval
-- [ ] Implement GET /api/athlete endpoint in StravaClient
-- [ ] Fetch authenticated user's profile on login
-- [ ] Store athlete_id, name, profile photo in session
-- [ ] Display user info in dashboard header
-- [ ] Handle profile fetch errors
+### 1.7 Authentication Middleware & Route Protection
+- [ ] Create AuthMiddleware to check for valid session
+- [ ] Apply middleware to /dashboard and /api/* routes
+- [ ] Redirect unauthenticated users to home page
+- [ ] Test protected routes require authentication
+- [ ] **VISIBLE:** Unauthenticated users can't access dashboard
 
-### 1.10 Security Hardening
-- [ ] Implement rate limiting for OAuth endpoints
-- [ ] Add request validation and sanitization
-- [ ] Configure HTTPS redirects (production)
-- [ ] Set security headers (X-Frame-Options, X-Content-Type-Options)
-- [ ] Test CSRF protection
-- [ ] Security audit of authentication flow
+### 1.8 Token Refresh (Background)
+- [ ] Implement automatic token refresh before expiry
+- [ ] Handle 401 responses by refreshing token and retrying
+- [ ] Update session with new tokens
+- [ ] Log refresh events
+- [ ] Test with expired token scenarios
 
-### 1.11 Error Handling & UX
-- [ ] Create error pages for OAuth failures
-- [ ] Display user-friendly error messages
-- [ ] Implement "Connect with Strava" button on home page
-- [ ] Show loading states during OAuth flow
-- [ ] Handle edge cases (expired tokens, revoked access)
-- [ ] Test all error scenarios
+### 1.9 Error Handling & User Feedback
+- [ ] Create error page template for OAuth failures
+- [ ] Handle "access_denied" from Strava
+- [ ] Handle network/API errors with retry option
+- [ ] Display friendly error messages to user
+- [ ] **VISIBLE:** User sees helpful errors if OAuth fails
 
-### 1.12 Documentation & Testing
-- [ ] Document OAuth setup in README
-- [ ] Add authentication flow diagram
-- [ ] Write unit tests for token management
-- [ ] Write integration tests for OAuth flow
-- [ ] Document security considerations
-- [ ] Update INSTALLATION.md with OAuth setup
+### 1.10 Session Security
+- [ ] Configure secure session cookies (httpOnly, secure, sameSite)
+- [ ] Implement session regeneration after login
+- [ ] Set appropriate session timeout
+- [ ] Add CSRF token for forms (if needed)
+- [ ] Test session security
 
 ---
 
-## Phase 2 — Strava API Client & Data Layer
+## Phase 2 — First Widget: Activity Count Chart (Deliver: Real Data Visualization)
 
-### 2.1 HTTP Client Setup
-- [ ] Create StravaClient service using Guzzle
-- [ ] Configure base URL (https://www.strava.com/api/v3)
-- [ ] Implement authentication header injection
-- [ ] Configure default timeouts and retry policy
-- [ ] Add request/response logging
+**Goal:** User sees a working pie chart showing their activity distribution by sport type.
 
-### 2.2 Rate Limit Handling
-- [ ] Research Strava rate limit policies (15-minute and daily limits)
-- [ ] Implement rate limit header parsing
-- [ ] Create RateLimiter service
-- [ ] Implement exponential backoff with jitter
-- [ ] Add rate limit tracking and metrics
-- [ ] Test rate limit recovery
+### 2.1 Basic Strava API Client
+- [ ] Create StravaClient service
+- [ ] Implement getActivities() method with pagination
+- [ ] Add authorization header injection
+- [ ] Configure timeout and error handling
+- [ ] Test fetching activities
 
-### 2.3 Activities API - Basic Fetch
-- [ ] Implement GET /athlete/activities endpoint
-- [ ] Add pagination support (per_page, page parameters)
-- [ ] Parse activity response into Activity model
-- [ ] Handle empty results
-- [ ] Test with sample data
-
-### 2.4 Activities API - Date Filtering
-- [ ] Add before/after timestamp parameters
-- [ ] Implement date range filtering
-- [ ] Handle timezone conversions
-- [ ] Test filtering with various date ranges
-
-### 2.5 Activity Data Model
+### 2.2 Activity Model & Data Parsing
 - [ ] Create Activity model class
-- [ ] Map Strava API fields to model properties
-- [ ] Handle optional fields (laps, splits, segment efforts)
-- [ ] Implement type conversions (distance, duration, pace)
-- [ ] Add model validation
+- [ ] Map Strava API response to Activity objects
+- [ ] Parse: id, type, name, start_date, distance, moving_time
+- [ ] Handle missing/optional fields
+- [ ] Test with sample Strava data
 
-### 2.6 Pagination & Batch Fetching
-- [ ] Implement automatic pagination through all pages
-- [ ] Create ActivityRepository for batch operations
-- [ ] Add progress tracking for large fetches
-- [ ] Implement configurable page size
-- [ ] Test with large datasets
+### 2.3 Activity Fetching for Dashboard
+- [ ] Fetch user's recent activities (last 30 days by default)
+- [ ] Store activities in session or cache
+- [ ] Handle pagination to get all activities in range
+- [ ] Pass activities to dashboard view
+- [ ] Test with real Strava account
 
-### 2.7 Privacy & Scope Handling
-- [ ] Check granted OAuth scopes
-- [ ] Filter private activities if scope missing
-- [ ] Handle visibility field from API
-- [ ] Test with different scope combinations
-- [ ] Document privacy behavior
+### 2.4 Activity Count Aggregation
+- [ ] Create AggregationService
+- [ ] Implement groupByType() method (count activities by type)
+- [ ] Return data structure for charts: [{type, count, percentage}]
+- [ ] Handle edge case (no activities)
+- [ ] Test aggregation logic
 
-### 2.8 Caching Strategy
-- [ ] Design cache key structure (user_id + date_range)
-- [ ] Implement file-based caching
-- [ ] Configure cache TTL (default 5 minutes)
-- [ ] Implement cache invalidation
-- [ ] Add cache hit/miss metrics
-- [ ] Test cache performance
+### 2.5 Dashboard: Overview Tab Structure
+- [ ] Add tab navigation to dashboard (Overview, Duration, Heatmap, Trends, Running Stats)
+- [ ] Create "Overview" tab content area
+- [ ] Add canvas element for Chart.js
+- [ ] Style tab navigation
+- [ ] **VISIBLE:** User sees tab structure in dashboard
 
-### 2.9 Error Handling
-- [ ] Handle network errors and timeouts
-- [ ] Handle Strava API errors (4xx, 5xx)
-- [ ] Implement retry logic for transient errors
-- [ ] Create user-friendly error messages
-- [ ] Log API errors for debugging
+### 2.6 Chart.js: Activity Count Pie Chart
+- [ ] Pass aggregated data from backend to frontend
+- [ ] Create JavaScript module for Overview chart
+- [ ] Initialize Chart.js pie chart with activity counts
+- [ ] Add labels and colors for different activity types
+- [ ] **VISIBLE:** User sees pie chart with their activity distribution
+
+### 2.7 Chart Interactivity & Styling
+- [ ] Add tooltips showing count and percentage
+- [ ] Add legend below chart
+- [ ] Make chart responsive
+- [ ] Style chart colors (Strava orange theme)
+- [ ] **VISIBLE:** User can hover over chart segments for details
+
+### 2.8 Date Range Filter (Last 30 Days)
+- [ ] Add date range display above dashboard ("Showing: Last 30 days")
+- [ ] Implement basic date filtering in backend
+- [ ] Update chart when date range changes
+- [ ] **VISIBLE:** User sees what date range is displayed
+
+### 2.9 Loading States & Empty States
+- [ ] Add loading spinner while fetching activities
+- [ ] Show "No activities found" message if empty
+- [ ] Handle API errors gracefully
+- [ ] **VISIBLE:** User sees loading feedback and helpful empty states
+
+### 2.10 Rate Limiting (Basic)
+- [ ] Parse Strava rate limit headers
+- [ ] Log rate limit usage
+- [ ] Add basic exponential backoff on 429 errors
+- [ ] Display rate limit message to user if hit
+- [ ] Test rate limit handling
+
+---
+
+## Phase 3 — Second Widget: Activity Duration Chart (Deliver: Time Analysis)
+
+**Goal:** User sees a bar chart showing total time spent on each activity type.
+
+### 3.1 Duration Aggregation
+- [ ] Add groupByTypeDuration() method to AggregationService
+- [ ] Sum moving_time for each activity type
+- [ ] Convert seconds to hours for display
+- [ ] Return data: [{type, hours, formatted_time}]
+- [ ] Test aggregation
+
+### 3.2 Duration Tab & Bar Chart
+- [ ] Create "Duration" tab content area
+- [ ] Add canvas for bar chart
+- [ ] Create JavaScript module for Duration chart
+- [ ] Initialize Chart.js bar chart with duration data
+- [ ] **VISIBLE:** User sees bar chart with time breakdown by sport
+
+### 3.3 Time Formatting & Labels
+- [ ] Format time as "Xh Ym" for labels
+- [ ] Add data labels on bars for times > 5% of total
+- [ ] Style bar colors consistently with Overview chart
+- [ ] **VISIBLE:** User sees clearly formatted time values
+
+### 3.4 Chart Comparison & Insights
+- [ ] Show total time across all activities
+- [ ] Highlight most time-consuming activity
+- [ ] Add simple insight text ("You spent X hours cycling")
+- [ ] **VISIBLE:** User sees summary insights above chart
+
+---
+
+## Phase 4 — Third Widget: Training Heatmap (Deliver: Consistency View)
+
+**Goal:** User sees calendar heatmap showing workout consistency, streaks, and gaps.
+
+### 4.1 Calendar Grid Data Generation
+- [ ] Create HeatmapService
+- [ ] Generate calendar grid for date range
+- [ ] Group activities by day
+- [ ] Calculate intensity buckets (No Activity, <1h, 1-2h, 2h+)
+- [ ] Return grid data with dates and intensities
+
+### 4.2 Heatmap Tab & Canvas Layout
+- [ ] Create "Heatmap" tab content area
+- [ ] Design horizontal calendar layout (days as rows, weeks as columns)
+- [ ] Add legend for intensity levels
+- [ ] Add mode toggle (All Activities / Running Only)
+- [ ] **VISIBLE:** User sees calendar grid structure
+
+### 4.3 Heatmap Rendering
+- [ ] Create JavaScript module for heatmap
+- [ ] Render calendar cells with color coding
+- [ ] Add tooltips showing date and activity details
+- [ ] Make responsive to screen width
+- [ ] **VISIBLE:** User sees color-coded calendar heatmap
+
+### 4.4 Streak Calculations
+- [ ] Implement current streak calculation
+- [ ] Implement longest streak calculation
+- [ ] Calculate days since last activity
+- [ ] Calculate workout days vs missed days
+- [ ] Display streak stats above heatmap
+- [ ] **VISIBLE:** User sees their streaks and consistency metrics
+
+### 4.5 Gap Analysis
+- [ ] Calculate gap periods (consecutive days without activity)
+- [ ] Find longest gap
+- [ ] Sum total gap days
+- [ ] Add "Show Gap Details" button
+- [ ] Display expandable list of gaps with dates
+- [ ] **VISIBLE:** User can see detailed gap analysis
+
+### 4.6 Running-Only Mode
+- [ ] Filter to only running activities
+- [ ] Recalculate heatmap with distance-based intensity buckets
+- [ ] Update legend for running mode (<3mi, 3-6mi, 6mi+)
+- [ ] Toggle between All Activities and Running Only
+- [ ] **VISIBLE:** User can switch between heatmap modes
+
+---
+
+## Phase 5 — Running Stats Widget (Deliver: Runner Insights)
+
+**Goal:** Runners see detailed statistics, PRs, and distance distribution histogram.
+
+### 5.1 Running Stats Tab Scaffold
+- [ ] Create "Running Stats" tab content
+- [ ] Add sections: Summary, PRs, Distance Distribution
+- [ ] Style layout with cards/boxes
+- [ ] **VISIBLE:** User sees structured running stats tab
+
+### 5.2 Running Summary Stats
+- [ ] Filter activities for type='Run'
+- [ ] Calculate: total runs, runs ≥10K, total distance, average pace
+- [ ] Format pace as min/mile or min/km
+- [ ] Display stats in card grid
+- [ ] **VISIBLE:** User sees their running summary
+
+### 5.3 Personal Records (PRs)
+- [ ] Calculate fastest mile from activities
+- [ ] Calculate fastest 10K
+- [ ] Calculate longest run
+- [ ] Calculate max elevation gain
+- [ ] Display PRs with activity names and dates
+- [ ] **VISIBLE:** User sees their personal records
+
+### 5.4 Distance Distribution Histogram
+- [ ] Create histogram bins (1-mile or 1-km increments)
+- [ ] Bin running distances
+- [ ] Extend bins for runs >10 miles
+- [ ] Create bar chart for distribution
+- [ ] **VISIBLE:** User sees histogram of run distances
+
+### 5.5 Unit Toggle (Metric/Imperial)
+- [ ] Add unit toggle button in dashboard header
+- [ ] Store preference in session
+- [ ] Convert all distances (miles ↔ km)
+- [ ] Convert all paces (min/mile ↔ min/km)
+- [ ] Update all widgets when toggled
+- [ ] **VISIBLE:** User can switch between metric and imperial
+
+---
+
+## Phase 6 — Trends Widget (Deliver: Progress Over Time)
+
+**Goal:** User sees line charts showing mileage and pace trends over time.
+
+### 6.1 Trends Tab & Mode Toggle
+- [ ] Create "Trends" tab content
+- [ ] Add mode toggle (All Activities / Running Only)
+- [ ] Add two chart canvases (Distance, Pace)
+- [ ] **VISIBLE:** User sees trends tab structure
+
+### 6.2 Daily/Weekly/Monthly Aggregation
+- [ ] Implement daily distance aggregation
+- [ ] Implement weekly distance aggregation (ISO week Mon-Sun)
+- [ ] Implement monthly distance aggregation
+- [ ] Add grain selector (Day/Week/Month)
+- [ ] Test aggregation logic
+
+### 6.3 Distance Trend Line Chart
+- [ ] Create line chart for distance over time
+- [ ] Apply moving average smoothing (configurable window)
+- [ ] Format X-axis (dates) and Y-axis (distance)
+- [ ] **VISIBLE:** User sees distance trend chart
+
+### 6.4 Pace Trend Line Chart
+- [ ] Calculate average pace for each time period
+- [ ] Handle pace inversion (speed → pace conversion)
+- [ ] Create line chart for pace over time
+- [ ] Show pace improving (going down) as positive
+- [ ] **VISIBLE:** User sees pace trend chart
+
+### 6.5 Trend Insights
+- [ ] Calculate trend direction (improving/declining)
+- [ ] Show week-over-week or month-over-month change
+- [ ] Display simple insight text
+- [ ] **VISIBLE:** User sees trend analysis summary
+
+---
+
+## Phase 7 — Date Range Filters (Deliver: Custom Time Analysis)
+
+**Goal:** User can filter all widgets by custom date ranges.
+
+### 7.1 Date Filter UI
+- [ ] Add date range selector above dashboard
+- [ ] Create preset buttons (7d, 30d, 90d, YTD, All Time)
+- [ ] Add custom date picker (start/end dates)
+- [ ] Style filter controls
+- [ ] **VISIBLE:** User sees date filter controls
+
+### 7.2 Filter Application
+- [ ] Capture date range selection
+- [ ] Reload activities for selected range
+- [ ] Update all widgets with filtered data
+- [ ] Show loading state during refetch
+- [ ] **VISIBLE:** All charts update when date range changes
+
+### 7.3 URL/Session Persistence
+- [ ] Store date range in URL query params
+- [ ] Persist date range in session
+- [ ] Restore on page refresh
+- [ ] Default to "Last 7 days" on first load
+- [ ] **VISIBLE:** User's filter selection persists
+
+### 7.4 Performance Optimization
+- [ ] Implement caching for common date ranges
+- [ ] Add cache invalidation strategy
+- [ ] Test with large datasets (5000+ activities)
+- [ ] Optimize to meet <2s load time target
+- [ ] **VISIBLE:** Dashboard loads quickly even with large datasets
+
+---
+
+## Phase 8 — Polish & Production Ready
+
+**Goal:** Application is production-ready with robust error handling, testing, and deployment.
+
+### 8.1 Comprehensive Error Handling
+- [ ] Handle all Strava API error codes
+- [ ] Implement retry logic with exponential backoff
+- [ ] Display user-friendly error messages
+- [ ] Log errors for debugging
 - [ ] Test error scenarios
 
-### 2.10 API Response Validation
-- [ ] Validate API response structure
-- [ ] Handle unexpected field types
-- [ ] Handle missing required fields
-- [ ] Add response schema validation
-- [ ] Test with malformed responses
+### 8.2 Unit Testing
+- [ ] Write tests for Activity model
+- [ ] Write tests for AggregationService
+- [ ] Write tests for HeatmapService
+- [ ] Write tests for UnitsService
+- [ ] Achieve >80% code coverage
 
-### 2.11 Testing & Mocking
-- [ ] Create mock Strava API responses
-- [ ] Write unit tests for StravaClient
-- [ ] Test pagination logic
+### 8.3 Integration Testing
+- [ ] Test OAuth flow end-to-end
+- [ ] Test activity fetching with mock API
+- [ ] Test dashboard rendering
+- [ ] Test all widgets
 - [ ] Test rate limiting
-- [ ] Test error handling
-- [ ] Create integration tests with mock server
 
-### 2.12 Documentation
-- [ ] Document StravaClient API
-- [ ] Add code examples for common operations
-- [ ] Document rate limit handling
-- [ ] Document caching behavior
-- [ ] Update developer documentation
+### 8.4 Security Hardening
+- [ ] Security audit of authentication flow
+- [ ] Enable HTTPS enforcement (production)
+- [ ] Set security headers
+- [ ] Validate all inputs
+- [ ] Test CSRF protection
 
----
+### 8.5 Performance Profiling
+- [ ] Profile dashboard load time
+- [ ] Optimize slow queries
+- [ ] Optimize front-end bundle size
+- [ ] Meet <2s load time and <300ms filter update targets
+- [ ] Document performance metrics
 
-## Phase 3 — Data Processing & Aggregation
+### 8.6 Documentation
+- [ ] Complete API documentation
+- [ ] Document all configuration options
+- [ ] Add troubleshooting guide
+- [ ] Create deployment guide
+- [ ] Update README with screenshots
 
-### 3.1 Timezone Normalization
-- [ ] Research timezone handling requirements
-- [ ] Implement timezone detection (from user profile or browser)
-- [ ] Convert all timestamps to user's local timezone
-- [ ] Handle DST transitions
-- [ ] Test timezone conversions
-
-### 3.2 Activity Type Aggregation
-- [ ] Create AggregationService
-- [ ] Implement count by activity type
-- [ ] Implement duration by activity type
-- [ ] Calculate percentages
-- [ ] Sort results by count/duration
-- [ ] Test with diverse activity types
-
-### 3.3 Date Grouping Utilities
-- [ ] Implement daily grouping
-- [ ] Implement weekly grouping (ISO week, Mon-Sun)
-- [ ] Implement monthly grouping
-- [ ] Handle year boundaries
-- [ ] Test grouping logic
-
-### 3.4 Running-Specific Aggregation
-- [ ] Filter activities by type='Run'
-- [ ] Calculate total runs
-- [ ] Calculate runs >= 10K
-- [ ] Calculate total distance
-- [ ] Calculate average pace
-- [ ] Handle edge cases (zero runs)
-
-### 3.5 Personal Records (PRs)
-- [ ] Implement fastest mile calculation
-- [ ] Implement fastest 10K calculation
-- [ ] Implement longest run calculation
-- [ ] Implement max elevation gain calculation
-- [ ] Handle split data if available
-- [ ] Test PR calculations
-
-### 3.6 Heatmap Data Generation
-- [ ] Create calendar grid structure
-- [ ] Aggregate activities by day
-- [ ] Calculate intensity buckets (time-based)
-- [ ] Calculate intensity buckets (distance-based for runs)
-- [ ] Format data for front-end consumption
-- [ ] Test heatmap generation
-
-### 3.7 Streak Calculation
-- [ ] Implement current streak logic
-- [ ] Implement longest streak logic
-- [ ] Implement days since last activity
-- [ ] Handle ongoing streaks (ending today)
-- [ ] Test streak calculations
-
-### 3.8 Gap Analysis
-- [ ] Calculate workout days vs missed days
-- [ ] Identify gap periods (consecutive days without activity)
-- [ ] Calculate longest gap
-- [ ] Calculate total gap days
-- [ ] Generate gap detail list (start, end, duration)
-- [ ] Test gap calculations
-
-### 3.9 Trend Calculations
-- [ ] Aggregate distance by day/week/month
-- [ ] Aggregate pace by day/week/month
-- [ ] Implement moving average smoothing
-- [ ] Handle pace inversion (speed to pace conversion)
-- [ ] Configure smoothing window
-- [ ] Test trend calculations
-
-### 3.10 Distance Histogram
-- [ ] Define bin sizes (1 mile or 1 km)
-- [ ] Bin running distances
-- [ ] Extend bins for outliers (>10 miles)
-- [ ] Calculate bin counts
-- [ ] Format for charting
-- [ ] Test histogram generation
-
-### 3.11 Unit Conversions
-- [ ] Create UnitsService
-- [ ] Implement meters to miles/km
-- [ ] Implement seconds to HH:MM:SS
-- [ ] Implement m/s to pace (min/mile, min/km)
-- [ ] Implement pace to speed conversions
-- [ ] Test all conversions
-
-### 3.12 Testing & Optimization
-- [ ] Create test datasets with known outcomes
-- [ ] Write unit tests for all aggregations
-- [ ] Test edge cases (empty data, single activity)
-- [ ] Profile performance with large datasets
-- [ ] Optimize slow calculations
-- [ ] Document aggregation algorithms
-
----
-
-## Phase 4 — Dashboard UI & Widgets
-
-*(To be broken down further based on requirements)*
-
-### 4.1 Dashboard Layout
-### 4.2 Summary Strip
-### 4.3 Tab Navigation
-### 4.4 Overview Widget
-### 4.5 Duration Widget
-### 4.6 Heatmap Widget
-### 4.7 Running Stats Widget
-### 4.8 Trends Widget
-### 4.9 Date Filters
-### 4.10 Unit Toggle
-### 4.11 Loading States
-### 4.12 Empty States
-
----
-
-## Phase 5 — API Endpoints
-
-*(To be broken down further)*
-
-### 5.1 Summary Endpoint
-### 5.2 Distributions Endpoint
-### 5.3 Heatmap Endpoint
-### 5.4 Trends Endpoint
-### 5.5 Running Stats Endpoint
-### 5.6 Gaps Endpoint
-### 5.7 API Documentation
-### 5.8 API Testing
-
----
-
-## Phase 6 — Testing & Quality Assurance
-
-*(To be broken down further)*
-
-### 6.1 Unit Testing Setup
-### 6.2 Integration Testing
-### 6.3 API Contract Testing
-### 6.4 UI Testing
-### 6.5 Performance Testing
-### 6.6 Security Testing
-
----
-
-## Phase 7 — Deployment & Operations
-
-*(To be broken down further)*
-
-### 7.1 Docker Setup
-### 7.2 CI/CD Pipeline
-### 7.3 Production Configuration
-### 7.4 Monitoring & Logging
-### 7.5 Backup & Recovery
+### 8.7 Deployment
+- [ ] Create Dockerfile
+- [ ] Set up CI/CD pipeline
+- [ ] Deploy to staging environment
+- [ ] Smoke test in staging
+- [ ] Deploy to production
 
 ---
 
 ## Notes
 
-- Each sub-phase should be completable in 30-60 minutes
-- Sub-phases are designed to be independent where possible
-- Dependencies between sub-phases are noted
-- Each phase can be merged to main when complete
-- Tests should accompany each implementation sub-phase
+- **Each phase delivers a working, visible feature**
+- Sub-phases within each phase build progressively toward the deliverable
+- Phases can be demoed to stakeholders as they complete
+- Testing happens alongside feature development, not as a separate phase
+- Focus on "make it work, make it visible, then make it better"
