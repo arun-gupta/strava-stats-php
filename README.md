@@ -28,6 +28,26 @@ Then access the app at http://localhost:8080
 
 > **Need more control?** See [docs/INSTALLATION.md](docs/INSTALLATION.md) for manual installation and production deployment.
 
+## Tech Stack
+
+**Backend:**
+- PHP 8.1+
+- [Slim Framework 4](https://www.slimframework.com/) - Lightweight routing and middleware
+- [Guzzle](https://docs.guzzlephp.org/) - HTTP client for Strava API
+- [League OAuth2 Client](https://oauth2-client.thephpleague.com/) - OAuth authentication
+- [Carbon](https://carbon.nesbot.com/) - Date/time handling
+- [Monolog](https://github.com/Seldaek/monolog) - Logging
+
+**Frontend:**
+- [Chart.js](https://www.chartjs.org/) - Interactive data visualizations
+- [Vite](https://vitejs.dev/) - Build tool and bundler
+- Vanilla JavaScript - No heavy frameworks
+
+**Development:**
+- Composer - PHP dependency management
+- npm - JavaScript package management
+- PHPUnit - Testing framework
+
 ## Documentation
 
 **For Users:**
@@ -37,8 +57,6 @@ Then access the app at http://localhost:8080
 - [Requirements](docs/requirements.md) - Detailed feature requirements
 - [Development Plan](docs/plan.md) - Implementation roadmap
 - [Task Checklist](docs/tasks.md) - Development progress
-
-**Tech Stack:** Built with PHP 8.1+, Slim Framework 4, Chart.js
 
 ## License
 
