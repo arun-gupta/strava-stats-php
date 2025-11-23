@@ -7,16 +7,26 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
 <div style="padding: 2rem 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <div>
-            <h2 style="margin: 0;">Welcome back, <?= htmlspecialchars($firstName) ?>! 👋</h2>
+            <h2 style="margin: 0;">Strava Activity Analyzer</h2>
             <p style="color: #666; margin-top: 0.5rem;">
-                Your personalized activity dashboard is ready.
+                Your personalized activity dashboard
             </p>
         </div>
-        <a href="/signout"
-           style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
-                  border-radius: 4px; font-weight: 600; white-space: nowrap;">
-            Sign Out
-        </a>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <?php if (!empty($athlete['profile'])): ?>
+                <img src="<?= htmlspecialchars($athlete['profile']) ?>"
+                     alt="<?= htmlspecialchars($firstName) ?>"
+                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fc4c02;">
+            <?php endif; ?>
+            <span style="color: #333; font-size: 0.9rem; font-weight: 500;">
+                <?= htmlspecialchars($firstName) ?>
+            </span>
+            <a href="/signout"
+               style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
+                      border-radius: 4px; font-weight: 600; white-space: nowrap;">
+                Sign Out
+            </a>
+        </div>
     </div>
 
     <!-- Error Message -->
