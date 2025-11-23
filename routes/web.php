@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\AuthController;
 use App\Middleware\AuthMiddleware;
+use App\Services\ActivityService;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -40,9 +41,28 @@ return function (App $app) {
 
     // Dashboard (protected with middleware)
     $app->get('/dashboard', function (Request $request, Response $response) {
+        // Start session to get access token
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $accessToken = $_SESSION['access_token'] ?? null;
+        $activities = [];
+        $activityCounts = [];
+
+        // Fetch activities if we have a token
+        if ($accessToken) {
+            $activityService = new ActivityService();
+            $activities = $activityService->fetchRecentActivities($accessToken);
+            $activityCounts = $activityService->getCountsByType($activities);
+        }
+
         $html = View::render('pages/dashboard', [
             'layout' => 'main',
             'title' => 'Dashboard - Strava Activity Analyzer',
+            'activities' => $activities,
+            'activityCounts' => $activityCounts,
+            'totalActivities' => count($activities),
         ]);
 
         $response->getBody()->write($html);
