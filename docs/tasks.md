@@ -308,11 +308,11 @@
 - [x] Mark active days with ✓ or color
 - [x] **VISIBLE:** User sees which days they were active
 
-### 4.3 Visual Heatmap with Colors
-- [ ] Create intensity buckets based on time spent (no activity, light, medium, heavy)
-- [ ] Render calendar grid with color-coded cells
-- [ ] Add legend explaining colors and intensity levels
-- [ ] **VISIBLE:** User sees color-coded activity heatmap with legend
+### 4.3 Visual Heatmap with Colors ✅
+- [x] Create intensity buckets based on time spent (no activity, light, medium, heavy)
+- [x] Render calendar grid with color-coded cells
+- [x] Add legend explaining colors and intensity levels
+- [x] **VISIBLE:** User sees color-coded activity heatmap with legend
 
 ### 4.4 Add Tooltips & Interactivity
 - [ ] Add hover tooltips showing activity details per day

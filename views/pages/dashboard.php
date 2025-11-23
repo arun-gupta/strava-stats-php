@@ -317,9 +317,10 @@
                     <!-- Calendar Grid -->
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
-                            <div style="width: 60px; height: 60px; background: <?= $day['hasActivity'] ? '#fbbf24' : '#2d3748' ?>;
+                            <div style="width: 60px; height: 60px; background: <?= htmlspecialchars($day['color']) ?>;
                                         border-radius: 4px; display: flex; align-items: center; justify-content: center;
-                                        position: relative; cursor: pointer;">
+                                        position: relative; cursor: pointer;"
+                                 title="<?= $day['date']->format('M j, Y') ?> - <?= $day['hasActivity'] ? number_format($day['timeSpent'] / 3600, 1) . 'h' : 'No activity' ?>">
                             </div>
                         <?php endforeach; ?>
                     </div>

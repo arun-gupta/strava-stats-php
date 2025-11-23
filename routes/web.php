@@ -232,16 +232,50 @@ return function (App $app) {
             $activitiesByDate[$dateStr][] = $activity;
         }
 
-        // Generate calendar days (last 7 days)
+        // Calculate time spent per day
+        $timeByDate = [];
+        foreach ($activitiesByDate as $dateStr => $dayActivities) {
+            $totalSeconds = 0;
+            foreach ($dayActivities as $activity) {
+                $totalSeconds += $activity->movingTime;
+            }
+            $timeByDate[$dateStr] = $totalSeconds;
+        }
+
+        // Generate calendar days (last 7 days) with intensity levels
         $calendarDays = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = (clone $endDate)->modify("-{$i} days");
             $dateStr = $date->format('Y-m-d');
+            $hasActivity = isset($activitiesByDate[$dateStr]);
+            $timeSpent = $timeByDate[$dateStr] ?? 0;
+
+            // Determine intensity level based on time spent
+            $intensity = 'none'; // No activity
+            $color = '#2d3748'; // Dark gray
+
+            if ($timeSpent > 0) {
+                $hours = $timeSpent / 3600;
+                if ($hours < 1) {
+                    $intensity = 'light';
+                    $color = '#fbbf24'; // Yellow
+                } elseif ($hours < 2) {
+                    $intensity = 'medium';
+                    $color = '#f97316'; // Orange
+                } else {
+                    $intensity = 'heavy';
+                    $color = '#fc4c02'; // Strava orange
+                }
+            }
+
             $calendarDays[] = [
                 'date' => $date,
                 'dateStr' => $dateStr,
-                'hasActivity' => isset($activitiesByDate[$dateStr]),
+                'hasActivity' => $hasActivity,
                 'activityCount' => isset($activitiesByDate[$dateStr]) ? count($activitiesByDate[$dateStr]) : 0,
+                'timeSpent' => $timeSpent,
+                'intensity' => $intensity,
+                'color' => $color,
             ];
         }
 
