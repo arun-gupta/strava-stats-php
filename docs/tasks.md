@@ -101,11 +101,11 @@
 
 **Goal:** User can click "Connect with Strava" and successfully authenticate, seeing their name/photo in the app.
 
-### 1.1 OAuth Configuration & "Connect with Strava" Button
-- [ ] Create config/oauth.php with Strava OAuth settings
-- [ ] Update home page with styled "Connect with Strava" button
-- [ ] Create AuthController with placeholder methods
-- [ ] **VISIBLE:** User sees working button on home page
+### 1.1 OAuth Configuration & "Connect with Strava" Button ✅
+- [x] Create config/oauth.php with Strava OAuth settings
+- [x] Update home page with styled "Connect with Strava" button
+- [x] Create AuthController with placeholder methods
+- [x] **VISIBLE:** User sees working button on home page
 
 ### 1.2 OAuth Authorization Flow (User → Strava)
 - [ ] Implement GET /auth/strava route in AuthController
