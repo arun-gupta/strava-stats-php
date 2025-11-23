@@ -14,7 +14,13 @@
     }
     $isAuthenticated = isset($_SESSION['access_token']);
     $athlete = $_SESSION['athlete'] ?? null;
+
+    // Ensure athlete is an array (handle legacy sessions)
+    if (is_string($athlete)) {
+        $athlete = null;
+    }
     ?>
+
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <h1><a href="/" style="color: white; text-decoration: none;">Strava Stats</a></h1>

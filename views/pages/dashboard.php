@@ -5,10 +5,19 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
 ?>
 
 <div style="padding: 2rem 0;">
-    <h2>Welcome back, <?= htmlspecialchars($firstName) ?>! 👋</h2>
-    <p style="color: #666; margin-top: 0.5rem;">
-        Your personalized activity dashboard is ready.
-    </p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <h2 style="margin: 0;">Welcome back, <?= htmlspecialchars($firstName) ?>! 👋</h2>
+            <p style="color: #666; margin-top: 0.5rem;">
+                Your personalized activity dashboard is ready.
+            </p>
+        </div>
+        <a href="/signout"
+           style="padding: 10px 20px; background-color: #fc4c02; color: white; text-decoration: none;
+                  border-radius: 4px; font-weight: 600; white-space: nowrap;">
+            Sign Out
+        </a>
+    </div>
 
     <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #fc4c02;">
         <h3 style="margin-top: 0;">🚧 Dashboard Under Construction</h3>
