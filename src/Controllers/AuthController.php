@@ -25,14 +25,65 @@ class AuthController
      */
     public function authorize(Request $request, Response $response): Response
     {
-        // TODO: Implement OAuth authorization flow (Phase 1.2)
-        // - Generate state parameter for CSRF protection
-        // - Generate PKCE code challenge
-        // - Build authorization URL
-        // - Redirect to Strava
+        // Start session if not already started
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-        $response->getBody()->write('OAuth authorization - Coming Soon');
-        return $response;
+        // Load OAuth configuration
+        $config = require __DIR__ . '/../../config/oauth.php';
+        $stravaConfig = $config['strava'];
+
+        // Generate state parameter for CSRF protection
+        $state = bin2hex(random_bytes(32));
+        $_SESSION['oauth_state'] = $state;
+
+        // Generate PKCE code verifier and challenge
+        $codeVerifier = $this->generateCodeVerifier();
+        $codeChallenge = $this->generateCodeChallenge($codeVerifier);
+
+        // Store code verifier for callback
+        $_SESSION['oauth_code_verifier'] = $codeVerifier;
+
+        // Build authorization URL
+        $authUrl = $stravaConfig['authorize_url'] . '?' . http_build_query([
+            'client_id' => $stravaConfig['client_id'],
+            'redirect_uri' => $stravaConfig['redirect_uri'],
+            'response_type' => $stravaConfig['response_type'],
+            'approval_prompt' => $stravaConfig['approval_prompt'],
+            'scope' => implode(',', $stravaConfig['scopes']),
+            'state' => $state,
+            'code_challenge' => $codeChallenge,
+            'code_challenge_method' => 'S256',
+        ]);
+
+        // Redirect to Strava authorization page
+        return $response
+            ->withHeader('Location', $authUrl)
+            ->withStatus(302);
+    }
+
+    /**
+     * Generate PKCE code verifier
+     *
+     * @return string
+     */
+    private function generateCodeVerifier(): string
+    {
+        $randomBytes = random_bytes(32);
+        return rtrim(strtr(base64_encode($randomBytes), '+/', '-_'), '=');
+    }
+
+    /**
+     * Generate PKCE code challenge from verifier
+     *
+     * @param string $verifier
+     * @return string
+     */
+    private function generateCodeChallenge(string $verifier): string
+    {
+        $hash = hash('sha256', $verifier, true);
+        return rtrim(strtr(base64_encode($hash), '+/', '-_'), '=');
     }
 
     /**
