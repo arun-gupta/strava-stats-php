@@ -154,7 +154,7 @@ function initExampleChart() {
     });
 }
 
-// Initialize duration bar chart
+// Initialize duration pie chart
 function initDurationChart() {
     // Check if we have duration data and chart element
     if (typeof window.durationData === 'undefined' || !window.durationData) {
@@ -168,18 +168,18 @@ function initDurationChart() {
 
     console.log('Creating duration chart with data:', window.durationData);
 
-    // Extract labels and data (convert seconds to hours)
+    // Extract labels and data (keep in seconds for calculation, but display in hours)
     const labels = Object.keys(window.durationData);
-    const dataInHours = Object.values(window.durationData).map(seconds => seconds / 3600);
+    const dataInSeconds = Object.values(window.durationData);
+    const totalSeconds = dataInSeconds.reduce((sum, val) => sum + val, 0);
 
-    // Create bar chart
+    // Create pie chart
     new Chart(chartElement, {
-        type: 'bar',
+        type: 'pie',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Hours',
-                data: dataInHours,
+                data: dataInSeconds,
                 backgroundColor: [
                     '#fc4c02', // Strava orange
                     '#2d3748', // Dark gray
@@ -190,8 +190,8 @@ function initDurationChart() {
                     '#f56565', // Red
                     '#38b2ac', // Teal
                 ],
-                borderWidth: 0,
-                borderRadius: 4
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
         },
         options: {
@@ -199,46 +199,37 @@ function initDurationChart() {
             maintainAspectRatio: true,
             plugins: {
                 legend: {
-                    display: false
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
                 },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            const hours = Math.floor(context.parsed.y);
-                            const minutes = Math.round((context.parsed.y - hours) * 60);
-                            return `${hours}h ${minutes}m`;
+                            const label = context.label || '';
+                            const seconds = context.parsed || 0;
+                            const hours = Math.floor(seconds / 3600);
+                            const minutes = Math.round((seconds % 3600) / 60);
+                            const percentage = ((seconds / totalSeconds) * 100).toFixed(1);
+                            return `${label}: ${hours}h ${minutes}m (${percentage}%)`;
                         }
                     }
                 },
                 datalabels: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Hours',
-                        font: {
-                            size: 12,
-                            weight: '600'
-                        }
+                    color: '#ffffff',
+                    font: {
+                        weight: 'bold',
+                        size: 14
                     },
-                    ticks: {
-                        callback: function(value) {
-                            return value + 'h';
-                        }
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Activity Type',
-                        font: {
-                            size: 12,
-                            weight: '600'
-                        }
+                    formatter: function(value, context) {
+                        const hours = Math.floor(value / 3600);
+                        const minutes = Math.round((value % 3600) / 60);
+                        const percentage = ((value / totalSeconds) * 100).toFixed(1);
+                        return `${hours}h ${minutes}m\n(${percentage}%)`;
                     }
                 }
             }
