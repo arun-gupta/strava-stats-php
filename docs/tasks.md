@@ -123,13 +123,13 @@
 - [x] Redirect to dashboard on success
 - [x] **VISIBLE:** User returns to app after Strava authorization
 
-### 1.4 User Profile Display
-- [ ] Create StravaClient service with getAthlete() method
-- [ ] Fetch user profile from Strava API after login
-- [ ] Store athlete name and profile photo URL in session
-- [ ] Update layout header to show user name and photo when logged in
-- [ ] Add "Sign Out" link in header
-- [ ] **VISIBLE:** User sees their Strava profile info in the app header
+### 1.4 User Profile Display ✅
+- [x] Create StravaClient service with getAthlete() method
+- [x] Fetch user profile from Strava API after login
+- [x] Store athlete name and profile photo URL in session
+- [x] Update layout header to show user name and photo when logged in
+- [x] Add "Sign Out" link in header
+- [x] **VISIBLE:** User sees their Strava profile info in the app header
 
 ### 1.5 Dashboard Page Scaffold
 - [ ] Create views/pages/dashboard.php
