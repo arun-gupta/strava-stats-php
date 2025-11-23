@@ -305,6 +305,11 @@ return function (App $app) {
         for ($i = 6; $i >= 0; $i--) {
             $date = (clone $endDate)->modify("-{$i} days");
             $dateStr = $date->format('Y-m-d');
+
+            // Update startDate to match the first calendar day
+            if ($i === 6) {
+                $startDate = clone $date;
+            }
             $hasActivity = isset($activitiesByDate[$dateStr]);
             $timeSpent = $timeByDate[$dateStr] ?? 0;
 
