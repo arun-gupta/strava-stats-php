@@ -247,11 +247,13 @@ return function (App $app) {
             $totalRunningTime += $run->movingTime;
         }
 
-        // Calculate average pace (min/km)
+        // Calculate average pace (min/mile)
         $averagePace = 0;
         if ($totalRunningDistance > 0) {
-            // Pace in minutes per kilometer
-            $averagePace = ($totalRunningTime / 60) / ($totalRunningDistance / 1000);
+            // Convert meters to miles: 1 mile = 1609.34 meters
+            $totalMiles = $totalRunningDistance / 1609.34;
+            // Pace in minutes per mile
+            $averagePace = ($totalRunningTime / 60) / $totalMiles;
         }
 
         // Group activities by date for calendar display

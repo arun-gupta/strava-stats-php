@@ -458,10 +458,10 @@
                                 Total Distance
                             </div>
                             <div style="font-size: 2.5rem; font-weight: 700; color: #2d3748;">
-                                <?= number_format($totalRunningDistance / 1000, 1) ?>
+                                <?= number_format($totalRunningDistance / 1609.34, 1) ?>
                             </div>
                             <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                kilometers
+                                miles
                             </div>
                         </div>
 
@@ -478,7 +478,7 @@
                                 ?>
                             </div>
                             <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                min/km
+                                min/mile
                             </div>
                         </div>
                     </div>
