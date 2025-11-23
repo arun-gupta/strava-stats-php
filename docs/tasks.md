@@ -271,11 +271,11 @@
 - [x] Show total time across all activities
 - [x] **VISIBLE:** User sees time spent on each activity type
 
-### 3.3 Add Duration Bar Chart ✅
-- [x] Add canvas for bar chart in Duration section
+### 3.3 Add Duration Pie Chart ✅
+- [x] Add canvas for pie chart in Duration section
 - [x] Pass duration data to JavaScript
-- [x] Create simple Chart.js bar chart
-- [x] **VISIBLE:** User sees bar chart with time breakdown
+- [x] Create Chart.js pie chart (converted from bar chart for consistency)
+- [x] **VISIBLE:** User sees pie chart with time breakdown
 
 ### 3.4 Style & Polish Duration Chart ✅
 - [x] Style bars with Strava colors
