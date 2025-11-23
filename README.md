@@ -30,6 +30,25 @@ On other platforms, see https://getcomposer.org/download/
 
 ## Installation
 
+### Quick Start
+
+The fastest way to get started:
+
+```bash
+git clone https://github.com/arun-gupta/strava-stats-php.git
+cd strava-stats-php
+./quickstart.sh
+```
+
+The script will:
+- Check for required dependencies (PHP, Composer, npm)
+- Install all dependencies
+- Build front-end assets
+- Create .env file if needed
+- Start the development server on http://localhost:8080
+
+### Manual Installation
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/arun-gupta/strava-stats-php.git
