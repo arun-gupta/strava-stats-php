@@ -115,9 +115,50 @@ return function (App $app) {
             $totalMovingTime += $activity->movingTime;
         }
 
+        // Calculate insights
+        $longestDurationType = '';
+        $longestDuration = 0;
+        foreach ($movingTimeByType as $type => $seconds) {
+            if ($seconds > $longestDuration) {
+                $longestDuration = $seconds;
+                $longestDurationType = $type;
+            }
+        }
+
+        // Calculate weekly average
+        $weeklyAverage = 0;
+        if (count($activities) > 0) {
+            // Calculate total seconds in the time range
+            $endDate = new DateTime();
+            $startDate = (new DateTime())->modify('-7 days');
+            $daysDiff = $endDate->diff($startDate)->days;
+            $weeks = max(1, $daysDiff / 7); // At least 1 week
+            $weeklyAverage = $totalMovingTime / $weeks;
+        } else {
+            $endDate = new DateTime();
+            $startDate = (new DateTime())->modify('-7 days');
+        }
+
+        // Find most active day of week
+        $dayOfWeekCounts = [];
+        foreach ($activities as $activity) {
+            $dayName = $activity->startDate->format('l'); // "Monday", "Tuesday", etc.
+            if (!isset($dayOfWeekCounts[$dayName])) {
+                $dayOfWeekCounts[$dayName] = 0;
+            }
+            $dayOfWeekCounts[$dayName]++;
+        }
+        $mostActiveDay = '';
+        if (count($dayOfWeekCounts) > 0) {
+            arsort($dayOfWeekCounts);
+            $mostActiveDay = array_key_first($dayOfWeekCounts);
+        }
+
         // Calculate date range (last 7 days)
-        $endDate = new DateTime();
-        $startDate = (new DateTime())->modify('-7 days');
+        if (!isset($endDate)) {
+            $endDate = new DateTime();
+            $startDate = (new DateTime())->modify('-7 days');
+        }
 
         $html = View::render('pages/dashboard', [
             'layout' => 'main',
@@ -130,6 +171,9 @@ return function (App $app) {
             'startDate' => $startDate,
             'endDate' => $endDate,
             'error' => $error,
+            'longestDurationType' => $longestDurationType,
+            'weeklyAverage' => $weeklyAverage,
+            'mostActiveDay' => $mostActiveDay,
         ]);
 
         $response->getBody()->write($html);

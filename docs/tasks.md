@@ -284,11 +284,11 @@
 - [x] Add chart title and axis labels
 - [x] **VISIBLE:** User sees polished, readable time chart
 
-### 3.5 Add Insights Summary
-- [ ] Highlight longest duration activity
-- [ ] Show weekly average time
-- [ ] Add insight text ("Most active on Tuesdays")
-- [ ] **VISIBLE:** User gets actionable insights from data
+### 3.5 Add Insights Summary ✅
+- [x] Highlight longest duration activity
+- [x] Show weekly average time
+- [x] Add insight text ("Most active on Tuesdays")
+- [x] **VISIBLE:** User gets actionable insights from data
 
 ---
 

@@ -206,6 +206,43 @@
                     window.durationData = <?= json_encode($movingTimeByType) ?>;
                 </script>
 
+                <!-- Insights Section -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #fff9e6; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                    <h4 style="margin-top: 0; margin-bottom: 1rem; color: #92400e;">💡 Insights</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <?php if ($longestDurationType): ?>
+                            <div style="padding: 1rem; background: white; border-radius: 6px;">
+                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Most Time Spent</div>
+                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                                    <?= htmlspecialchars($longestDurationType) ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($weeklyAverage > 0): ?>
+                            <div style="padding: 1rem; background: white; border-radius: 6px;">
+                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Weekly Average</div>
+                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                                    <?php
+                                    $avgHours = floor($weeklyAverage / 3600);
+                                    $avgMinutes = round(($weeklyAverage % 3600) / 60);
+                                    echo $avgHours . 'h ' . $avgMinutes . 'm';
+                                    ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($mostActiveDay): ?>
+                            <div style="padding: 1rem; background: white; border-radius: 6px;">
+                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Most Active On</div>
+                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                                    <?= htmlspecialchars($mostActiveDay) ?>s
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
                 <!-- Total Time Summary -->
                 <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
                     <div style="text-align: center;">
