@@ -154,16 +154,112 @@ function initExampleChart() {
     });
 }
 
+// Initialize duration bar chart
+function initDurationChart() {
+    // Check if we have duration data and chart element
+    if (typeof window.durationData === 'undefined' || !window.durationData) {
+        return;
+    }
+
+    const chartElement = document.getElementById('durationChart');
+    if (!chartElement) {
+        return;
+    }
+
+    console.log('Creating duration chart with data:', window.durationData);
+
+    // Extract labels and data (convert seconds to hours)
+    const labels = Object.keys(window.durationData);
+    const dataInHours = Object.values(window.durationData).map(seconds => seconds / 3600);
+
+    // Create bar chart
+    new Chart(chartElement, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Hours',
+                data: dataInHours,
+                backgroundColor: [
+                    '#fc4c02', // Strava orange
+                    '#2d3748', // Dark gray
+                    '#4299e1', // Blue
+                    '#48bb78', // Green
+                    '#ed8936', // Orange
+                    '#9f7aea', // Purple
+                    '#f56565', // Red
+                    '#38b2ac', // Teal
+                ],
+                borderWidth: 0,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const hours = Math.floor(context.parsed.y);
+                            const minutes = Math.round((context.parsed.y - hours) * 60);
+                            return `${hours}h ${minutes}m`;
+                        }
+                    }
+                },
+                datalabels: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Hours',
+                        font: {
+                            size: 12,
+                            weight: '600'
+                        }
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + 'h';
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Activity Type',
+                        font: {
+                            size: 12,
+                            weight: '600'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    console.log('Duration chart created successfully');
+}
+
 // Try to initialize immediately and also on DOMContentLoaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         initActivityChart();
         initExampleChart();
+        initDurationChart();
     });
 } else {
     // DOM is already ready, call immediately
     initActivityChart();
     initExampleChart();
+    initDurationChart();
 }
 
 console.log('Strava Stats app initialized');

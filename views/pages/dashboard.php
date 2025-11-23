@@ -189,9 +189,17 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
     <div id="durationContent" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalActivities > 0): ?>
-                <!-- Duration Breakdown Cards -->
+                <!-- Duration Bar Chart -->
                 <div style="margin-top: 1rem;">
-                    <h4 style="margin-bottom: 1rem;">Time Spent by Activity Type:</h4>
+                    <h4 style="margin-bottom: 1rem; text-align: center;">Time Spent by Activity Type</h4>
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <canvas id="durationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Duration Breakdown Cards -->
+                <div style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem;">Duration Breakdown:</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                         <?php foreach ($movingTimeByType as $type => $seconds): ?>
                             <?php
@@ -212,6 +220,11 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                <!-- Pass duration data to JavaScript -->
+                <script>
+                    window.durationData = <?= json_encode($movingTimeByType) ?>;
+                </script>
 
                 <!-- Total Time Summary -->
                 <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
