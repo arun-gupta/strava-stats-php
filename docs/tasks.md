@@ -309,10 +309,10 @@
 - [ ] **VISIBLE:** User sees which days they were active
 
 ### 4.3 Visual Heatmap with Colors
-- [ ] Create intensity buckets (no activity, light, medium, heavy)
+- [ ] Create intensity buckets based on time spent (no activity, light, medium, heavy)
 - [ ] Render calendar grid with color-coded cells
-- [ ] Add legend explaining colors
-- [ ] **VISIBLE:** User sees color-coded activity heatmap
+- [ ] Add legend explaining colors and intensity levels
+- [ ] **VISIBLE:** User sees color-coded activity heatmap with legend
 
 ### 4.4 Add Tooltips & Interactivity
 - [ ] Add hover tooltips showing activity details per day
