@@ -73,23 +73,28 @@ class StravaClient
     }
 
     /**
-     * Make HTTP request with automatic retry on 401
+     * Make HTTP request with automatic retry on specific errors
      *
      * @param callable $requestCallback Function that makes the request
      * @param string $accessToken Current access token
      * @param string $requestName Name for logging
+     * @param int $retryCount Current retry attempt (for exponential backoff)
      * @return array|null Response data or null on failure
      */
-    private function makeRequestWithRetry(callable $requestCallback, string $accessToken, string $requestName): ?array
+    private function makeRequestWithRetry(callable $requestCallback, string $accessToken, string $requestName, int $retryCount = 0): ?array
     {
+        $maxRetries = 3;
+
         try {
             $response = $requestCallback($accessToken);
             $data = json_decode($response->getBody()->getContents(), true);
             return $data;
 
         } catch (ClientException $e) {
-            // Check if it's a 401 Unauthorized
-            if ($e->getResponse()->getStatusCode() === 401) {
+            $statusCode = $e->getResponse()->getStatusCode();
+
+            // Handle 401 Unauthorized - Token expired
+            if ($statusCode === 401) {
                 Logger::info("Received 401 for $requestName, attempting token refresh");
 
                 // Try to refresh token
@@ -118,12 +123,44 @@ class StravaClient
                 return null;
             }
 
-            // Other client errors
-            Logger::error("Failed to fetch $requestName: " . $e->getMessage());
+            // Handle 429 Too Many Requests - Rate limiting
+            if ($statusCode === 429 && $retryCount < $maxRetries) {
+                $retryAfter = $e->getResponse()->getHeaderLine('Retry-After') ?: 5;
+                $waitTime = is_numeric($retryAfter) ? (int)$retryAfter : 5;
+
+                Logger::warning("Rate limited for $requestName, waiting {$waitTime}s before retry");
+                sleep($waitTime);
+
+                return $this->makeRequestWithRetry($requestCallback, $accessToken, $requestName, $retryCount + 1);
+            }
+
+            // Handle 403 Forbidden - Insufficient permissions
+            if ($statusCode === 403) {
+                Logger::error("Insufficient permissions for $requestName - check OAuth scopes");
+                return null;
+            }
+
+            // Handle 404 Not Found - Resource doesn't exist (don't retry)
+            if ($statusCode === 404) {
+                Logger::warning("Resource not found for $requestName");
+                return null;
+            }
+
+            // Other 4xx client errors (don't retry)
+            Logger::error("Client error ($statusCode) for $requestName: " . $e->getMessage());
             return null;
 
         } catch (GuzzleException $e) {
-            Logger::error("Failed to fetch $requestName: " . $e->getMessage());
+            // Handle 5xx server errors with exponential backoff
+            if ($retryCount < $maxRetries) {
+                $waitTime = pow(2, $retryCount); // Exponential backoff: 1s, 2s, 4s
+                Logger::warning("Server error for $requestName, retrying in {$waitTime}s (attempt " . ($retryCount + 1) . "/$maxRetries)");
+                sleep($waitTime);
+
+                return $this->makeRequestWithRetry($requestCallback, $accessToken, $requestName, $retryCount + 1);
+            }
+
+            Logger::error("Failed to fetch $requestName after $maxRetries retries: " . $e->getMessage());
             return null;
         }
     }
