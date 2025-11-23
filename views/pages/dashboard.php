@@ -318,20 +318,23 @@
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
                             <?php
-                            $tooltipText = $day['date']->format('M j, Y') . '\n';
+                            $tooltipText = $day['date']->format('M j, Y');
                             if ($day['hasActivity']) {
                                 $hours = floor($day['timeSpent'] / 3600);
                                 $minutes = floor(($day['timeSpent'] % 3600) / 60);
-                                $tooltipText .= $hours . 'h ' . $minutes . 'm total\n';
-                                $tooltipText .= $day['activityCount'] . ' ' . ($day['activityCount'] === 1 ? 'activity' : 'activities') . '\n\n';
+                                $tooltipText .= ' | ' . $hours . 'h ' . $minutes . 'm total';
+                                $tooltipText .= ' | ' . $day['activityCount'] . ' ' . ($day['activityCount'] === 1 ? 'activity' : 'activities');
+                                $tooltipText .= ' | ';
+                                $activityParts = [];
                                 foreach ($day['activities'] as $activity) {
                                     $actHours = floor($activity['movingTime'] / 3600);
                                     $actMinutes = floor(($activity['movingTime'] % 3600) / 60);
                                     $distance = round($activity['distance'] / 1000, 1);
-                                    $tooltipText .= '• ' . $activity['type'] . ': ' . $distance . 'km, ' . $actHours . 'h ' . $actMinutes . 'm\n';
+                                    $activityParts[] = $activity['type'] . ': ' . $distance . 'km, ' . $actHours . 'h ' . $actMinutes . 'm';
                                 }
+                                $tooltipText .= implode(' | ', $activityParts);
                             } else {
-                                $tooltipText .= 'No activity';
+                                $tooltipText .= ' | No activity';
                             }
                             ?>
                             <div class="heatmap-cell"
