@@ -24,8 +24,11 @@ class StravaClient
         $config = require __DIR__ . '/../../config/oauth.php';
         $this->apiBaseUrl = $config['strava']['api_base_url'];
 
+        // Ensure base_uri ends with trailing slash for Guzzle relative paths
+        $baseUri = rtrim($this->apiBaseUrl, '/') . '/';
+
         $this->httpClient = new Client([
-            'base_uri' => $this->apiBaseUrl,
+            'base_uri' => $baseUri,
             'timeout' => 10.0,
         ]);
     }
