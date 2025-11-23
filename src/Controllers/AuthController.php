@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -97,14 +98,91 @@ class AuthController
      */
     public function callback(Request $request, Response $response): Response
     {
-        // TODO: Implement OAuth callback handling (Phase 1.3)
-        // - Validate state parameter
-        // - Exchange code for tokens
-        // - Store tokens in session
-        // - Redirect to dashboard
+        // Start session if not already started
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-        $response->getBody()->write('OAuth callback - Coming Soon');
-        return $response;
+        // Get query parameters
+        $queryParams = $request->getQueryParams();
+        $code = $queryParams['code'] ?? null;
+        $state = $queryParams['state'] ?? null;
+        $error = $queryParams['error'] ?? null;
+
+        // Handle error from Strava (user denied access)
+        if ($error) {
+            // Redirect to home with error message
+            return $response
+                ->withHeader('Location', '/?error=' . urlencode($error))
+                ->withStatus(302);
+        }
+
+        // Validate required parameters
+        if (!$code || !$state) {
+            return $response
+                ->withHeader('Location', '/?error=missing_parameters')
+                ->withStatus(302);
+        }
+
+        // Validate state parameter (CSRF protection)
+        if (!isset($_SESSION['oauth_state']) || $state !== $_SESSION['oauth_state']) {
+            // Clear session and redirect with error
+            unset($_SESSION['oauth_state']);
+            unset($_SESSION['oauth_code_verifier']);
+            return $response
+                ->withHeader('Location', '/?error=invalid_state')
+                ->withStatus(302);
+        }
+
+        // Get code verifier from session
+        $codeVerifier = $_SESSION['oauth_code_verifier'] ?? null;
+        if (!$codeVerifier) {
+            return $response
+                ->withHeader('Location', '/?error=missing_verifier')
+                ->withStatus(302);
+        }
+
+        // Load OAuth configuration
+        $config = require __DIR__ . '/../../config/oauth.php';
+        $stravaConfig = $config['strava'];
+
+        // Exchange authorization code for access token
+        try {
+            $client = new Client();
+            $tokenResponse = $client->post($stravaConfig['token_url'], [
+                'form_params' => [
+                    'client_id' => $stravaConfig['client_id'],
+                    'client_secret' => $stravaConfig['client_secret'],
+                    'code' => $code,
+                    'grant_type' => 'authorization_code',
+                    'code_verifier' => $codeVerifier,
+                ],
+            ]);
+
+            $tokenData = json_decode($tokenResponse->getBody()->getContents(), true);
+
+            // Store tokens and athlete data in session
+            $_SESSION['access_token'] = $tokenData['access_token'];
+            $_SESSION['refresh_token'] = $tokenData['refresh_token'];
+            $_SESSION['expires_at'] = $tokenData['expires_at'];
+            $_SESSION['athlete'] = $tokenData['athlete'] ?? [];
+
+            // Clean up OAuth state
+            unset($_SESSION['oauth_state']);
+            unset($_SESSION['oauth_code_verifier']);
+
+            // Redirect to dashboard
+            return $response
+                ->withHeader('Location', '/dashboard')
+                ->withStatus(302);
+
+        } catch (\Exception $e) {
+            // Log error and redirect with error message
+            error_log('OAuth token exchange failed: ' . $e->getMessage());
+            return $response
+                ->withHeader('Location', '/?error=token_exchange_failed')
+                ->withStatus(302);
+        }
     }
 
     /**
