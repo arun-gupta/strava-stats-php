@@ -87,13 +87,29 @@ return function (App $app) {
         $accessToken = $_SESSION['access_token'] ?? null;
         $activities = [];
         $activityCounts = [];
+        $error = null;
 
         // Fetch activities if we have a token
         if ($accessToken) {
-            $activityService = new ActivityService();
-            $activities = $activityService->fetchRecentActivities($accessToken);
-            $activityCounts = $activityService->getCountsByType($activities);
+            try {
+                $activityService = new ActivityService();
+                $activities = $activityService->fetchRecentActivities($accessToken);
+                $activityCounts = $activityService->getCountsByType($activities);
+            } catch (\Exception $e) {
+                // Log the error
+                \App\Services\Logger::error('Failed to fetch activities', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                // Set user-friendly error message
+                $error = 'Unable to load activities from Strava. Please try again.';
+            }
         }
+
+        // Calculate date range (last 7 days)
+        $endDate = new DateTime();
+        $startDate = (new DateTime())->modify('-7 days');
 
         $html = View::render('pages/dashboard', [
             'layout' => 'main',
@@ -101,6 +117,9 @@ return function (App $app) {
             'activities' => $activities,
             'activityCounts' => $activityCounts,
             'totalActivities' => count($activities),
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'error' => $error,
         ]);
 
         $response->getBody()->write($html);

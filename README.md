@@ -4,13 +4,20 @@ Analyze and visualize your Strava activity statistics with beautiful charts and 
 
 ## Features
 
-- 📊 Activity distribution by sport type (count and duration)
+**Current:**
+- 🔒 Secure OAuth2 authentication with Strava
+- 📊 Activity distribution pie chart (last 7 days)
+- 📈 Activity count breakdown by sport type
+- 🎨 Interactive charts with tooltips and data labels
+- ⚡ Loading states and error handling
+
+**Coming Soon:**
+- ⏱️ Duration analysis and time spent per activity type
 - 🔥 Training heatmaps with consistency and streak tracking
 - 🏃 Running statistics and personal records
 - 📈 Mileage and pace trends over time
-- 📅 Flexible date ranges (7d, 30d, YTD, All Time, Custom)
+- 📅 Flexible date ranges (7d, 30d, 90d, Custom)
 - ⚖️ Toggle between metric and imperial units
-- 🔒 Secure OAuth2 authentication with Strava
 
 ## Quick Start
 

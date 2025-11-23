@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Strava Activity Analyzer' ?></title>
-    <link rel="stylesheet" href="/build/assets/app.css">
+    <?php
+    use App\Helpers\Vite;
+
+    // Load CSS files if they exist
+    foreach (Vite::css('resources/js/app.js') as $cssFile): ?>
+        <link rel="stylesheet" href="<?= $cssFile ?>">
+    <?php endforeach; ?>
 </head>
 <body>
     <?php
@@ -59,6 +65,6 @@
         <p>&copy; <?= date('Y') ?> Strava Activity Analyzer</p>
     </footer>
 
-    <script type="module" src="/build/assets/app.js"></script>
+    <script type="module" src="<?= Vite::asset('resources/js/app.js') ?>"></script>
 </body>
 </html>
