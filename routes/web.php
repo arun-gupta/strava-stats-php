@@ -268,6 +268,19 @@ return function (App $app) {
                 }
             }
 
+            // Get activity details for this day
+            $dayActivitiesDetails = [];
+            if (isset($activitiesByDate[$dateStr])) {
+                foreach ($activitiesByDate[$dateStr] as $activity) {
+                    $dayActivitiesDetails[] = [
+                        'name' => $activity->name,
+                        'type' => $activity->type,
+                        'distance' => $activity->distance,
+                        'movingTime' => $activity->movingTime,
+                    ];
+                }
+            }
+
             $calendarDays[] = [
                 'date' => $date,
                 'dateStr' => $dateStr,
@@ -276,6 +289,7 @@ return function (App $app) {
                 'timeSpent' => $timeSpent,
                 'intensity' => $intensity,
                 'color' => $color,
+                'activities' => $dayActivitiesDetails,
             ];
         }
 

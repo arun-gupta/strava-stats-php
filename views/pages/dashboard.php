@@ -317,10 +317,30 @@
                     <!-- Calendar Grid -->
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
-                            <div style="width: 60px; height: 60px; background: <?= htmlspecialchars($day['color']) ?>;
+                            <?php
+                            $tooltipText = $day['date']->format('M j, Y') . '\n';
+                            if ($day['hasActivity']) {
+                                $hours = floor($day['timeSpent'] / 3600);
+                                $minutes = floor(($day['timeSpent'] % 3600) / 60);
+                                $tooltipText .= $hours . 'h ' . $minutes . 'm total\n';
+                                $tooltipText .= $day['activityCount'] . ' ' . ($day['activityCount'] === 1 ? 'activity' : 'activities') . '\n\n';
+                                foreach ($day['activities'] as $activity) {
+                                    $actHours = floor($activity['movingTime'] / 3600);
+                                    $actMinutes = floor(($activity['movingTime'] % 3600) / 60);
+                                    $distance = round($activity['distance'] / 1000, 1);
+                                    $tooltipText .= '• ' . $activity['type'] . ': ' . $distance . 'km, ' . $actHours . 'h ' . $actMinutes . 'm\n';
+                                }
+                            } else {
+                                $tooltipText .= 'No activity';
+                            }
+                            ?>
+                            <div class="heatmap-cell"
+                                 style="width: 60px; height: 60px; background: <?= htmlspecialchars($day['color']) ?>;
                                         border-radius: 4px; display: flex; align-items: center; justify-content: center;
-                                        position: relative; cursor: pointer;"
-                                 title="<?= $day['date']->format('M j, Y') ?> - <?= $day['hasActivity'] ? number_format($day['timeSpent'] / 3600, 1) . 'h' : 'No activity' ?>">
+                                        position: relative; cursor: pointer; transition: all 0.2s ease-in-out;"
+                                 title="<?= htmlspecialchars($tooltipText) ?>"
+                                 onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.3)';"
+                                 onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
                             </div>
                         <?php endforeach; ?>
                     </div>

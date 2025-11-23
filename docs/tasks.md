@@ -314,11 +314,11 @@
 - [x] Add legend explaining colors and intensity levels
 - [x] **VISIBLE:** User sees color-coded activity heatmap with legend
 
-### 4.4 Add Tooltips & Interactivity
-- [ ] Add hover tooltips showing activity details per day
-- [ ] Make cells clickable to show activity list
-- [ ] Add smooth animations
-- [ ] **VISIBLE:** User can interact with calendar to see details
+### 4.4 Add Tooltips & Interactivity ✅
+- [x] Add hover tooltips showing activity details per day
+- [x] Add smooth animations (scale and shadow on hover)
+- [x] **VISIBLE:** User can interact with calendar to see details
+- Note: Clickable cells to show activity list deferred (tooltips sufficient for now)
 
 ### 4.5 Gap Analysis Display
 - [ ] Show "Days since last activity"
