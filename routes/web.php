@@ -154,6 +154,74 @@ return function (App $app) {
             $mostActiveDay = array_key_first($dayOfWeekCounts);
         }
 
+        // Calculate streak statistics
+        $currentStreak = 0;
+        $longestStreak = 0;
+        $totalActiveDays = 0;
+
+        if (count($activities) > 0) {
+            // Group activities by date (Y-m-d format)
+            $activityDates = [];
+            foreach ($activities as $activity) {
+                $dateStr = $activity->startDate->format('Y-m-d');
+                $activityDates[$dateStr] = true;
+            }
+            $totalActiveDays = count($activityDates);
+
+            // Sort dates
+            $sortedDates = array_keys($activityDates);
+            sort($sortedDates);
+
+            // Calculate current streak (working backwards from today)
+            $today = new DateTime();
+            $checkDate = clone $today;
+            $currentStreak = 0;
+
+            // Check if today or yesterday has activity (current streak is still active)
+            $todayStr = $today->format('Y-m-d');
+            $yesterdayStr = $today->modify('-1 day')->format('Y-m-d');
+
+            if (isset($activityDates[$todayStr]) || isset($activityDates[$yesterdayStr])) {
+                // Start from the most recent activity date
+                $checkDate = isset($activityDates[$todayStr]) ? new DateTime($todayStr) : new DateTime($yesterdayStr);
+
+                while (true) {
+                    $checkStr = $checkDate->format('Y-m-d');
+                    if (isset($activityDates[$checkStr])) {
+                        $currentStreak++;
+                        $checkDate->modify('-1 day');
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            // Calculate longest streak
+            $tempStreak = 1;
+            $longestStreak = 1;
+
+            for ($i = 1; $i < count($sortedDates); $i++) {
+                $prevDate = new DateTime($sortedDates[$i - 1]);
+                $currDate = new DateTime($sortedDates[$i]);
+                $diff = $prevDate->diff($currDate)->days;
+
+                if ($diff === 1) {
+                    $tempStreak++;
+                    $longestStreak = max($longestStreak, $tempStreak);
+                } else {
+                    $tempStreak = 1;
+                }
+            }
+        }
+
+        // Calculate rest days
+        if (!isset($endDate)) {
+            $endDate = new DateTime();
+            $startDate = (new DateTime())->modify('-7 days');
+        }
+        $totalDays = $endDate->diff($startDate)->days + 1;
+        $restDays = $totalDays - $totalActiveDays;
+
         // Calculate date range (last 7 days)
         if (!isset($endDate)) {
             $endDate = new DateTime();
@@ -174,6 +242,10 @@ return function (App $app) {
             'longestDurationType' => $longestDurationType,
             'weeklyAverage' => $weeklyAverage,
             'mostActiveDay' => $mostActiveDay,
+            'currentStreak' => $currentStreak,
+            'longestStreak' => $longestStreak,
+            'totalActiveDays' => $totalActiveDays,
+            'restDays' => $restDays,
         ]);
 
         $response->getBody()->write($html);

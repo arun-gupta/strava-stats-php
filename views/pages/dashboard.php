@@ -76,6 +76,11 @@
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 ⏱️ Duration
             </button>
+            <button id="consistencyTab" class="tab-button" onclick="switchTab('consistency')"
+                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                           color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                🔥 Consistency
+            </button>
         </div>
     </div>
 
@@ -266,6 +271,98 @@
                     <div style="font-size: 4rem; margin-bottom: 1rem;">⏱️</div>
                     <h3 style="color: #333; margin-bottom: 0.5rem;">No Duration Data</h3>
                     <p style="font-size: 1.1rem;">Start logging activities to see your time breakdown</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Consistency Tab Content -->
+    <div id="consistencyContent" class="tab-content" style="display: none;">
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
+            <?php if ($totalActivities > 0): ?>
+                <!-- Streak Statistics Cards -->
+                <div style="margin-top: 1rem;">
+                    <h4 style="margin-bottom: 1rem; text-align: center;">🔥 Training Streak Stats</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <!-- Current Streak -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Current Streak
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
+                                <?= $currentStreak ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                <?= $currentStreak === 1 ? 'day' : 'days' ?> in a row
+                            </div>
+                        </div>
+
+                        <!-- Longest Streak -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Longest Streak
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #2d3748;">
+                                <?= $longestStreak ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                <?= $longestStreak === 1 ? 'day' : 'days' ?> personal best
+                            </div>
+                        </div>
+
+                        <!-- Active Days -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Active Days
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #48bb78;">
+                                <?= $totalActiveDays ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                out of 7 days
+                            </div>
+                        </div>
+
+                        <!-- Rest Days -->
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                                Rest Days
+                            </div>
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #9f7aea;">
+                                <?= $restDays ?>
+                            </div>
+                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                                days of recovery
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivation Message -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #fff9e6; border-radius: 8px; border-left: 4px solid #f59e0b; text-align: center;">
+                    <?php if ($currentStreak === 0): ?>
+                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
+                            💪 Time to start a new streak! Get out there and log an activity.
+                        </p>
+                    <?php elseif ($currentStreak === 1): ?>
+                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
+                            🎯 Great start! Keep the momentum going.
+                        </p>
+                    <?php elseif ($currentStreak < 7): ?>
+                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
+                            🔥 You're on a <?= $currentStreak ?>-day streak! Keep it up!
+                        </p>
+                    <?php else: ?>
+                        <p style="margin: 0; font-size: 1.1rem; color: #92400e;">
+                            🏆 Amazing! <?= $currentStreak ?> days in a row. You're crushing it!
+                        </p>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <div style="text-align: center; padding: 3rem; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🔥</div>
+                    <h3 style="color: #333; margin-bottom: 0.5rem;">No Streak Data Yet</h3>
+                    <p style="font-size: 1.1rem;">Start logging activities to build your streak!</p>
                 </div>
             <?php endif; ?>
         </div>

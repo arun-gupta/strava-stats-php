@@ -296,11 +296,11 @@
 
 **Goal:** User sees calendar heatmap showing workout consistency, streaks, and gaps.
 
-### 4.1 Show Basic Streak Stats First
-- [ ] Calculate and display current streak (consecutive days with activity)
-- [ ] Show longest streak achieved
-- [ ] Display total active days vs rest days
-- [ ] **VISIBLE:** User sees their streak statistics
+### 4.1 Show Basic Streak Stats First ✅
+- [x] Calculate and display current streak (consecutive days with activity)
+- [x] Show longest streak achieved
+- [x] Display total active days vs rest days
+- [x] **VISIBLE:** User sees their streak statistics
 
 ### 4.2 Simple Calendar Grid (Text-Based)
 - [ ] Group activities by date
