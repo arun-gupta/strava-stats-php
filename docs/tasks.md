@@ -84,6 +84,7 @@
 - [x] Add interactive .env configuration prompts
 - [x] Add automatic dependency installation
 - [x] Add development server startup
+- [x] Auto-open browser when server starts (cross-platform support)
 - [x] Make script executable
 
 ### 0.12 Documentation (Bonus) ✅
