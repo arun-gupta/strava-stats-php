@@ -39,6 +39,44 @@ return function (App $app) {
     $app->get('/auth/callback', [$authController, 'callback']);
     $app->get('/signout', [$authController, 'signout']);
 
+    // Test endpoint to debug Strava API
+    $app->get('/test-strava', function (Request $request, Response $response) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $accessToken = $_SESSION['access_token'] ?? null;
+
+        if (!$accessToken) {
+            $response->getBody()->write('No access token in session');
+            return $response;
+        }
+
+        // Make a raw curl request to Strava
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.strava.com/api/v3/athlete/activities?per_page=5');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $accessToken,
+            'Accept: application/json',
+        ]);
+
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        $output = [
+            'http_code' => $httpCode,
+            'error' => $error ?: null,
+            'token_prefix' => substr($accessToken, 0, 10) . '...',
+            'response' => $result,
+        ];
+
+        $response->getBody()->write('<pre>' . htmlspecialchars(json_encode($output, JSON_PRETTY_PRINT)) . '</pre>');
+        return $response;
+    });
+
     // Dashboard (protected with middleware)
     $app->get('/dashboard', function (Request $request, Response $response) {
         // Start session to get access token
