@@ -186,12 +186,14 @@ return function (App $app) {
         if (count($activities) > 0) {
             // Group activities by date (Y-m-d format) within the 7-day window
             $activityDates = [];
+            $startDateStr = $startDate->format('Y-m-d');
+            $endDateStr = $endDate->format('Y-m-d');
+
             foreach ($activities as $activity) {
                 $dateStr = $activity->startDate->format('Y-m-d');
-                $activityDate = $activity->startDate;
 
-                // Only count activities within our 7-day display window
-                if ($activityDate >= $startDate && $activityDate <= $endDate) {
+                // Only count activities within our 7-day display window (compare date strings, not timestamps)
+                if ($dateStr >= $startDateStr && $dateStr <= $endDateStr) {
                     $activityDates[$dateStr] = true;
                 }
             }
