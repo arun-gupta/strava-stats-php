@@ -98,17 +98,7 @@ return function (App $app) {
         if ($accessToken) {
             try {
                 $activityService = new ActivityService();
-                $allActivities = $activityService->fetchRecentActivities($accessToken);
-
-                // Filter to running activities if running-only mode is enabled
-                if ($runningOnly) {
-                    $activities = array_filter($allActivities, function($activity) {
-                        return $activity->type === 'Run';
-                    });
-                    $activities = array_values($activities); // Re-index array
-                } else {
-                    $activities = $allActivities;
-                }
+                $activities = $activityService->fetchRecentActivities($accessToken);
 
                 $activityCounts = $activityService->getCountsByType($activities);
                 $movingTimeByType = $activityService->getMovingTimeByType($activities);
@@ -169,13 +159,23 @@ return function (App $app) {
             $mostActiveDay = array_key_first($dayOfWeekCounts);
         }
 
+        // Filter activities for heatmap if running-only mode is enabled
+        // This only affects the heatmap calculations, not other tabs
+        $heatmapActivities = $activities;
+        if ($runningOnly) {
+            $heatmapActivities = array_filter($activities, function($activity) {
+                return $activity->type === 'Run';
+            });
+            $heatmapActivities = array_values($heatmapActivities); // Re-index array
+        }
+
         // Calculate date range for the display window (last 7 days)
         if (!isset($endDate)) {
             $endDate = new DateTime();
             $startDate = (new DateTime())->modify('-6 days'); // -6 days + today = 7 days
         }
 
-        // Calculate streak statistics
+        // Calculate streak statistics (using heatmap-filtered activities)
         $currentStreak = 0;
         $longestStreak = 0;
         $totalActiveDays = 0;
@@ -183,13 +183,13 @@ return function (App $app) {
         $longestGap = 0;
         $totalGapDays = 0;
 
-        if (count($activities) > 0) {
+        if (count($heatmapActivities) > 0) {
             // Group activities by date (Y-m-d format) within the 7-day window
             $activityDates = [];
             $startDateStr = $startDate->format('Y-m-d');
             $endDateStr = $endDate->format('Y-m-d');
 
-            foreach ($activities as $activity) {
+            foreach ($heatmapActivities as $activity) {
                 $dateStr = $activity->startDate->format('Y-m-d');
 
                 // Only count activities within our 7-day display window (compare date strings, not timestamps)
@@ -280,9 +280,9 @@ return function (App $app) {
             $averagePace = ($totalRunningTime / 60) / $totalMiles;
         }
 
-        // Group activities by date for calendar display
+        // Group activities by date for calendar display (use heatmap-filtered activities)
         $activitiesByDate = [];
-        foreach ($activities as $activity) {
+        foreach ($heatmapActivities as $activity) {
             $dateStr = $activity->startDate->format('Y-m-d');
             if (!isset($activitiesByDate[$dateStr])) {
                 $activitiesByDate[$dateStr] = [];
