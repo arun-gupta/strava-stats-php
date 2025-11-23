@@ -7,9 +7,39 @@
     <link rel="stylesheet" href="/build/assets/app.css">
 </head>
 <body>
+    <?php
+    // Start session to check authentication
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $isAuthenticated = isset($_SESSION['access_token']);
+    $athlete = $_SESSION['athlete'] ?? null;
+    ?>
     <header>
-        <div class="container">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <h1><a href="/" style="color: white; text-decoration: none;">Strava Stats</a></h1>
+
+            <?php if ($isAuthenticated && $athlete): ?>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <?php if (!empty($athlete['profile'])): ?>
+                            <img src="<?= htmlspecialchars($athlete['profile']) ?>"
+                                 alt="<?= htmlspecialchars($athlete['firstname'] ?? 'Athlete') ?>"
+                                 style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                        <?php endif; ?>
+                        <span style="color: white; font-weight: 500;">
+                            <?= htmlspecialchars(($athlete['firstname'] ?? '') . ' ' . ($athlete['lastname'] ?? '')) ?>
+                        </span>
+                    </div>
+                    <a href="/signout"
+                       style="color: white; text-decoration: none; padding: 6px 12px;
+                              border: 1px solid white; border-radius: 4px; font-size: 14px;"
+                       onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+                       onmouseout="this.style.backgroundColor='transparent'">
+                        Sign Out
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </header>
 
