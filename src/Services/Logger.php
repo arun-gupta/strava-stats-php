@@ -26,9 +26,17 @@ class Logger
                 mkdir($logDir, 0755, true);
             }
 
+            // Log to file
             self::$instance->pushHandler(
                 new StreamHandler($logPath, MonologLogger::DEBUG)
             );
+
+            // Also log to console (stderr) in development
+            if (($_ENV['APP_ENV'] ?? 'development') !== 'production') {
+                self::$instance->pushHandler(
+                    new StreamHandler('php://stderr', MonologLogger::DEBUG)
+                );
+            }
         }
 
         return self::$instance;
