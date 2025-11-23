@@ -115,13 +115,13 @@
 - [x] Redirect user to Strava authorization page
 - [x] **VISIBLE:** User is redirected to Strava when clicking button
 
-### 1.3 OAuth Callback & Token Exchange (Strava → App)
-- [ ] Implement GET /auth/callback route
-- [ ] Validate state parameter (CSRF protection)
-- [ ] Exchange authorization code for access token using Guzzle
-- [ ] Store tokens in session (access_token, refresh_token, expires_at)
-- [ ] Redirect to dashboard on success
-- [ ] **VISIBLE:** User returns to app after Strava authorization
+### 1.3 OAuth Callback & Token Exchange (Strava → App) ✅
+- [x] Implement GET /auth/callback route
+- [x] Validate state parameter (CSRF protection)
+- [x] Exchange authorization code for access token using Guzzle
+- [x] Store tokens in session (access_token, refresh_token, expires_at)
+- [x] Redirect to dashboard on success
+- [x] **VISIBLE:** User returns to app after Strava authorization
 
 ### 1.4 User Profile Display
 - [ ] Create StravaClient service with getAthlete() method
