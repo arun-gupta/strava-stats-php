@@ -88,18 +88,6 @@ return function (App $app) {
         $activities = [];
         $activityCounts = [];
 
-        // Debug: Log token info
-        if ($accessToken) {
-            \App\Services\Logger::info('Dashboard loading with token', [
-                'token_length' => strlen($accessToken),
-                'token_prefix' => substr($accessToken, 0, 10) . '...',
-                'expires_at' => $_SESSION['expires_at'] ?? 'not set',
-                'athlete_id' => $_SESSION['athlete']['id'] ?? 'not set',
-            ]);
-        } else {
-            \App\Services\Logger::warning('Dashboard loading WITHOUT access token');
-        }
-
         // Fetch activities if we have a token
         if ($accessToken) {
             $activityService = new ActivityService();

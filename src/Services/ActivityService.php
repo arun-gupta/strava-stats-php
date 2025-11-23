@@ -45,11 +45,8 @@ class ActivityService
 
             // No more activities
             if ($response === null || empty($response)) {
-                Logger::info('No more activities from API', ['page' => $page]);
                 break;
             }
-
-            Logger::info('Fetched activities from API', ['page' => $page, 'count' => count($response)]);
 
             // Parse activities
             foreach ($response as $activityData) {
@@ -59,10 +56,6 @@ class ActivityService
                 // Activities are returned in reverse chronological order, so if we hit one that's too old,
                 // all remaining activities will also be too old
                 if ($after !== null && $activity->startDate < $after) {
-                    Logger::info('Activity too old, stopping pagination', [
-                        'activity_date' => $activity->startDate->format('Y-m-d'),
-                        'after_date' => $after->format('Y-m-d')
-                    ]);
                     break 2; // Break out of both foreach and while loops
                 }
 
