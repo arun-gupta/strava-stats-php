@@ -114,5 +114,28 @@ echo ""
 echo "   Press Ctrl+C to stop the server"
 echo ""
 
-# Start PHP built-in server
-php -S localhost:8080 -t public
+# Function to open browser based on OS
+open_browser() {
+    local url="$1"
+    if command -v xdg-open &> /dev/null; then
+        xdg-open "$url" &> /dev/null &
+    elif command -v open &> /dev/null; then
+        open "$url" &> /dev/null &
+    elif command -v start &> /dev/null; then
+        start "$url" &> /dev/null &
+    fi
+}
+
+# Start PHP built-in server in background briefly to let it initialize
+php -S localhost:8080 -t public &> logs/server.log &
+SERVER_PID=$!
+
+# Wait a moment for server to start
+sleep 2
+
+# Open browser
+echo "🌐 Opening browser..."
+open_browser "http://localhost:8080"
+
+# Bring server to foreground
+wait $SERVER_PID
