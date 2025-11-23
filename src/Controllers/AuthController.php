@@ -162,6 +162,9 @@ class AuthController
 
             $tokenData = json_decode($tokenResponse->getBody()->getContents(), true);
 
+            // Regenerate session ID to prevent session fixation attacks
+            session_regenerate_id(true);
+
             // Store tokens and athlete data in session
             $_SESSION['access_token'] = $tokenData['access_token'];
             $_SESSION['refresh_token'] = $tokenData['refresh_token'];
