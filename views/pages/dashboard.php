@@ -4,7 +4,7 @@ $athlete = $_SESSION['athlete'] ?? null;
 $firstName = $athlete['firstname'] ?? 'Athlete';
 ?>
 
-<div style="padding: 2rem 0;">
+<div style="padding: 1rem 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <div>
             <h2 style="margin: 0;">Strava Activity Analyzer</h2>
