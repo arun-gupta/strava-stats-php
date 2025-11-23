@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 
 return function (App $app) {
-    // Health check endpoint
+    // Health check endpoint (public, no auth required)
     $app->get('/healthz', function (Request $request, Response $response) {
         $health = [
             'status' => 'healthy',
@@ -22,5 +23,5 @@ return function (App $app) {
             ->withStatus(200);
     });
 
-    // API routes will be added here
+    // Protected API routes will be added here with ->add(new AuthMiddleware())
 };

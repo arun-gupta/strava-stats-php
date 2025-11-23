@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\AuthController;
+use App\Middleware\AuthMiddleware;
 use App\Services\View;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -26,21 +27,8 @@ return function (App $app) {
     $app->get('/auth/callback', [$authController, 'callback']);
     $app->get('/signout', [$authController, 'signout']);
 
-    // Dashboard (protected)
+    // Dashboard (protected with middleware)
     $app->get('/dashboard', function (Request $request, Response $response) {
-        // Start session if not already started
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        // Check if user is authenticated
-        if (!isset($_SESSION['access_token'])) {
-            // Redirect to home if not authenticated
-            return $response
-                ->withHeader('Location', '/')
-                ->withStatus(302);
-        }
-
         $html = View::render('pages/dashboard', [
             'layout' => 'main',
             'title' => 'Dashboard - Strava Activity Analyzer',
@@ -48,5 +36,5 @@ return function (App $app) {
 
         $response->getBody()->write($html);
         return $response;
-    });
+    })->add(new AuthMiddleware());
 };

@@ -146,12 +146,12 @@
 - [x] Test complete login → logout cycle
 - [x] **VISIBLE:** User can sign out and return to home page
 
-### 1.7 Authentication Middleware & Route Protection
-- [ ] Create AuthMiddleware to check for valid session
-- [ ] Apply middleware to /dashboard and /api/* routes
-- [ ] Redirect unauthenticated users to home page
-- [ ] Test protected routes require authentication
-- [ ] **VISIBLE:** Unauthenticated users can't access dashboard
+### 1.7 Authentication Middleware & Route Protection ✅
+- [x] Create AuthMiddleware to check for valid session
+- [x] Apply middleware to /dashboard and /api/* routes
+- [x] Redirect unauthenticated users to home page
+- [x] Test protected routes require authentication
+- [x] **VISIBLE:** Unauthenticated users can't access dashboard
 
 ### 1.8 Token Refresh (Background)
 - [ ] Implement automatic token refresh before expiry
