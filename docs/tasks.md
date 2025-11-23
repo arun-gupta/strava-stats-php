@@ -108,12 +108,12 @@
 - [x] Create AuthController with placeholder methods
 - [x] **VISIBLE:** User sees working button on home page
 
-### 1.2 OAuth Authorization Flow (User → Strava)
-- [ ] Implement GET /auth/strava route in AuthController
-- [ ] Generate OAuth URL with state parameter and PKCE
-- [ ] Store state in session for validation
-- [ ] Redirect user to Strava authorization page
-- [ ] **VISIBLE:** User is redirected to Strava when clicking button
+### 1.2 OAuth Authorization Flow (User → Strava) ✅
+- [x] Implement GET /auth/strava route in AuthController
+- [x] Generate OAuth URL with state parameter and PKCE
+- [x] Store state in session for validation
+- [x] Redirect user to Strava authorization page
+- [x] **VISIBLE:** User is redirected to Strava when clicking button
 
 ### 1.3 OAuth Callback & Token Exchange (Strava → App)
 - [ ] Implement GET /auth/callback route
