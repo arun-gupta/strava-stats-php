@@ -354,30 +354,25 @@
 - [x] Remove "coming soon" alert and make toggle functional
 - [x] **VISIBLE:** Running Only button filters heatmap to show only runs
 
-### 5.2 Add Personal Records (PRs)
-- [ ] Calculate fastest pace from all runs
-- [ ] Calculate longest run distance
-- [ ] Show runs over 10K count
-- [ ] Display PRs with dates
-- [ ] **VISIBLE:** User sees their personal records
+### 5.2 Add Personal Records (PRs) ✅
+- [x] Calculate fastest pace from all runs
+- [x] Calculate longest run distance
+- [x] Show runs over 10K count
+- [x] Display PRs with dates
+- [x] **VISIBLE:** User sees their personal records
 
-### 5.3 Simple Distance Distribution List
-- [ ] Group runs by distance ranges (0-5K, 5-10K, 10K+)
-- [ ] Show count in each range
-- [ ] Display as simple list or cards
-- [ ] **VISIBLE:** User sees distance distribution
+### 5.3 Distance Distribution Histogram ✅
+- [x] Group runs by 1-mile bins (0-1, 1-2, 2-3, etc.)
+- [x] Calculate count in each bin
+- [x] Create histogram with Chart.js
+- [x] Style bars consistently
+- [x] **VISIBLE:** User sees visual histogram of run distances
 
-### 5.4 Distance Distribution Histogram
-- [ ] Create histogram with Chart.js
-- [ ] Use 1-mile or 1-km bins
-- [ ] Style bars consistently
-- [ ] **VISIBLE:** User sees visual histogram of run distances
-
-### 5.5 Add Unit Toggle (Miles/Kilometers)
-- [ ] Add toggle button in header
-- [ ] Convert distances and paces
-- [ ] Update all displayed values
-- [ ] **VISIBLE:** User can switch between units
+### 5.5 Add Unit Toggle (Miles/Kilometers) ✅
+- [x] Add toggle button in Running Stats tab
+- [x] Convert distances and paces dynamically
+- [x] Update all displayed values including histogram
+- [x] **VISIBLE:** User can switch between miles and kilometers
 
 ---
 

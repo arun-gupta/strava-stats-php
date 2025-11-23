@@ -280,6 +280,52 @@ return function (App $app) {
             $averagePace = ($totalRunningTime / 60) / $totalMiles;
         }
 
+        // Calculate Personal Records (PRs)
+        $fastestPace = 0;
+        $fastestPaceDate = null;
+        $longestRunDistance = 0;
+        $longestRunDate = null;
+        $runsOver10K = 0;
+
+        foreach ($runningActivities as $run) {
+            // Fastest pace
+            if ($run->distance > 0) {
+                $runMiles = $run->distance / 1609.34;
+                $runPace = ($run->movingTime / 60) / $runMiles; // min/mile
+
+                if ($fastestPace === 0 || $runPace < $fastestPace) {
+                    $fastestPace = $runPace;
+                    $fastestPaceDate = $run->startDate;
+                }
+            }
+
+            // Longest run
+            if ($run->distance > $longestRunDistance) {
+                $longestRunDistance = $run->distance;
+                $longestRunDate = $run->startDate;
+            }
+
+            // Runs over 10K (10,000 meters = 10K)
+            if ($run->distance >= 10000) {
+                $runsOver10K++;
+            }
+        }
+
+        // Calculate distance distribution by 1-mile bins for histogram
+        $distanceBins = [];
+        foreach ($runningActivities as $run) {
+            $miles = $run->distance / 1609.34;
+            $bin = floor($miles); // 0-1, 1-2, 2-3, etc.
+
+            if (!isset($distanceBins[$bin])) {
+                $distanceBins[$bin] = 0;
+            }
+            $distanceBins[$bin]++;
+        }
+
+        // Sort bins by distance
+        ksort($distanceBins);
+
         // Group activities by date for calendar display (use heatmap-filtered activities)
         $activitiesByDate = [];
         foreach ($heatmapActivities as $activity) {
@@ -384,6 +430,12 @@ return function (App $app) {
             'totalRunningDistance' => $totalRunningDistance,
             'averagePace' => $averagePace,
             'runningOnly' => $runningOnly,
+            'fastestPace' => $fastestPace,
+            'fastestPaceDate' => $fastestPaceDate,
+            'longestRunDistance' => $longestRunDistance,
+            'longestRunDate' => $longestRunDate,
+            'runsOver10K' => $runsOver10K,
+            'distanceBins' => $distanceBins,
         ]);
 
         $response->getBody()->write($html);

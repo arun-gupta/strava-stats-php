@@ -435,54 +435,137 @@
     <div id="runningContent" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalRuns > 0): ?>
+                <!-- Unit Toggle -->
+                <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+                    <button id="milesBtn" onclick="switchUnits('miles')" style="padding: 0.5rem 1rem; background: #fc4c02; color: white; border: 2px solid #fc4c02; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                        Miles
+                    </button>
+                    <button id="kmBtn" onclick="switchUnits('km')" style="padding: 0.5rem 1rem; background: white; color: #666; border: 2px solid #e2e8f0; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                        Kilometers
+                    </button>
+                </div>
+
                 <!-- Running Summary Stats -->
                 <div style="margin-top: 1rem;">
-                    <h4 style="margin-bottom: 1rem; text-align: center;">🏃 Running Summary</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <h4 style="margin-bottom: 0.75rem; text-align: center;">🏃 Running Summary</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
                         <!-- Total Runs -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
                                 Total Runs
                             </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #fc4c02;">
                                 <?= $totalRuns ?>
                             </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
                                 <?= $totalRuns === 1 ? 'run' : 'runs' ?> completed
                             </div>
                         </div>
 
                         <!-- Total Distance -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
                                 Total Distance
                             </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #2d3748;">
+                            <div class="distance-value" data-meters="<?= $totalRunningDistance ?>" style="font-size: 2rem; font-weight: 700; color: #2d3748;">
                                 <?= number_format($totalRunningDistance / 1609.34, 1) ?>
                             </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                            <div class="distance-unit" style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
                                 miles
                             </div>
                         </div>
 
                         <!-- Average Pace -->
-                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-                            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
                                 Average Pace
                             </div>
-                            <div style="font-size: 2.5rem; font-weight: 700; color: #48bb78;">
+                            <div class="pace-value" data-min-per-mile="<?= $averagePace ?>" style="font-size: 2rem; font-weight: 700; color: #48bb78;">
                                 <?php
                                 $paceMinutes = floor($averagePace);
                                 $paceSeconds = round(($averagePace - $paceMinutes) * 60);
                                 echo $paceMinutes . ':' . str_pad($paceSeconds, 2, '0', STR_PAD_LEFT);
                                 ?>
                             </div>
-                            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+                            <div class="pace-unit" style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
                                 min/mile
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Personal Records Section -->
+                <div style="margin-top: 1.25rem;">
+                    <h4 style="margin-bottom: 0.75rem; text-align: center;">🏆 Personal Records</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                        <!-- Fastest Pace -->
+                        <?php if ($fastestPace > 0): ?>
+                            <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #f59e0b;">
+                                <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
+                                    ⚡ Fastest Pace
+                                </div>
+                                <div class="pace-value" data-min-per-mile="<?= $fastestPace ?>" style="font-size: 1.75rem; font-weight: 700; color: #f59e0b;">
+                                    <?php
+                                    $paceMinutes = floor($fastestPace);
+                                    $paceSeconds = round(($fastestPace - $paceMinutes) * 60);
+                                    echo $paceMinutes . ':' . str_pad($paceSeconds, 2, '0', STR_PAD_LEFT);
+                                    ?>
+                                </div>
+                                <div class="pace-unit" style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
+                                    min/mile
+                                </div>
+                                <?php if ($fastestPaceDate): ?>
+                                    <div style="font-size: 0.7rem; color: #999; margin-top: 0.375rem;">
+                                        <?= $fastestPaceDate->format('M j, Y') ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Longest Run -->
+                        <?php if ($longestRunDistance > 0): ?>
+                            <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #8b5cf6;">
+                                <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
+                                    📏 Longest Run
+                                </div>
+                                <div class="distance-value" data-meters="<?= $longestRunDistance ?>" style="font-size: 1.75rem; font-weight: 700; color: #8b5cf6;">
+                                    <?= number_format($longestRunDistance / 1609.34, 1) ?>
+                                </div>
+                                <div class="distance-unit" style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
+                                    miles
+                                </div>
+                                <?php if ($longestRunDate): ?>
+                                    <div style="font-size: 0.7rem; color: #999; margin-top: 0.375rem;">
+                                        <?= $longestRunDate->format('M j, Y') ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Runs Over 10K -->
+                        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #10b981;">
+                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem;">
+                                🎯 Runs Over 10K
+                            </div>
+                            <div style="font-size: 1.75rem; font-weight: 700; color: #10b981;">
+                                <?= $runsOver10K ?>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem;">
+                                <?= $runsOver10K === 1 ? 'achievement' : 'achievements' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distance Distribution Histogram -->
+                <?php if (!empty($distanceBins)): ?>
+                    <div style="margin-top: 2rem;">
+                        <h4 style="margin-bottom: 1rem; text-align: center;">📊 Distance Distribution</h4>
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <canvas id="distanceHistogram" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php else: ?>
                 <div style="text-align: center; padding: 3rem; color: #666;">
                     <div style="font-size: 4rem; margin-bottom: 1rem;">🏃</div>
@@ -539,6 +622,192 @@
             const hash = window.location.hash.substring(1); // Remove the #
             if (hash && ['overview', 'duration', 'heatmap', 'running'].includes(hash)) {
                 switchTab(hash);
+            }
+
+            // Initialize distance histogram if it exists
+            const histogramCanvas = document.getElementById('distanceHistogram');
+            if (histogramCanvas) {
+                const distanceBins = <?= json_encode($distanceBins ?? []) ?>;
+
+                // Prepare data for Chart.js
+                const labels = [];
+                const data = [];
+
+                // Find max bin to ensure continuous range
+                const maxBin = Math.max(...Object.keys(distanceBins).map(k => parseInt(k)));
+
+                for (let i = 0; i <= maxBin; i++) {
+                    labels.push(i + '-' + (i + 1) + ' mi');
+                    data.push(distanceBins[i] || 0);
+                }
+
+                new Chart(histogramCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Number of Runs',
+                            data: data,
+                            backgroundColor: '#fc4c02',
+                            borderColor: '#fc4c02',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    precision: 0
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Number of Runs'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Distance Range'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // Unit conversion functionality
+        let currentUnit = 'miles';
+
+        function switchUnits(unit) {
+            if (currentUnit === unit) return;
+
+            currentUnit = unit;
+
+            // Update button styles
+            const milesBtn = document.getElementById('milesBtn');
+            const kmBtn = document.getElementById('kmBtn');
+
+            if (unit === 'miles') {
+                milesBtn.style.background = '#fc4c02';
+                milesBtn.style.color = 'white';
+                milesBtn.style.borderColor = '#fc4c02';
+                kmBtn.style.background = 'white';
+                kmBtn.style.color = '#666';
+                kmBtn.style.borderColor = '#e2e8f0';
+            } else {
+                kmBtn.style.background = '#fc4c02';
+                kmBtn.style.color = 'white';
+                kmBtn.style.borderColor = '#fc4c02';
+                milesBtn.style.background = 'white';
+                milesBtn.style.color = '#666';
+                milesBtn.style.borderColor = '#e2e8f0';
+            }
+
+            // Convert all distances
+            document.querySelectorAll('.distance-value').forEach(elem => {
+                const meters = parseFloat(elem.getAttribute('data-meters'));
+                if (unit === 'miles') {
+                    const miles = meters / 1609.34;
+                    elem.textContent = miles.toFixed(1);
+                } else {
+                    const km = meters / 1000;
+                    elem.textContent = km.toFixed(1);
+                }
+            });
+
+            // Update distance units
+            document.querySelectorAll('.distance-unit').forEach(elem => {
+                elem.textContent = unit === 'miles' ? 'miles' : 'kilometers';
+            });
+
+            // Convert all paces
+            document.querySelectorAll('.pace-value').forEach(elem => {
+                const minPerMile = parseFloat(elem.getAttribute('data-min-per-mile'));
+                let paceValue;
+
+                if (unit === 'miles') {
+                    paceValue = minPerMile;
+                } else {
+                    // Convert min/mile to min/km: min/mile * 0.621371 = min/km
+                    paceValue = minPerMile * 0.621371;
+                }
+
+                const minutes = Math.floor(paceValue);
+                const seconds = Math.round((paceValue - minutes) * 60);
+                elem.textContent = minutes + ':' + String(seconds).padStart(2, '0');
+            });
+
+            // Update pace units
+            document.querySelectorAll('.pace-unit').forEach(elem => {
+                elem.textContent = unit === 'miles' ? 'min/mile' : 'min/km';
+            });
+
+            // Update histogram if it exists
+            updateHistogram(unit);
+        }
+
+        function updateHistogram(unit) {
+            const canvas = document.getElementById('distanceHistogram');
+            if (!canvas || !canvas.chart) return;
+
+            const chart = canvas.chart;
+            const distanceBins = <?= json_encode($distanceBins ?? []) ?>;
+
+            // Prepare data based on unit
+            const labels = [];
+            const data = [];
+
+            if (unit === 'miles') {
+                const maxBin = Math.max(...Object.keys(distanceBins).map(k => parseInt(k)));
+                for (let i = 0; i <= maxBin; i++) {
+                    labels.push(i + '-' + (i + 1) + ' mi');
+                    data.push(distanceBins[i] || 0);
+                }
+            } else {
+                // Convert bins to km (1 mile = 1.60934 km)
+                const kmBins = {};
+                for (const [mileBin, count] of Object.entries(distanceBins)) {
+                    const kmBin = Math.floor(parseFloat(mileBin) * 1.60934);
+                    kmBins[kmBin] = (kmBins[kmBin] || 0) + count;
+                }
+
+                const maxBin = Math.max(...Object.keys(kmBins).map(k => parseInt(k)));
+                for (let i = 0; i <= maxBin; i++) {
+                    labels.push(i + '-' + (i + 1) + ' km');
+                    data.push(kmBins[i] || 0);
+                }
+            }
+
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.options.scales.x.title.text = 'Distance Range';
+            chart.update();
+        }
+
+        // Store chart instance for later access
+        window.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('distanceHistogram');
+            if (canvas && window.Chart) {
+                // Wait a bit for the chart to be created
+                setTimeout(() => {
+                    const chart = Chart.getChart(canvas);
+                    if (chart) {
+                        canvas.chart = chart;
+                    }
+                }, 100);
             }
         });
     </script>
