@@ -245,7 +245,8 @@ return function (App $app) {
             $endDate = new DateTime();
             $startDate = (new DateTime())->modify('-7 days');
         }
-        $totalDays = $endDate->diff($startDate)->days + 1;
+        // Last 7 days means 7 days total (not 8)
+        $totalDays = 7;
         $restDays = $totalDays - $totalActiveDays;
 
         // Filter running activities and calculate running stats
