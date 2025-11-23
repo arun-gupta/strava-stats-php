@@ -102,22 +102,7 @@ $firstName = $athlete['firstname'] ?? 'Athlete';
     <!-- Overview Tab Content -->
     <div id="overviewContent" class="tab-content" style="display: block;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
-            <h3 style="margin-top: 0;">📊 Your Recent Activities</h3>
-
             <?php if ($totalActivities > 0): ?>
-            <!-- Date Range and Total Count -->
-            <div style="text-align: center; margin: 1.5rem 0;">
-                <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
-                    <?= $startDate->format('M j') ?> - <?= $endDate->format('M j, Y') ?> (Last 7 Days)
-                </div>
-                <div style="font-size: 2rem; color: #fc4c02; font-weight: 700;">
-                    <?= $totalActivities ?>
-                </div>
-                <div style="font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em;">
-                    Total Activities
-                </div>
-            </div>
-
             <!-- Activity Chart -->
             <div style="margin-top: 2rem;">
                 <h4 style="margin-bottom: 1rem; text-align: center;">Activity Distribution</h4>
