@@ -61,15 +61,20 @@ class StravaClient
      */
     public function getActivities(string $accessToken, int $page = 1, int $perPage = 30): ?array
     {
+        // Get the actual base URI being used
+        $baseUri = $this->httpClient->getConfig('base_uri');
+
         Logger::info('Requesting activities from Strava API', [
             'page' => $page,
             'per_page' => $perPage,
             'token_length' => strlen($accessToken),
-            'url' => $this->apiBaseUrl . '/athlete/activities',
+            'base_uri' => (string)$baseUri,
+            'relative_path' => '/athlete/activities',
+            'full_url' => $baseUri . 'athlete/activities',
         ]);
 
         return $this->makeRequestWithRetry(function($token) use ($page, $perPage) {
-            return $this->httpClient->get('/athlete/activities', [
+            return $this->httpClient->get('athlete/activities', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token,
                     'Accept' => 'application/json',
