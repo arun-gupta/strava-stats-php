@@ -158,6 +158,9 @@ return function (App $app) {
         $currentStreak = 0;
         $longestStreak = 0;
         $totalActiveDays = 0;
+        $daysSinceLastActivity = 0;
+        $longestGap = 0;
+        $totalGapDays = 0;
 
         if (count($activities) > 0) {
             // Group activities by date (Y-m-d format)
@@ -172,14 +175,18 @@ return function (App $app) {
             $sortedDates = array_keys($activityDates);
             sort($sortedDates);
 
-            // Calculate current streak (working backwards from today)
+            // Calculate days since last activity
             $today = new DateTime();
+            $lastActivityDate = new DateTime(end($sortedDates));
+            $daysSinceLastActivity = $today->diff($lastActivityDate)->days;
+
+            // Calculate current streak (working backwards from today)
             $checkDate = clone $today;
             $currentStreak = 0;
 
             // Check if today or yesterday has activity (current streak is still active)
             $todayStr = $today->format('Y-m-d');
-            $yesterdayStr = $today->modify('-1 day')->format('Y-m-d');
+            $yesterdayStr = (clone $today)->modify('-1 day')->format('Y-m-d');
 
             if (isset($activityDates[$todayStr]) || isset($activityDates[$yesterdayStr])) {
                 // Start from the most recent activity date
@@ -196,7 +203,7 @@ return function (App $app) {
                 }
             }
 
-            // Calculate longest streak
+            // Calculate longest streak and gaps
             $tempStreak = 1;
             $longestStreak = 1;
 
@@ -209,6 +216,10 @@ return function (App $app) {
                     $tempStreak++;
                     $longestStreak = max($longestStreak, $tempStreak);
                 } else {
+                    // Found a gap
+                    $gapDays = $diff - 1; // Subtract 1 because diff includes both endpoints
+                    $longestGap = max($longestGap, $gapDays);
+                    $totalGapDays += $gapDays;
                     $tempStreak = 1;
                 }
             }
@@ -318,6 +329,9 @@ return function (App $app) {
             'totalActiveDays' => $totalActiveDays,
             'restDays' => $restDays,
             'calendarDays' => $calendarDays,
+            'daysSinceLastActivity' => $daysSinceLastActivity,
+            'longestGap' => $longestGap,
+            'totalGapDays' => $totalGapDays,
         ]);
 
         $response->getBody()->write($html);

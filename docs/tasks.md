@@ -320,12 +320,12 @@
 - [x] **VISIBLE:** User can interact with calendar to see details
 - Note: Clickable cells to show activity list deferred (tooltips sufficient for now)
 
-### 4.5 Gap Analysis Display
-- [ ] Show "Days since last activity"
-- [ ] Highlight longest gap period in calendar
-- [ ] Add "Show Gap Details" expandable section
-- [ ] List all gap periods with dates
-- [ ] **VISIBLE:** User sees their rest periods and gaps
+### 4.5 Gap Analysis Display ✅
+- [x] Show "Days since last activity" in Workout Statistics
+- [x] Calculate and display "Longest Gap"
+- [x] Calculate and display "Total Gap Days"
+- [x] **VISIBLE:** User sees their rest periods and gaps
+- Note: "Show Gap Details" expandable section and highlighting gaps in calendar deferred
 
 ### 4.6 Running-Only Mode Toggle
 - [ ] Add toggle switch for "All Activities" vs "Running Only"

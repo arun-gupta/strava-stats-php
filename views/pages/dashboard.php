@@ -389,7 +389,7 @@
                                 Days Since Last
                             </div>
                             <div style="font-size: 2rem; font-weight: 700; color: #fff;">
-                                0
+                                <?= $daysSinceLastActivity ?>
                             </div>
                         </div>
 
@@ -399,7 +399,7 @@
                                 Longest Gap
                             </div>
                             <div style="font-size: 2rem; font-weight: 700; color: #fff;">
-                                0
+                                <?= $longestGap ?>
                             </div>
                         </div>
 
@@ -409,7 +409,7 @@
                                 Total Gap Days
                             </div>
                             <div style="font-size: 2rem; font-weight: 700; color: #fff;">
-                                0
+                                <?= $totalGapDays ?>
                             </div>
                         </div>
                     </div>
