@@ -84,9 +84,104 @@ return function (App $app) {
             session_start();
         }
 
-        // Check if running-only mode is enabled
+        // Check query parameters
         $queryParams = $request->getQueryParams();
         $runningOnly = isset($queryParams['running_only']) && $queryParams['running_only'] === 'true';
+
+        // Handle date range parameters
+        $endDate = new DateTime();
+        $endDate->setTime(23, 59, 59); // Set to end of day
+        $startDate = null;
+        $periodLabel = 'Last 7 Days'; // Default label
+
+        // Check if query params exist, otherwise try to restore from session
+        $hasQueryParams = isset($queryParams['start']) || isset($queryParams['range']) || isset($queryParams['days']);
+
+        if (isset($queryParams['start']) && isset($queryParams['end'])) {
+            // Custom date range
+            $startDate = new DateTime($queryParams['start']);
+            $startDate->setTime(0, 0, 0);
+            $endDate = new DateTime($queryParams['end']);
+            $endDate->setTime(23, 59, 59);
+            $periodLabel = 'Custom Range';
+
+            // Store in session
+            $_SESSION['date_range'] = [
+                'type' => 'custom',
+                'start' => $queryParams['start'],
+                'end' => $queryParams['end']
+            ];
+        } elseif (isset($queryParams['range']) && $queryParams['range'] === 'ytd') {
+            // Year to date
+            $startDate = new DateTime(date('Y') . '-01-01');
+            $startDate->setTime(0, 0, 0);
+            $periodLabel = 'Year to Date';
+
+            // Store in session
+            $_SESSION['date_range'] = [
+                'type' => 'ytd'
+            ];
+        } elseif (isset($queryParams['days'])) {
+            // Preset days
+            $days = (int)$queryParams['days'];
+            // For "Last N days", we want N days including today
+            // Clone endDate and go back (N-1) days to get N total days
+            $startDate = (clone $endDate)->modify('-' . ($days - 1) . ' days');
+            $startDate->setTime(0, 0, 0);
+            if ($days == 30) {
+                $periodLabel = 'Last 30 Days';
+            } elseif ($days == 90) {
+                $periodLabel = 'Last 90 Days';
+            } elseif ($days == 180) {
+                $periodLabel = 'Last 6 Months';
+            } else {
+                $periodLabel = 'Last ' . $days . ' Days';
+            }
+
+            // Store in session
+            $_SESSION['date_range'] = [
+                'type' => 'days',
+                'days' => $days
+            ];
+        } elseif (!$hasQueryParams && isset($_SESSION['date_range'])) {
+            // Restore from session if no query params
+            $savedRange = $_SESSION['date_range'];
+
+            if ($savedRange['type'] === 'custom') {
+                $startDate = new DateTime($savedRange['start']);
+                $startDate->setTime(0, 0, 0);
+                $endDate = new DateTime($savedRange['end']);
+                $endDate->setTime(23, 59, 59);
+                $periodLabel = 'Custom Range';
+            } elseif ($savedRange['type'] === 'ytd') {
+                $startDate = new DateTime(date('Y') . '-01-01');
+                $startDate->setTime(0, 0, 0);
+                $periodLabel = 'Year to Date';
+            } elseif ($savedRange['type'] === 'days') {
+                $days = $savedRange['days'];
+                $startDate = (clone $endDate)->modify('-' . ($days - 1) . ' days');
+                $startDate->setTime(0, 0, 0);
+                if ($days == 30) {
+                    $periodLabel = 'Last 30 Days';
+                } elseif ($days == 90) {
+                    $periodLabel = 'Last 90 Days';
+                } elseif ($days == 180) {
+                    $periodLabel = 'Last 6 Months';
+                } else {
+                    $periodLabel = 'Last ' . $days . ' Days';
+                }
+            }
+        } else {
+            // Default: last 7 days (6 days ago + today = 7 days)
+            $startDate = (clone $endDate)->modify('-6 days');
+            $startDate->setTime(0, 0, 0);
+
+            // Store default in session
+            $_SESSION['date_range'] = [
+                'type' => 'days',
+                'days' => 7
+            ];
+        }
 
         $accessToken = $_SESSION['access_token'] ?? null;
         $activities = [];
@@ -98,7 +193,19 @@ return function (App $app) {
         if ($accessToken) {
             try {
                 $activityService = new ActivityService();
-                $activities = $activityService->fetchRecentActivities($accessToken);
+                // Fetch activities from the start date of the selected range
+                $allActivities = $activityService->fetchActivities($accessToken, $startDate);
+
+                // Filter activities by date range
+                $activities = array_filter($allActivities, function($activity) use ($startDate, $endDate) {
+                    $activityDate = $activity->startDate;
+                    $startDateStr = $startDate->format('Y-m-d');
+                    $endDateStr = $endDate->format('Y-m-d');
+                    $activityDateStr = $activityDate->format('Y-m-d');
+
+                    return $activityDateStr >= $startDateStr && $activityDateStr <= $endDateStr;
+                });
+                $activities = array_values($activities); // Re-index array
 
                 $activityCounts = $activityService->getCountsByType($activities);
                 $movingTimeByType = $activityService->getMovingTimeByType($activities);
@@ -133,15 +240,10 @@ return function (App $app) {
         // Calculate weekly average
         $weeklyAverage = 0;
         if (count($activities) > 0) {
-            // Calculate total seconds in the time range
-            $endDate = new DateTime();
-            $startDate = (new DateTime())->modify('-7 days');
+            // Calculate total seconds in the time range (use already calculated startDate and endDate)
             $daysDiff = $endDate->diff($startDate)->days;
             $weeks = max(1, $daysDiff / 7); // At least 1 week
             $weeklyAverage = $totalMovingTime / $weeks;
-        } else {
-            $endDate = new DateTime();
-            $startDate = (new DateTime())->modify('-7 days');
         }
 
         // Find most active day of week
@@ -167,12 +269,6 @@ return function (App $app) {
                 return $activity->type === 'Run';
             });
             $heatmapActivities = array_values($heatmapActivities); // Re-index array
-        }
-
-        // Calculate date range for the display window (last 7 days)
-        if (!isset($endDate)) {
-            $endDate = new DateTime();
-            $startDate = (new DateTime())->modify('-6 days'); // -6 days + today = 7 days
         }
 
         // Calculate streak statistics (using heatmap-filtered activities)
@@ -253,8 +349,8 @@ return function (App $app) {
             }
         }
 
-        // Calculate rest days (dates are already set above)
-        $totalDays = 7;
+        // Calculate rest days (use dynamic date range)
+        $totalDays = (int)$endDate->diff($startDate)->days + 1; // +1 to include both start and end dates
         $restDays = $totalDays - $totalActiveDays;
 
         // Filter running activities and calculate running stats
@@ -346,16 +442,91 @@ return function (App $app) {
             $timeByDate[$dateStr] = $totalSeconds;
         }
 
-        // Generate calendar days (last 7 days) with intensity levels
+        // Calculate distance per day for trend chart (all activities, not heatmap-filtered)
+        $distanceByDate = [];
+        foreach ($activities as $activity) {
+            $dateStr = $activity->startDate->format('Y-m-d');
+            if (!isset($distanceByDate[$dateStr])) {
+                $distanceByDate[$dateStr] = 0;
+            }
+            $distanceByDate[$dateStr] += $activity->distance;
+        }
+
+        // Calculate average pace per day for running activities
+        $paceByDate = [];
+        foreach ($activities as $activity) {
+            if ($activity->type === 'Run' && $activity->distance > 0) {
+                $dateStr = $activity->startDate->format('Y-m-d');
+                if (!isset($paceByDate[$dateStr])) {
+                    $paceByDate[$dateStr] = [
+                        'totalTime' => 0,
+                        'totalDistance' => 0,
+                    ];
+                }
+                $paceByDate[$dateStr]['totalTime'] += $activity->movingTime;
+                $paceByDate[$dateStr]['totalDistance'] += $activity->distance;
+            }
+        }
+
+        // Convert to average pace (min/mile) for each day
+        $averagePaceByDate = [];
+        foreach ($paceByDate as $dateStr => $data) {
+            if ($data['totalDistance'] > 0) {
+                $miles = $data['totalDistance'] / 1609.34;
+                $minutes = $data['totalTime'] / 60;
+                $averagePaceByDate[$dateStr] = $minutes / $miles; // min/mile
+            }
+        }
+
+        // Calculate trend insights for distance
+        $distanceTrendInsight = '';
+        $distanceValues = array_values($distanceByDate);
+        if (count($distanceValues) >= 2) {
+            $firstHalf = array_slice($distanceValues, 0, (int)(count($distanceValues) / 2));
+            $secondHalf = array_slice($distanceValues, (int)(count($distanceValues) / 2));
+
+            $firstAvg = array_sum($firstHalf) / count($firstHalf);
+            $secondAvg = array_sum($secondHalf) / count($secondHalf);
+
+            $percentChange = (($secondAvg - $firstAvg) / $firstAvg) * 100;
+
+            if (abs($percentChange) < 5) {
+                $distanceTrendInsight = 'Distance staying steady';
+            } elseif ($percentChange > 0) {
+                $distanceTrendInsight = 'Distance increasing by ' . round(abs($percentChange)) . '%';
+            } else {
+                $distanceTrendInsight = 'Distance decreasing by ' . round(abs($percentChange)) . '%';
+            }
+        }
+
+        // Calculate trend insights for pace
+        $paceTrendInsight = '';
+        $paceValues = array_values($averagePaceByDate);
+        if (count($paceValues) >= 2) {
+            $firstHalf = array_slice($paceValues, 0, (int)(count($paceValues) / 2));
+            $secondHalf = array_slice($paceValues, (int)(count($paceValues) / 2));
+
+            $firstAvg = array_sum($firstHalf) / count($firstHalf);
+            $secondAvg = array_sum($secondHalf) / count($secondHalf);
+
+            $percentChange = (($secondAvg - $firstAvg) / $firstAvg) * 100;
+
+            if (abs($percentChange) < 3) {
+                $paceTrendInsight = 'Pace staying consistent';
+            } elseif ($percentChange < 0) {
+                // Negative change = faster pace = improvement
+                $paceTrendInsight = 'Pace improving by ' . round(abs($percentChange)) . '%';
+            } else {
+                $paceTrendInsight = 'Pace slowing by ' . round(abs($percentChange)) . '%';
+            }
+        }
+
+        // Generate calendar days for the selected date range with intensity levels
         $calendarDays = [];
-        for ($i = 6; $i >= 0; $i--) {
+        $daysDiff = (int)$endDate->diff($startDate)->days;
+        for ($i = $daysDiff; $i >= 0; $i--) {
             $date = (clone $endDate)->modify("-{$i} days");
             $dateStr = $date->format('Y-m-d');
-
-            // Update startDate to match the first calendar day
-            if ($i === 6) {
-                $startDate = clone $date;
-            }
             $hasActivity = isset($activitiesByDate[$dateStr]);
             $timeSpent = $timeByDate[$dateStr] ?? 0;
 
@@ -436,6 +607,12 @@ return function (App $app) {
             'longestRunDate' => $longestRunDate,
             'runsOver10K' => $runsOver10K,
             'distanceBins' => $distanceBins,
+            'distanceByDate' => $distanceByDate,
+            'averagePaceByDate' => $averagePaceByDate,
+            'distanceTrendInsight' => $distanceTrendInsight,
+            'paceTrendInsight' => $paceTrendInsight,
+            'periodLabel' => $periodLabel,
+            'savedDateRange' => $_SESSION['date_range'] ?? null,
         ]);
 
         $response->getBody()->write($html);

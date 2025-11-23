@@ -380,34 +380,32 @@
 
 **Goal:** User sees line charts showing mileage and pace trends over time.
 
-### 6.1 Show Weekly Summary First
-- [ ] Group activities by week
-- [ ] Display weekly distance totals in simple list
-- [ ] Show current week vs previous week
-- [ ] **VISIBLE:** User sees weekly activity summary
+### 6.1 Show Weekly Summary First ❌
+- [x] ~~Removed as redundant when all activities are in same week~~
 
-### 6.2 Simple Distance Trend Chart
-- [ ] Create basic line chart for weekly distance
-- [ ] Plot last 4-8 weeks
-- [ ] Label axes clearly
-- [ ] **VISIBLE:** User sees distance trend over time
+### 6.2 Simple Distance Trend Chart ✅
+- [x] Create new **Trends** tab in navigation
+- [x] Calculate daily distance totals based on selected date range
+- [x] Create line chart showing distance per day in Trends tab
+- [x] Label axes clearly with dates
+- [x] **VISIBLE:** User sees distance trend in dedicated Trends tab for selected period
 
-### 6.3 Add Pace Trend Chart
-- [ ] Calculate average pace per week (running only)
-- [ ] Create separate line chart for pace
-- [ ] Show pace improving as downward trend
-- [ ] **VISIBLE:** User sees pace improvement over time
+### 6.3 Add Pace Trend Chart ✅
+- [x] Calculate average pace per day (running only)
+- [x] Create line chart for pace in Trends tab
+- [x] Show pace improving as downward trend (reversed Y-axis)
+- [x] Display pace in min:sec format
+- [x] **VISIBLE:** User sees pace improvement over time
 
-### 6.4 Add Time Period Selector
-- [ ] Add buttons for "Last 4 weeks" / "Last 8 weeks" / "Last 12 weeks"
-- [ ] Update charts when period changes
-- [ ] **VISIBLE:** User can choose time range
+### 6.4 Add Time Period Selector ❌
+- [x] ~~Removed - redundant with global time selector in Phase 7.1~~
 
-### 6.5 Trend Insights & Smoothing
-- [ ] Apply moving average to smooth trends
-- [ ] Calculate trend direction (up/down/flat)
-- [ ] Show insight text ("Distance increasing by 10%")
-- [ ] **VISIBLE:** User sees trend analysis with insights
+### 6.5 Trend Insights & Smoothing ✅
+- [x] Calculate trend direction for distance (up/down/flat)
+- [x] Calculate trend direction for pace (improving/declining/stable)
+- [x] Show insight text with percentage change
+- [x] Display insights in styled boxes below charts
+- [x] **VISIBLE:** User sees trend analysis with insights
 
 ---
 
@@ -415,29 +413,32 @@
 
 **Goal:** User can filter all widgets by custom date ranges.
 
-### 7.1 Add Quick Filter Buttons
-- [ ] Add preset buttons: "7 days" / "30 days" / "90 days"
-- [ ] Show currently selected period
-- [ ] Place buttons prominently above charts
-- [ ] **VISIBLE:** User sees and can click filter options
+### 7.1 Add Date Range Selector ✅
+- [x] Add preset buttons: "7 days" / "30 days" / "90 days" / "6 months" / "YTD"
+- [x] Add custom date picker option
+- [x] Show currently selected period (active button styling)
+- [x] Place date selector prominently at top of dashboard
+- [x] Backend handles all date range parameters and filters activities
+- [x] Dynamic calendar generation based on selected range
+- [x] **VISIBLE:** User sees and can select time ranges including custom dates
 
-### 7.2 Apply Filters to Dashboard
-- [ ] Refetch activities when filter changes
-- [ ] Update all visible charts and stats
-- [ ] Show loading indicator during refetch
-- [ ] **VISIBLE:** Dashboard updates when period changes
+### 7.2 Apply Filters to Dashboard ✅
+- [x] Activities are filtered by date range in backend
+- [x] All visible charts and stats update automatically
+- [x] Page reload applies new filter (query parameters)
+- [x] **VISIBLE:** Dashboard updates when period changes
 
-### 7.3 Add Custom Date Picker
-- [ ] Add "Custom" button to open date picker
-- [ ] Use simple date inputs (start/end)
-- [ ] Apply custom range to dashboard
-- [ ] **VISIBLE:** User can select any date range
+### 7.3 Add Custom Date Picker ✅
+- [x] Add "Custom" button to open date picker
+- [x] Use simple date inputs (start/end)
+- [x] Apply custom range to dashboard
+- [x] **VISIBLE:** User can select any date range
 
-### 7.4 Persist User's Selection
-- [ ] Store selected range in session
-- [ ] Restore on page refresh
-- [ ] Show selected range in UI
-- [ ] **VISIBLE:** User's filter preference persists
+### 7.4 Persist User's Selection ✅
+- [x] Store selected range in session
+- [x] Restore on page refresh
+- [x] Show selected range in UI
+- [x] **VISIBLE:** User's filter preference persists
 
 ### 7.5 Optimize for Large Datasets
 - [ ] Cache fetched activities in session

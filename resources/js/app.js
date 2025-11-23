@@ -90,9 +90,17 @@ function initActivityChart() {
                         size: 14
                     },
                     formatter: function(value, context) {
-                        const percentage = ((value / total) * 100).toFixed(1);
-                        return `${value}\n(${percentage}%)`;
-                    }
+                        const percentage = ((value / total) * 100);
+                        // Only show label if slice is big enough (>5%)
+                        if (percentage < 5) {
+                            return '';
+                        }
+                        return `${value}\n(${percentage.toFixed(1)}%)`;
+                    },
+                    anchor: 'center',
+                    align: 'center',
+                    offset: 0,
+                    clamp: true
                 }
             }
         }

@@ -28,7 +28,7 @@
                 <?= $startDate->format('M j') ?> - <?= $endDate->format('M j, Y') ?>
             </div>
             <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                Last 7 Days
+                <?= htmlspecialchars($periodLabel) ?>
             </div>
         </div>
 
@@ -63,6 +63,90 @@
         </div>
     </div>
 
+    <?php
+    // Determine active selection (from query params or session)
+    $hasQueryParams = isset($_GET['start']) || isset($_GET['range']) || isset($_GET['days']);
+    $activeRange = $savedDateRange ?? ['type' => 'days', 'days' => 7];
+
+    // Check active states
+    $is7DaysActive = false;
+    $is30DaysActive = false;
+    $is90DaysActive = false;
+    $is180DaysActive = false;
+    $isYtdActive = false;
+    $isCustomActive = false;
+
+    if ($hasQueryParams) {
+        $is7DaysActive = isset($_GET['days']) && $_GET['days'] == 7;
+        $is30DaysActive = isset($_GET['days']) && $_GET['days'] == 30;
+        $is90DaysActive = isset($_GET['days']) && $_GET['days'] == 90;
+        $is180DaysActive = isset($_GET['days']) && $_GET['days'] == 180;
+        $isYtdActive = isset($_GET['range']) && $_GET['range'] == 'ytd';
+        $isCustomActive = isset($_GET['start']) && isset($_GET['end']);
+    } else {
+        // Use saved range from session
+        if ($activeRange['type'] === 'days') {
+            $days = $activeRange['days'];
+            $is7DaysActive = $days == 7;
+            $is30DaysActive = $days == 30;
+            $is90DaysActive = $days == 90;
+            $is180DaysActive = $days == 180;
+        } elseif ($activeRange['type'] === 'ytd') {
+            $isYtdActive = true;
+        } elseif ($activeRange['type'] === 'custom') {
+            $isCustomActive = true;
+        }
+    }
+
+    $customStart = $_GET['start'] ?? ($activeRange['start'] ?? '');
+    $customEnd = $_GET['end'] ?? ($activeRange['end'] ?? '');
+    ?>
+
+    <!-- Date Range Selector -->
+    <div style="margin-top: 2rem; padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: center;">
+            <span style="font-weight: 600; color: #333;">📅 Time Period:</span>
+            <button onclick="changeDateRange(7)" class="date-range-btn <?= $is7DaysActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $is7DaysActive ? '#fc4c02' : 'white' ?>; color: <?= $is7DaysActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                7 Days
+            </button>
+            <button onclick="changeDateRange(30)" class="date-range-btn <?= $is30DaysActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $is30DaysActive ? '#fc4c02' : 'white' ?>; color: <?= $is30DaysActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                30 Days
+            </button>
+            <button onclick="changeDateRange(90)" class="date-range-btn <?= $is90DaysActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $is90DaysActive ? '#fc4c02' : 'white' ?>; color: <?= $is90DaysActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                90 Days
+            </button>
+            <button onclick="changeDateRange(180)" class="date-range-btn <?= $is180DaysActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $is180DaysActive ? '#fc4c02' : 'white' ?>; color: <?= $is180DaysActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                6 Months
+            </button>
+            <button onclick="changeDateRange('ytd')" class="date-range-btn <?= $isYtdActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $isYtdActive ? '#fc4c02' : 'white' ?>; color: <?= $isYtdActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                YTD
+            </button>
+            <button onclick="toggleCustomPicker()" class="date-range-btn <?= $isCustomActive ? 'active' : '' ?>"
+                    style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $isCustomActive ? '#fc4c02' : 'white' ?>; color: <?= $isCustomActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                Custom
+            </button>
+        </div>
+
+        <!-- Custom Date Picker (Hidden by default) -->
+        <div id="customDatePicker" style="display: <?= $isCustomActive ? 'flex' : 'none' ?>; margin-top: 1rem; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+            <label style="font-weight: 600; color: #666;">From:</label>
+            <input type="date" id="startDate" value="<?= htmlspecialchars($customStart) ?>"
+                   style="padding: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem;">
+            <label style="font-weight: 600; color: #666;">To:</label>
+            <input type="date" id="endDate" value="<?= htmlspecialchars($customEnd) ?>"
+                   style="padding: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem;">
+            <button onclick="applyCustomRange()"
+                    style="padding: 0.5rem 1.5rem; background: #48bb78; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                Apply
+            </button>
+        </div>
+    </div>
+
     <!-- Tab Navigation -->
     <div style="margin-top: 2rem;">
         <div style="display: flex; gap: 0.5rem; border-bottom: 2px solid #e2e8f0;">
@@ -85,6 +169,11 @@
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🏃 Running Stats
+            </button>
+            <button id="trendsTab" class="tab-button" onclick="switchTab('trends')"
+                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                           color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                📈 Trends
             </button>
         </div>
     </div>
@@ -559,8 +648,8 @@
 
                 <!-- Distance Distribution Histogram -->
                 <?php if (!empty($distanceBins)): ?>
-                    <div style="margin-top: 2rem;">
-                        <h4 style="margin-bottom: 1rem; text-align: center;">📊 Distance Distribution</h4>
+                    <div style="margin-top: 1.25rem;">
+                        <h4 style="margin-bottom: 0.75rem; text-align: center;">📊 Distance Distribution</h4>
                         <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
                             <canvas id="distanceHistogram" style="max-height: 300px;"></canvas>
                         </div>
@@ -576,10 +665,58 @@
         </div>
     </div>
 
+    <!-- Trends Tab Content -->
+    <div id="trendsContent" class="tab-content" style="display: none;">
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
+            <?php if ($totalActivities > 0): ?>
+                <!-- Distance Trend Chart -->
+                <div>
+                    <h4 style="margin-bottom: 1rem; text-align: center;">📈 Distance Trend</h4>
+                    <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                        <canvas id="distanceTrendChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <?php if (!empty($distanceTrendInsight)): ?>
+                        <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: #f0f8ff; border-radius: 6px; border-left: 4px solid #fc4c02;">
+                            <p style="margin: 0; text-align: center; color: #333; font-size: 0.875rem; font-weight: 600;">
+                                💡 <?= htmlspecialchars($distanceTrendInsight) ?>
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Pace Trend Chart -->
+                <?php if ($totalRuns > 0): ?>
+                    <div style="margin-top: 1.5rem;">
+                        <h4 style="margin-bottom: 1rem; text-align: center;">⚡ Pace Trend (Running)</h4>
+                        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                            <canvas id="paceTrendChart" style="max-height: 300px;"></canvas>
+                        </div>
+                        <?php if (!empty($paceTrendInsight)): ?>
+                            <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: #f0fff4; border-radius: 6px; border-left: 4px solid #48bb78;">
+                                <p style="margin: 0; text-align: center; color: #333; font-size: 0.875rem; font-weight: 600;">
+                                    💡 <?= htmlspecialchars($paceTrendInsight) ?>
+                                </p>
+                            </div>
+                        <?php endif; ?>
+                        <p style="margin-top: 0.5rem; text-align: center; color: #666; font-size: 0.75rem;">
+                            Lower is better
+                        </p>
+                    </div>
+                <?php endif; ?>
+            <?php else: ?>
+                <div style="text-align: center; padding: 3rem; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📈</div>
+                    <h3 style="color: #333; margin-bottom: 0.5rem;">No Activity Data Yet</h3>
+                    <p style="font-size: 1.1rem;">Start logging activities to see trends!</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #999;">
         <h3 style="margin-top: 0;">🚧 Coming Soon</h3>
         <ul style="margin-top: 1rem; line-height: 1.8;">
-            <li><strong>Trends</strong> - Mileage and pace trends over time</li>
+            <li><strong>Pace Trends</strong> - Track pace improvements over time</li>
         </ul>
     </div>
 
@@ -606,22 +743,253 @@
             activeButton.style.color = '#fc4c02';
         }
 
+        // Date range functions
+        function changeDateRange(value) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentHash = window.location.hash;
+
+            // Clear all date-related params
+            urlParams.delete('days');
+            urlParams.delete('range');
+            urlParams.delete('start');
+            urlParams.delete('end');
+
+            if (value === 'ytd') {
+                urlParams.set('range', 'ytd');
+            } else {
+                urlParams.set('days', value);
+            }
+
+            // Preserve running_only if set
+            const runningOnly = urlParams.get('running_only');
+            let url = '/dashboard';
+            if (urlParams.toString()) {
+                url += '?' + urlParams.toString();
+            }
+            url += currentHash;
+            window.location.href = url;
+        }
+
+        function toggleCustomPicker() {
+            const picker = document.getElementById('customDatePicker');
+            if (picker.style.display === 'none') {
+                picker.style.display = 'flex';
+            } else {
+                picker.style.display = 'none';
+            }
+        }
+
+        function applyCustomRange() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentHash = window.location.hash;
+
+            // Clear preset params
+            urlParams.delete('days');
+            urlParams.delete('range');
+
+            // Set custom range
+            urlParams.set('start', startDate);
+            urlParams.set('end', endDate);
+
+            let url = '/dashboard?' + urlParams.toString() + currentHash;
+            window.location.href = url;
+        }
+
         // Heatmap mode switching
         function switchHeatmapMode(mode) {
+            const urlParams = new URLSearchParams(window.location.search);
+
             if (mode === 'all') {
-                // Reload page without running_only parameter, stay on heatmap tab
-                window.location.href = '/dashboard#heatmap';
+                urlParams.delete('running_only');
             } else if (mode === 'running') {
-                // Reload page with running_only parameter, stay on heatmap tab
-                window.location.href = '/dashboard?running_only=true#heatmap';
+                urlParams.set('running_only', 'true');
             }
+
+            let url = '/dashboard';
+            if (urlParams.toString()) {
+                url += '?' + urlParams.toString();
+            }
+            url += '#heatmap';
+            window.location.href = url;
         }
 
         // On page load, check if there's a hash and switch to that tab
         document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash.substring(1); // Remove the #
-            if (hash && ['overview', 'duration', 'heatmap', 'running'].includes(hash)) {
+            if (hash && ['overview', 'duration', 'heatmap', 'running', 'trends'].includes(hash)) {
                 switchTab(hash);
+            }
+
+            // Initialize distance trend chart if it exists
+            const trendCanvas = document.getElementById('distanceTrendChart');
+            if (trendCanvas) {
+                const distanceByDate = <?= json_encode($distanceByDate ?? []) ?>;
+                const startDate = new Date('<?= $startDate->format('Y-m-d') ?>');
+                const endDate = new Date('<?= $endDate->format('Y-m-d') ?>');
+
+                // Generate all dates in range
+                const dates = [];
+                const distances = [];
+                const currentDate = new Date(startDate);
+
+                while (currentDate <= endDate) {
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    dates.push(new Date(currentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                    // Convert meters to miles
+                    const meters = distanceByDate[dateStr] || 0;
+                    distances.push((meters / 1609.34).toFixed(2));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                new Chart(trendCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Distance (mi)',
+                            data: distances,
+                            borderColor: '#fc4c02',
+                            backgroundColor: 'rgba(252, 76, 2, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#fc4c02'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y + ' miles';
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Distance (miles)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize pace trend chart if it exists
+            const paceCanvas = document.getElementById('paceTrendChart');
+            if (paceCanvas) {
+                const averagePaceByDate = <?= json_encode($averagePaceByDate ?? []) ?>;
+                const startDate = new Date('<?= $startDate->format('Y-m-d') ?>');
+                const endDate = new Date('<?= $endDate->format('Y-m-d') ?>');
+
+                // Generate all dates in range
+                const dates = [];
+                const paces = [];
+                const currentDate = new Date(startDate);
+
+                while (currentDate <= endDate) {
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    dates.push(new Date(currentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+                    // Get pace for this date (null if no running activity)
+                    const pace = averagePaceByDate[dateStr] || null;
+                    paces.push(pace);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                new Chart(paceCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Pace (min/mile)',
+                            data: paces,
+                            borderColor: '#48bb78',
+                            backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#48bb78',
+                            spanGaps: true // Connect lines across null values
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.parsed.y === null) return 'No runs';
+                                        const pace = context.parsed.y;
+                                        const minutes = Math.floor(pace);
+                                        const seconds = Math.round((pace - minutes) * 60);
+                                        return minutes + ':' + String(seconds).padStart(2, '0') + ' /mile';
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                reverse: true, // Lower pace is better, so reverse the axis
+                                title: {
+                                    display: true,
+                                    text: 'Pace (min/mile)'
+                                },
+                                ticks: {
+                                    stepSize: 0.5, // 30 second intervals
+                                    callback: function(value) {
+                                        const minutes = Math.floor(value);
+                                        const seconds = Math.round((value - minutes) * 60);
+                                        return minutes + ':' + String(seconds).padStart(2, '0');
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
             // Initialize distance histogram if it exists
