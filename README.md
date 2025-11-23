@@ -19,6 +19,15 @@ Laravel was considered but deemed too heavy for this focused use case where we p
 - Composer
 - Node.js and npm (for front-end assets)
 
+### Installing Composer
+
+On macOS using Homebrew:
+```bash
+brew install composer
+```
+
+On other platforms, see https://getcomposer.org/download/
+
 ## Installation
 
 1. Clone the repository:
