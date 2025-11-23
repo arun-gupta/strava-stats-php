@@ -257,31 +257,30 @@
 
 **Goal:** User sees a bar chart showing total time spent on each activity type.
 
-### 3.1 Duration Aggregation
-- [ ] Add groupByTypeDuration() method to AggregationService
-- [ ] Sum moving_time for each activity type
-- [ ] Convert seconds to hours for display
-- [ ] Return data: [{type, hours, formatted_time}]
-- [ ] Test aggregation
-
-### 3.2 Duration Tab & Bar Chart
-- [ ] Create "Duration" tab content area
-- [ ] Add canvas for bar chart
-- [ ] Create JavaScript module for Duration chart
-- [ ] Initialize Chart.js bar chart with duration data
-- [ ] **VISIBLE:** User sees bar chart with time breakdown by sport
-
-### 3.3 Time Formatting & Labels
-- [ ] Format time as "Xh Ym" for labels
-- [ ] Add data labels on bars for times > 5% of total
-- [ ] Style bar colors consistently with Overview chart
-- [ ] **VISIBLE:** User sees clearly formatted time values
-
-### 3.4 Chart Comparison & Insights
+### 3.1 Display Duration Data as Text First
+- [ ] Calculate total moving time by activity type
+- [ ] Display time in "Xh Ym" format below activity cards
 - [ ] Show total time across all activities
-- [ ] Highlight most time-consuming activity
-- [ ] Add simple insight text ("You spent X hours cycling")
-- [ ] **VISIBLE:** User sees summary insights above chart
+- [ ] **VISIBLE:** User sees time spent on each activity type
+
+### 3.2 Add Duration Bar Chart
+- [ ] Add canvas for bar chart in Duration section
+- [ ] Pass duration data to JavaScript
+- [ ] Create simple Chart.js bar chart
+- [ ] **VISIBLE:** User sees bar chart with time breakdown
+
+### 3.3 Style & Polish Duration Chart
+- [ ] Style bars with Strava colors
+- [ ] Add tooltips with formatted times
+- [ ] Make responsive
+- [ ] Add chart title and axis labels
+- [ ] **VISIBLE:** User sees polished, readable time chart
+
+### 3.4 Add Insights Summary
+- [ ] Highlight longest duration activity
+- [ ] Show weekly average time
+- [ ] Add insight text ("Most active on Tuesdays")
+- [ ] **VISIBLE:** User gets actionable insights from data
 
 ---
 
@@ -289,49 +288,42 @@
 
 **Goal:** User sees calendar heatmap showing workout consistency, streaks, and gaps.
 
-### 4.1 Calendar Grid Data Generation
-- [ ] Create HeatmapService
-- [ ] Generate calendar grid for date range
-- [ ] Group activities by day
-- [ ] Calculate intensity buckets (No Activity, <1h, 1-2h, 2h+)
-- [ ] Return grid data with dates and intensities
+### 4.1 Show Basic Streak Stats First
+- [ ] Calculate and display current streak (consecutive days with activity)
+- [ ] Show longest streak achieved
+- [ ] Display total active days vs rest days
+- [ ] **VISIBLE:** User sees their streak statistics
 
-### 4.2 Heatmap Tab & Canvas Layout
-- [ ] Create "Heatmap" tab content area
-- [ ] Design horizontal calendar layout (days as rows, weeks as columns)
-- [ ] Add legend for intensity levels
-- [ ] Add mode toggle (All Activities / Running Only)
-- [ ] **VISIBLE:** User sees calendar grid structure
+### 4.2 Simple Calendar Grid (Text-Based)
+- [ ] Group activities by date
+- [ ] Display simple text calendar showing days with activities
+- [ ] Mark active days with ✓ or color
+- [ ] **VISIBLE:** User sees which days they were active
 
-### 4.3 Heatmap Rendering
-- [ ] Create JavaScript module for heatmap
-- [ ] Render calendar cells with color coding
-- [ ] Add tooltips showing date and activity details
-- [ ] Make responsive to screen width
-- [ ] **VISIBLE:** User sees color-coded calendar heatmap
+### 4.3 Visual Heatmap with Colors
+- [ ] Create intensity buckets (no activity, light, medium, heavy)
+- [ ] Render calendar grid with color-coded cells
+- [ ] Add legend explaining colors
+- [ ] **VISIBLE:** User sees color-coded activity heatmap
 
-### 4.4 Streak Calculations
-- [ ] Implement current streak calculation
-- [ ] Implement longest streak calculation
-- [ ] Calculate days since last activity
-- [ ] Calculate workout days vs missed days
-- [ ] Display streak stats above heatmap
-- [ ] **VISIBLE:** User sees their streaks and consistency metrics
+### 4.4 Add Tooltips & Interactivity
+- [ ] Add hover tooltips showing activity details per day
+- [ ] Make cells clickable to show activity list
+- [ ] Add smooth animations
+- [ ] **VISIBLE:** User can interact with calendar to see details
 
-### 4.5 Gap Analysis
-- [ ] Calculate gap periods (consecutive days without activity)
-- [ ] Find longest gap
-- [ ] Sum total gap days
-- [ ] Add "Show Gap Details" button
-- [ ] Display expandable list of gaps with dates
-- [ ] **VISIBLE:** User can see detailed gap analysis
+### 4.5 Gap Analysis Display
+- [ ] Show "Days since last activity"
+- [ ] Highlight longest gap period in calendar
+- [ ] Add "Show Gap Details" expandable section
+- [ ] List all gap periods with dates
+- [ ] **VISIBLE:** User sees their rest periods and gaps
 
-### 4.6 Running-Only Mode
-- [ ] Filter to only running activities
-- [ ] Recalculate heatmap with distance-based intensity buckets
-- [ ] Update legend for running mode (<3mi, 3-6mi, 6mi+)
-- [ ] Toggle between All Activities and Running Only
-- [ ] **VISIBLE:** User can switch between heatmap modes
+### 4.6 Running-Only Mode Toggle
+- [ ] Add toggle switch for "All Activities" vs "Running Only"
+- [ ] Recalculate heatmap for running only
+- [ ] Update intensity buckets based on distance
+- [ ] **VISIBLE:** User can filter heatmap to running activities
 
 ---
 
@@ -339,41 +331,36 @@
 
 **Goal:** Runners see detailed statistics, PRs, and distance distribution histogram.
 
-### 5.1 Running Stats Tab Scaffold
-- [ ] Create "Running Stats" tab content
-- [ ] Add sections: Summary, PRs, Distance Distribution
-- [ ] Style layout with cards/boxes
-- [ ] **VISIBLE:** User sees structured running stats tab
+### 5.1 Show Basic Running Stats First
+- [ ] Filter running activities only
+- [ ] Display: total runs, total distance, average pace
+- [ ] Show in simple text format with cards
+- [ ] **VISIBLE:** User sees their running summary stats
 
-### 5.2 Running Summary Stats
-- [ ] Filter activities for type='Run'
-- [ ] Calculate: total runs, runs ≥10K, total distance, average pace
-- [ ] Format pace as min/mile or min/km
-- [ ] Display stats in card grid
-- [ ] **VISIBLE:** User sees their running summary
-
-### 5.3 Personal Records (PRs)
-- [ ] Calculate fastest mile from activities
-- [ ] Calculate fastest 10K
-- [ ] Calculate longest run
-- [ ] Calculate max elevation gain
-- [ ] Display PRs with activity names and dates
+### 5.2 Add Personal Records (PRs)
+- [ ] Calculate fastest pace from all runs
+- [ ] Calculate longest run distance
+- [ ] Show runs over 10K count
+- [ ] Display PRs with dates
 - [ ] **VISIBLE:** User sees their personal records
 
-### 5.4 Distance Distribution Histogram
-- [ ] Create histogram bins (1-mile or 1-km increments)
-- [ ] Bin running distances
-- [ ] Extend bins for runs >10 miles
-- [ ] Create bar chart for distribution
-- [ ] **VISIBLE:** User sees histogram of run distances
+### 5.3 Simple Distance Distribution List
+- [ ] Group runs by distance ranges (0-5K, 5-10K, 10K+)
+- [ ] Show count in each range
+- [ ] Display as simple list or cards
+- [ ] **VISIBLE:** User sees distance distribution
 
-### 5.5 Unit Toggle (Metric/Imperial)
-- [ ] Add unit toggle button in dashboard header
-- [ ] Store preference in session
-- [ ] Convert all distances (miles ↔ km)
-- [ ] Convert all paces (min/mile ↔ min/km)
-- [ ] Update all widgets when toggled
-- [ ] **VISIBLE:** User can switch between metric and imperial
+### 5.4 Distance Distribution Histogram
+- [ ] Create histogram with Chart.js
+- [ ] Use 1-mile or 1-km bins
+- [ ] Style bars consistently
+- [ ] **VISIBLE:** User sees visual histogram of run distances
+
+### 5.5 Add Unit Toggle (Miles/Kilometers)
+- [ ] Add toggle button in header
+- [ ] Convert distances and paces
+- [ ] Update all displayed values
+- [ ] **VISIBLE:** User can switch between units
 
 ---
 
@@ -381,37 +368,34 @@
 
 **Goal:** User sees line charts showing mileage and pace trends over time.
 
-### 6.1 Trends Tab & Mode Toggle
-- [ ] Create "Trends" tab content
-- [ ] Add mode toggle (All Activities / Running Only)
-- [ ] Add two chart canvases (Distance, Pace)
-- [ ] **VISIBLE:** User sees trends tab structure
+### 6.1 Show Weekly Summary First
+- [ ] Group activities by week
+- [ ] Display weekly distance totals in simple list
+- [ ] Show current week vs previous week
+- [ ] **VISIBLE:** User sees weekly activity summary
 
-### 6.2 Daily/Weekly/Monthly Aggregation
-- [ ] Implement daily distance aggregation
-- [ ] Implement weekly distance aggregation (ISO week Mon-Sun)
-- [ ] Implement monthly distance aggregation
-- [ ] Add grain selector (Day/Week/Month)
-- [ ] Test aggregation logic
+### 6.2 Simple Distance Trend Chart
+- [ ] Create basic line chart for weekly distance
+- [ ] Plot last 4-8 weeks
+- [ ] Label axes clearly
+- [ ] **VISIBLE:** User sees distance trend over time
 
-### 6.3 Distance Trend Line Chart
-- [ ] Create line chart for distance over time
-- [ ] Apply moving average smoothing (configurable window)
-- [ ] Format X-axis (dates) and Y-axis (distance)
-- [ ] **VISIBLE:** User sees distance trend chart
+### 6.3 Add Pace Trend Chart
+- [ ] Calculate average pace per week (running only)
+- [ ] Create separate line chart for pace
+- [ ] Show pace improving as downward trend
+- [ ] **VISIBLE:** User sees pace improvement over time
 
-### 6.4 Pace Trend Line Chart
-- [ ] Calculate average pace for each time period
-- [ ] Handle pace inversion (speed → pace conversion)
-- [ ] Create line chart for pace over time
-- [ ] Show pace improving (going down) as positive
-- [ ] **VISIBLE:** User sees pace trend chart
+### 6.4 Add Time Period Selector
+- [ ] Add buttons for "Last 4 weeks" / "Last 8 weeks" / "Last 12 weeks"
+- [ ] Update charts when period changes
+- [ ] **VISIBLE:** User can choose time range
 
-### 6.5 Trend Insights
-- [ ] Calculate trend direction (improving/declining)
-- [ ] Show week-over-week or month-over-month change
-- [ ] Display simple insight text
-- [ ] **VISIBLE:** User sees trend analysis summary
+### 6.5 Trend Insights & Smoothing
+- [ ] Apply moving average to smooth trends
+- [ ] Calculate trend direction (up/down/flat)
+- [ ] Show insight text ("Distance increasing by 10%")
+- [ ] **VISIBLE:** User sees trend analysis with insights
 
 ---
 
@@ -419,50 +403,74 @@
 
 **Goal:** User can filter all widgets by custom date ranges.
 
-### 7.1 Date Filter UI
-- [ ] Add date range selector above dashboard
-- [ ] Create preset buttons (7d, 30d, 90d, YTD, All Time)
-- [ ] Add custom date picker (start/end dates)
-- [ ] Style filter controls
-- [ ] **VISIBLE:** User sees date filter controls
+### 7.1 Add Quick Filter Buttons
+- [ ] Add preset buttons: "7 days" / "30 days" / "90 days"
+- [ ] Show currently selected period
+- [ ] Place buttons prominently above charts
+- [ ] **VISIBLE:** User sees and can click filter options
 
-### 7.2 Filter Application
-- [ ] Capture date range selection
-- [ ] Reload activities for selected range
-- [ ] Update all widgets with filtered data
-- [ ] Show loading state during refetch
-- [ ] **VISIBLE:** All charts update when date range changes
+### 7.2 Apply Filters to Dashboard
+- [ ] Refetch activities when filter changes
+- [ ] Update all visible charts and stats
+- [ ] Show loading indicator during refetch
+- [ ] **VISIBLE:** Dashboard updates when period changes
 
-### 7.3 URL/Session Persistence
-- [ ] Store date range in URL query params
-- [ ] Persist date range in session
+### 7.3 Add Custom Date Picker
+- [ ] Add "Custom" button to open date picker
+- [ ] Use simple date inputs (start/end)
+- [ ] Apply custom range to dashboard
+- [ ] **VISIBLE:** User can select any date range
+
+### 7.4 Persist User's Selection
+- [ ] Store selected range in session
 - [ ] Restore on page refresh
-- [ ] Default to "Last 7 days" on first load
-- [ ] **VISIBLE:** User's filter selection persists
+- [ ] Show selected range in UI
+- [ ] **VISIBLE:** User's filter preference persists
 
-### 7.4 Performance Optimization
-- [ ] Implement caching for common date ranges
-- [ ] Add cache invalidation strategy
-- [ ] Test with large datasets (5000+ activities)
-- [ ] Optimize to meet <2s load time target
-- [ ] **VISIBLE:** Dashboard loads quickly even with large datasets
+### 7.5 Optimize for Large Datasets
+- [ ] Cache fetched activities in session
+- [ ] Only refetch if range changes
+- [ ] Test with 1000+ activities
+- [ ] **VISIBLE:** Dashboard remains fast with lots of data
 
 ---
 
 ## Phase 8 — Polish & Production Ready
 
-**Goal:** Application is production-ready with robust error handling, testing, and deployment.
+**Goal:** Application is production-ready with polish, performance, and deployment.
 
-### 8.1 Comprehensive Error Handling
-- [ ] Handle all Strava API error codes
-- [ ] Implement retry logic with exponential backoff
-- [ ] Display user-friendly error messages
-- [ ] Log errors for debugging
-- [ ] Test error scenarios
+### 8.1 Visual Polish Pass
+- [ ] Review and improve all styling
+- [ ] Ensure consistent spacing and alignment
+- [ ] Test on mobile devices
+- [ ] Add smooth transitions and animations
+- [ ] **VISIBLE:** App looks professional and polished
 
-### 8.2 Unit Testing
-- [ ] Write tests for Activity model
-- [ ] Write tests for AggregationService
+### 8.2 Performance Optimization
+- [ ] Minimize JavaScript bundle size
+- [ ] Optimize API calls (reduce requests)
+- [ ] Add caching where appropriate
+- [ ] Test load times and optimize
+- [ ] **VISIBLE:** App loads and responds quickly
+
+### 8.3 Error Handling Polish
+- [ ] Review all error messages for clarity
+- [ ] Add helpful recovery actions
+- [ ] Test all error scenarios
+- [ ] **VISIBLE:** Errors are clear and actionable
+
+### 8.4 Accessibility Review
+- [ ] Add ARIA labels where needed
+- [ ] Test keyboard navigation
+- [ ] Ensure color contrast meets standards
+- [ ] Test with screen reader
+- [ ] **VISIBLE:** App is accessible to all users
+
+### 8.5 Documentation & Deployment
+- [ ] Update README with features and screenshots
+- [ ] Document deployment process
+- [ ] Test production deployment
+- [ ] **VISIBLE:** App is deployed and documented
 - [ ] Write tests for HeatmapService
 - [ ] Write tests for UnitsService
 - [ ] Achieve >80% code coverage
