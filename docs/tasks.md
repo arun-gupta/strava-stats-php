@@ -346,6 +346,14 @@
 - [x] Show in simple text format with cards
 - [x] **VISIBLE:** User sees their running summary stats
 
+### 5.1.1 Enable Running-Only Toggle on Heatmap (Complete Phase 4.6)
+- [ ] Implement server-side filtering for running-only mode
+- [ ] Recalculate heatmap calendar with only running activities
+- [ ] Recalculate all workout statistics for running activities
+- [ ] Update intensity buckets based on running distance/time
+- [ ] Remove "coming soon" alert and make toggle functional
+- [ ] **VISIBLE:** Running Only button filters heatmap to show only runs
+
 ### 5.2 Add Personal Records (PRs)
 - [ ] Calculate fastest pace from all runs
 - [ ] Calculate longest run distance
