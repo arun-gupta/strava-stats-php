@@ -2,17 +2,20 @@
 
 Generated from docs/plan.md on 2025-11-23. Do not implement tasks here; this file is a checklist only.
 
-1. Phase 0 — Project setup & foundations
-   - [ ] Decide framework (Slim or Laravel) and record the decision and rationale in README.
-   - [ ] Initialize Composer project and configure PSR-4 autoloading for the app namespace.
-   - [ ] Create base project structure (src/, public/, config/, routes/, views/ or framework defaults).
-   - [ ] Add Composer dependencies: guzzlehttp/guzzle, league/oauth2-client, nesbot/carbon, and chosen framework packages.
-   - [ ] Set up front-end dependency for Chart.js (via npm/CDN) and, if chosen, bundler (Vite/ESBuild) with basic config.
-   - [ ] Create .env and .env.example with STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, STRAVA_REDIRECT_URI, APP_URL, SESSION_SECRET, CACHE_URL.
-   - [ ] Implement base routing and a centralized error handler aligned with framework conventions.
-   - [ ] Configure application logging (format, level, destination).
-   - [ ] Implement /healthz endpoint returning simple JSON status.
-   - [ ] Add minimal home page placeholder (dashboard shell scaffold).
+1. Phase 0 — Project setup & foundations ✅ COMPLETE
+   - [x] Decide framework (Slim or Laravel) and record the decision and rationale in README.
+   - [x] Initialize Composer project and configure PSR-4 autoloading for the app namespace.
+   - [x] Create base project structure (src/, public/, config/, routes/, views/ or framework defaults).
+   - [x] Add Composer dependencies: guzzlehttp/guzzle, league/oauth2-client, nesbot/carbon, and chosen framework packages.
+   - [x] Set up front-end dependency for Chart.js (via npm/CDN) and, if chosen, bundler (Vite/ESBuild) with basic config.
+   - [x] Create .env and .env.example with STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, STRAVA_REDIRECT_URI, APP_URL, SESSION_SECRET, CACHE_URL.
+   - [x] Implement base routing and a centralized error handler aligned with framework conventions.
+   - [x] Configure application logging (format, level, destination).
+   - [x] Implement /healthz endpoint returning simple JSON status.
+   - [x] Add minimal home page placeholder (dashboard shell scaffold).
+   - [x] **BONUS:** Created quickstart.sh script for automated setup with interactive prompts.
+   - [x] **BONUS:** Created comprehensive docs/INSTALLATION.md with production deployment guide.
+   - [x] **BONUS:** Simplified and improved README for better user experience.
 
 2. Phase 1 — Authentication & Security (Reqs 1–2)
    - [ ] Implement GET /auth/strava to generate OAuth URL with scopes read,activity:read_all (include state and PKCE if used).
