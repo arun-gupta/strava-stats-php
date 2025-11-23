@@ -1,5 +1,7 @@
 # Requirements Document
 
+> **Note**: This document is copied from https://github.com/arun-gupta/strava-stats-dotnet/blob/main/docs/specs/requirements.md
+
 ## 1. Introduction
 The Strava Activity Analyzer is a web application designed to authenticate with a user’s Strava account and present interactive analytics and visualizations about their physical activities. It provides deep insights into training habits, including heatmaps, distribution charts, and trend analysis, without social features or data mutation. The system ensures user privacy by processing data in a read-only manner and calculating metrics dynamically based on user-defined time windows.
 
