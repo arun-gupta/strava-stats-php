@@ -107,6 +107,12 @@ return function (App $app) {
             }
         }
 
+        // Calculate total moving time
+        $totalMovingTime = 0;
+        foreach ($activities as $activity) {
+            $totalMovingTime += $activity->movingTime;
+        }
+
         // Calculate date range (last 7 days)
         $endDate = new DateTime();
         $startDate = (new DateTime())->modify('-7 days');
@@ -117,6 +123,7 @@ return function (App $app) {
             'activities' => $activities,
             'activityCounts' => $activityCounts,
             'totalActivities' => count($activities),
+            'totalMovingTime' => $totalMovingTime,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'error' => $error,
