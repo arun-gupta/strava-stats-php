@@ -196,12 +196,34 @@ class AuthController
      */
     public function signout(Request $request, Response $response): Response
     {
-        // TODO: Implement sign out (Phase 1.6)
-        // - Clear session
-        // - Clear stored tokens
-        // - Redirect to home page
+        // Start session if not already started
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-        $response->getBody()->write('Sign out - Coming Soon');
-        return $response;
+        // Clear all session data
+        $_SESSION = [];
+
+        // Destroy the session cookie
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params['path'],
+                $params['domain'],
+                $params['secure'],
+                $params['httponly']
+            );
+        }
+
+        // Destroy the session
+        session_destroy();
+
+        // Redirect to home page
+        return $response
+            ->withHeader('Location', '/?signed_out=1')
+            ->withStatus(302);
     }
 }

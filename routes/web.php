@@ -26,9 +26,27 @@ return function (App $app) {
     $app->get('/auth/callback', [$authController, 'callback']);
     $app->get('/signout', [$authController, 'signout']);
 
-    // Dashboard placeholder
+    // Dashboard (protected)
     $app->get('/dashboard', function (Request $request, Response $response) {
-        $response->getBody()->write('Dashboard - Coming Soon');
+        // Start session if not already started
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Check if user is authenticated
+        if (!isset($_SESSION['access_token'])) {
+            // Redirect to home if not authenticated
+            return $response
+                ->withHeader('Location', '/')
+                ->withStatus(302);
+        }
+
+        $html = View::render('pages/dashboard', [
+            'layout' => 'main',
+            'title' => 'Dashboard - Strava Activity Analyzer',
+        ]);
+
+        $response->getBody()->write($html);
         return $response;
     });
 };
