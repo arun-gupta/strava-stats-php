@@ -63,20 +63,44 @@ else
     echo "✅ Front-end assets already built"
 fi
 
-# Check for .env file
+# Check for .env file and prompt configuration
 if [ ! -f ".env" ]; then
     echo "⚙️  Creating .env file from .env.example..."
     cp .env.example .env
     echo ""
-    echo "⚠️  IMPORTANT: Edit .env and configure your Strava API credentials:"
-    echo "   - STRAVA_CLIENT_ID"
-    echo "   - STRAVA_CLIENT_SECRET"
-    echo "   - STRAVA_REDIRECT_URI"
+    echo "⚠️  CONFIGURATION REQUIRED"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    echo "   Register your app at: https://www.strava.com/settings/api"
+    echo "Before starting the server, you must configure your Strava API credentials:"
+    echo ""
+    echo "1. Register your app at: https://www.strava.com/settings/api"
+    echo "2. Edit the .env file and set:"
+    echo "   - STRAVA_CLIENT_ID=your_client_id"
+    echo "   - STRAVA_CLIENT_SECRET=your_client_secret"
+    echo "   - STRAVA_REDIRECT_URI=http://localhost:8080/auth/callback"
+    echo ""
+    echo "3. Optionally generate a session secret:"
+    echo "   php -r \"echo bin2hex(random_bytes(32));\""
+    echo ""
+    read -p "Press Enter after configuring .env to continue, or Ctrl+C to exit..."
     echo ""
 else
-    echo "✅ .env file exists"
+    # Check if .env still has placeholder values
+    if grep -q "your_client_id_here" .env || grep -q "your_client_secret_here" .env; then
+        echo "⚠️  WARNING: .env file contains placeholder values"
+        echo ""
+        echo "Please edit .env and configure your Strava API credentials:"
+        echo "   - STRAVA_CLIENT_ID"
+        echo "   - STRAVA_CLIENT_SECRET"
+        echo "   - STRAVA_REDIRECT_URI"
+        echo ""
+        echo "Register your app at: https://www.strava.com/settings/api"
+        echo ""
+        read -p "Press Enter after configuring .env to continue, or Ctrl+C to exit..."
+        echo ""
+    else
+        echo "✅ .env file configured"
+    fi
 fi
 
 # Create necessary directories

@@ -16,12 +16,14 @@ The script will:
 - Check for required dependencies (PHP, Composer, npm)
 - Install all dependencies
 - Build front-end assets
-- Create .env file if needed
+- Create `.env` file and prompt you to configure it
+- Wait for you to add Strava API credentials
 - Start the development server on http://localhost:8080
 
-**Important:** After the server starts, edit `.env` and configure your Strava API credentials:
-- Register your application at https://www.strava.com/settings/api
-- Set `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, and `STRAVA_REDIRECT_URI`
+**Note:** You'll need to:
+1. Register your application at https://www.strava.com/settings/api
+2. Add your `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, and `STRAVA_REDIRECT_URI` to `.env`
+3. The script will pause and wait for you to complete this configuration
 
 ## Framework Decision
 
