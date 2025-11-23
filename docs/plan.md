@@ -54,6 +54,13 @@
  - Never expose tokens to the browser; only server holds them.
  
  Deliverables: full OAuth loop, session persistence, sign‑out.
+
+HTTP error handling implemented:
+- 401 Unauthorized → automatic token refresh and retry
+- 429 Rate Limit → respect Retry-After header with backoff
+- 403 Forbidden → log scope permission issues (no retry)
+- 404 Not Found → log missing resource (no retry)
+- 5xx Server Errors → exponential backoff retry (max 3 attempts)
  
  ### Phase 2 — Data acquisition & normalization (Req 3)
  - `StravaClient`: endpoints for activities list with pagination; honor rate limits (read headers; exponential backoff and retry windows).  

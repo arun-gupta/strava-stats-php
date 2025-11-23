@@ -22,6 +22,11 @@ The Strava Activity Analyzer is a web application designed to authenticate with 
         - WHEN an access token expires, THEN the system SHALL automatically use the refresh token to obtain a new access token without user intervention.
         - WHEN a user explicitly selects "Sign Out", THEN the system SHALL invalidate the local session and discard active tokens.
         - WHEN handling tokens, THEN the system SHALL store them securely server-side and never expose them to the client browser.
+        - WHEN making API requests, THEN the system SHALL handle HTTP 401 (Unauthorized) by refreshing the token and retrying.
+        - WHEN encountering HTTP 429 (Rate Limit), THEN the system SHALL respect the Retry-After header and retry with appropriate backoff.
+        - WHEN receiving HTTP 403 (Forbidden), THEN the system SHALL log scope permission issues and not retry.
+        - WHEN receiving HTTP 404 (Not Found), THEN the system SHALL log the missing resource and not retry.
+        - WHEN encountering HTTP 5xx (Server Errors), THEN the system SHALL retry with exponential backoff up to 3 attempts.
 
 ### Data Acquisition & Processing
 
