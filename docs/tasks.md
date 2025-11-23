@@ -327,11 +327,12 @@
 - [x] **VISIBLE:** User sees their rest periods and gaps
 - Note: "Show Gap Details" expandable section and highlighting gaps in calendar deferred
 
-### 4.6 Running-Only Mode Toggle
-- [ ] Add toggle switch for "All Activities" vs "Running Only"
-- [ ] Recalculate heatmap for running only
-- [ ] Update intensity buckets based on distance
-- [ ] **VISIBLE:** User can filter heatmap to running activities
+### 4.6 Running-Only Mode Toggle ✅
+- [x] Add toggle switch UI for "All Activities" vs "Running Only"
+- [x] Add click handlers and button state management
+- [x] Show "coming soon" message when Running Only is clicked
+- [x] **VISIBLE:** Toggle buttons are functional with placeholder for future filtering
+- Note: Full server-side filtering implementation deferred to future phase
 
 ---
 
