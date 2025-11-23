@@ -6,8 +6,15 @@
 
     <div style="margin-top: 2rem;">
         <a href="/auth/strava"
-           style="display: inline-block; background-color: #fc4c02; color: white; padding: 12px 24px;
-                  text-decoration: none; border-radius: 4px; font-weight: bold;">
+           style="display: inline-flex; align-items: center; gap: 10px; background-color: #fc4c02;
+                  color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px;
+                  font-weight: bold; font-size: 16px; transition: background-color 0.3s ease;
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
+           onmouseover="this.style.backgroundColor='#e04402'"
+           onmouseout="this.style.backgroundColor='#fc4c02'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/>
+            </svg>
             Connect with Strava
         </a>
     </div>
