@@ -4,22 +4,40 @@ Analyze and visualize your Strava activity statistics with beautiful charts and 
 
 ## 📸 Screenshots
 
-### Overview Tab
-![Dashboard Overview](docs/images/overview.png)
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/images/overview.png" alt="Dashboard Overview" width="100%"/>
+      <p align="center"><strong>Overview Tab</strong><br/>Activity distribution and summary cards</p>
+    </td>
+    <td width="50%">
+      <img src="docs/images/duration.png" alt="Duration Tab" width="100%"/>
+      <p align="center"><strong>Duration Analysis</strong><br/>Time spent breakdown with insights</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/images/heatmap-activity.png" alt="Heatmap Calendar" width="100%"/>
+      <p align="center"><strong>Activity Heatmap</strong><br/>Calendar view with workout statistics</p>
+    </td>
+    <td width="50%">
+      <img src="docs/images/running-stats.png" alt="Running Stats" width="100%"/>
+      <p align="center"><strong>Running Stats</strong><br/>Performance metrics and PRs</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/images/trends.png" alt="Trends Charts" width="100%"/>
+      <p align="center"><strong>Trends Analysis</strong><br/>Distance and pace trends over time</p>
+    </td>
+    <td width="50%">
+      <img src="docs/images/heatmap-running.png" alt="Running Only Heatmap" width="100%"/>
+      <p align="center"><strong>Running-Only Mode</strong><br/>Filter heatmap for running activities</p>
+    </td>
+  </tr>
+</table>
 
-### Duration Analysis
-![Duration Tab](docs/images/duration.png)
-
-### Activity Heatmap
-![Heatmap Calendar](docs/images/heatmap-activity.png)
-
-### Running Stats
-![Running Statistics](docs/images/running-stats.png)
-
-### Trends Analysis
-![Trends Charts](docs/images/trends.png)
-
-> See all screenshots in [docs/images/](docs/images/)
+> [View all screenshots](docs/images/)
 
 ## ✨ Features
 
