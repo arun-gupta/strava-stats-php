@@ -46,6 +46,7 @@
                     </svg>
                 </a>
                 <?php if ($isAuthenticated && $athlete): ?>
+                    <!-- DEBUG: Athlete data: <?= htmlspecialchars(json_encode($athlete)) ?> -->
                     <?php
                     // Use profile_medium from Strava API (fallback to profile if available)
                     $profilePhoto = $athlete['profile_medium'] ?? $athlete['profile'] ?? null;
