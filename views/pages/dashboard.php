@@ -222,8 +222,6 @@
             <!-- Pass data to JavaScript -->
             <script>
                 window.activityData = <?= json_encode($activityCounts) ?>;
-                console.log('Activity data set:', window.activityData);
-                console.log('Canvas element exists:', document.getElementById('activityChart'));
             </script>
         <?php else: ?>
             <!-- Empty State -->

@@ -10,22 +10,15 @@ window.Chart = Chart;
 
 // Initialize activity chart when data is available
 function initActivityChart() {
-    console.log('initActivityChart called');
-    console.log('window.activityData:', window.activityData);
-
     // Check if we have activity data and chart element
     if (typeof window.activityData === 'undefined' || !window.activityData) {
-        console.log('No activity data available');
         return;
     }
 
     const chartElement = document.getElementById('activityChart');
     if (!chartElement) {
-        console.log('Chart element not found');
         return;
     }
-
-    console.log('Creating chart with data:', window.activityData);
 
     // Extract labels and data from activityData object
     const labels = Object.keys(window.activityData);
@@ -105,8 +98,6 @@ function initActivityChart() {
             }
         }
     });
-
-    console.log('Chart created successfully');
 }
 
 // Initialize example chart for empty state
@@ -175,8 +166,6 @@ function initDurationChart() {
         return;
     }
 
-    console.log('Creating duration chart with data:', window.durationData);
-
     // Extract labels and data (keep in seconds for calculation, but display in hours)
     const labels = Object.keys(window.durationData);
     const dataInSeconds = Object.values(window.durationData);
@@ -234,8 +223,6 @@ function initDurationChart() {
             }
         }
     });
-
-    console.log('Duration chart created successfully');
 }
 
 // Try to initialize immediately and also on DOMContentLoaded
@@ -251,5 +238,3 @@ if (document.readyState === 'loading') {
     initExampleChart();
     initDurationChart();
 }
-
-console.log('Strava Stats app initialized');
