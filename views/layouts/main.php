@@ -27,6 +27,13 @@
     }
     ?>
 
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" style="position: absolute; left: -9999px; z-index: 999; padding: 1rem; background: #fc4c02; color: white; text-decoration: none; font-weight: 600;"
+       onfocus="this.style.left='10px'; this.style.top='10px';"
+       onblur="this.style.left='-9999px'; this.style.top='auto';">
+        Skip to main content
+    </a>
+
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
             <h1><a href="/" style="color: white; text-decoration: none;">Strava Activity Analyzer</a></h1>
@@ -57,7 +64,7 @@
         </div>
     </header>
 
-    <main class="container">
+    <main id="main-content" class="container">
         <?= $content ?? '' ?>
     </main>
 

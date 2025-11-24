@@ -147,14 +147,26 @@
         </div>
 
         <!-- Custom Date Picker (Hidden by default) -->
-        <div id="customDatePicker" style="display: <?= $isCustomActive ? 'flex' : 'none' ?>; margin-top: 1rem; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
-            <label style="font-weight: 600; color: #666;">From:</label>
-            <input type="date" id="startDate" value="<?= htmlspecialchars($customStart) ?>"
+        <div id="customDatePicker"
+             role="region"
+             aria-label="Custom date range picker"
+             style="display: <?= $isCustomActive ? 'flex' : 'none' ?>; margin-top: 1rem; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+            <label for="startDate" style="font-weight: 600; color: #666;">From:</label>
+            <input type="date"
+                   id="startDate"
+                   name="startDate"
+                   aria-label="Start date"
+                   value="<?= htmlspecialchars($customStart) ?>"
                    style="padding: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem;">
-            <label style="font-weight: 600; color: #666;">To:</label>
-            <input type="date" id="endDate" value="<?= htmlspecialchars($customEnd) ?>"
+            <label for="endDate" style="font-weight: 600; color: #666;">To:</label>
+            <input type="date"
+                   id="endDate"
+                   name="endDate"
+                   aria-label="End date"
+                   value="<?= htmlspecialchars($customEnd) ?>"
                    style="padding: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem;">
             <button onclick="applyCustomRange()"
+                    aria-label="Apply custom date range"
                     style="padding: 0.5rem 1.5rem; background: #48bb78; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
                 Apply
             </button>
@@ -162,38 +174,63 @@
     </div>
 
     <!-- Tab Navigation -->
-    <div style="margin-top: 2rem;">
-        <div style="display: flex; gap: 0.5rem; border-bottom: 2px solid #e2e8f0;">
-            <button id="overviewTab" class="tab-button active" onclick="switchTab('overview')"
+    <nav style="margin-top: 2rem;" aria-label="Dashboard sections">
+        <div role="tablist" style="display: flex; gap: 0.5rem; border-bottom: 2px solid #e2e8f0;">
+            <button id="overviewTab"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="overviewContent"
+                    class="tab-button active"
+                    onclick="switchTab('overview')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid #fc4c02;
                            color: #fc4c02; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 📊 Overview
             </button>
-            <button id="durationTab" class="tab-button" onclick="switchTab('duration')"
+            <button id="durationTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="durationContent"
+                    class="tab-button"
+                    onclick="switchTab('duration')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 ⏱️ Duration
             </button>
-            <button id="heatmapTab" class="tab-button" onclick="switchTab('heatmap')"
+            <button id="heatmapTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="heatmapContent"
+                    class="tab-button"
+                    onclick="switchTab('heatmap')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🔥 Heatmap
             </button>
-            <button id="runningTab" class="tab-button" onclick="switchTab('running')"
+            <button id="runningTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="runningContent"
+                    class="tab-button"
+                    onclick="switchTab('running')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🏃 Running Stats
             </button>
-            <button id="trendsTab" class="tab-button" onclick="switchTab('trends')"
+            <button id="trendsTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="trendsContent"
+                    class="tab-button"
+                    onclick="switchTab('trends')"
                     style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 📈 Trends
             </button>
         </div>
-    </div>
+    </nav>
 
     <!-- Overview Tab Content -->
-    <div id="overviewContent" class="tab-content" style="display: block;">
+    <div id="overviewContent" role="tabpanel" aria-labelledby="overviewTab" class="tab-content" style="display: block;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalActivities > 0): ?>
             <!-- Activity Chart -->
@@ -277,7 +314,7 @@
     </div>
 
     <!-- Duration Tab Content -->
-    <div id="durationContent" class="tab-content" style="display: none;">
+    <div id="durationContent" role="tabpanel" aria-labelledby="durationTab" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalActivities > 0): ?>
                 <!-- Duration Pie Chart -->
@@ -383,7 +420,7 @@
     </div>
 
     <!-- Heatmap Tab Content -->
-    <div id="heatmapContent" class="tab-content" style="display: none;">
+    <div id="heatmapContent" role="tabpanel" aria-labelledby="heatmapTab" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #1a1d29; border-radius: 8px;">
             <?php if ($totalActivities > 0): ?>
                 <!-- Activity Calendar Section -->
@@ -533,7 +570,7 @@
     </div>
 
     <!-- Running Stats Tab Content -->
-    <div id="runningContent" class="tab-content" style="display: none;">
+    <div id="runningContent" role="tabpanel" aria-labelledby="runningTab" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalRuns > 0): ?>
                 <!-- Unit Toggle -->
@@ -678,7 +715,7 @@
     </div>
 
     <!-- Trends Tab Content -->
-    <div id="trendsContent" class="tab-content" style="display: none;">
+    <div id="trendsContent" role="tabpanel" aria-labelledby="trendsTab" class="tab-content" style="display: none;">
         <div style="margin-top: 2rem; padding: 1.5rem; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #fc4c02;">
             <?php if ($totalActivities > 0): ?>
                 <!-- Distance Trend Chart -->
@@ -740,19 +777,22 @@
                 content.style.display = 'none';
             });
 
-            // Remove active class from all buttons
+            // Remove active class from all buttons and update ARIA
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.style.borderBottomColor = 'transparent';
                 button.style.color = '#666';
+                button.setAttribute('aria-selected', 'false');
             });
 
             // Show selected tab content
             document.getElementById(tabName + 'Content').style.display = 'block';
 
-            // Add active class to selected button
+            // Add active class to selected button and update ARIA
             const activeButton = document.getElementById(tabName + 'Tab');
             activeButton.style.borderBottomColor = '#fc4c02';
             activeButton.style.color = '#fc4c02';
+            activeButton.setAttribute('aria-selected', 'true');
+            activeButton.focus(); // Move focus to selected tab for keyboard users
         }
 
         // Date range functions
