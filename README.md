@@ -2,6 +2,25 @@
 
 Analyze and visualize your Strava activity statistics with beautiful charts and insights. Built with PHP and Chart.js, featuring real-time data from your Strava account.
 
+## 📸 Screenshots
+
+### Overview Tab
+![Dashboard Overview](docs/images/overview.png)
+
+### Duration Analysis
+![Duration Tab](docs/images/duration.png)
+
+### Activity Heatmap
+![Heatmap Calendar](docs/images/heatmap-activity.png)
+
+### Running Stats
+![Running Statistics](docs/images/running-stats.png)
+
+### Trends Analysis
+![Trends Charts](docs/images/trends.png)
+
+> See all screenshots in [docs/images/](docs/images/)
+
 ## ✨ Features
 
 ### 📊 Dashboard & Analytics

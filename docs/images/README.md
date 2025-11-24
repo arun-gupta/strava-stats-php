@@ -47,7 +47,12 @@ This directory contains screenshots and images for the project documentation.
 
 ## Current Images
 
-_No images added yet. Add your screenshots here!_
+- **overview.png** (230KB) - Dashboard Overview tab with summary cards and activity distribution pie chart
+- **duration.png** (122KB) - Duration tab showing time spent by activity type with insights
+- **heatmap-activity.png** (97KB) - Heatmap tab with activity calendar and workout statistics (All Activities mode)
+- **heatmap-running.png** (98KB) - Heatmap tab showing running-only activity calendar
+- **running-stats.png** (201KB) - Running Stats tab with pace metrics, PRs, and distance distribution
+- **trends.png** (207KB) - Trends tab with distance and pace trend charts over time
 
 ## Tools for Screenshots
 
