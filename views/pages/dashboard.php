@@ -350,24 +350,6 @@
                     </div>
                 </div>
 
-                <!-- Total Time Summary -->
-                <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #fc4c02;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                            Total Moving Time
-                        </div>
-                        <div style="font-size: 2.5rem; font-weight: 700; color: #fc4c02;">
-                            <?php
-                            $totalHours = floor($totalMovingTime / 3600);
-                            $totalMinutes = floor(($totalMovingTime % 3600) / 60);
-                            echo $totalHours . 'h ' . $totalMinutes . 'm';
-                            ?>
-                        </div>
-                        <div style="font-size: 0.875rem; color: #666; margin-top: 0.5rem;">
-                            Across all <?= $totalActivities ?> activities
-                        </div>
-                    </div>
-                </div>
             <?php else: ?>
                 <div style="text-align: center; padding: 3rem; color: #666;">
                     <div style="font-size: 4rem; margin-bottom: 1rem;">⏱️</div>
