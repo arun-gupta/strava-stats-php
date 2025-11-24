@@ -46,8 +46,12 @@
                     </svg>
                 </a>
                 <?php if ($isAuthenticated && $athlete): ?>
-                    <?php if (!empty($athlete['profile'])): ?>
-                        <img src="<?= htmlspecialchars($athlete['profile']) ?>"
+                    <?php
+                    // Use profile_medium from Strava API (fallback to profile if available)
+                    $profilePhoto = $athlete['profile_medium'] ?? $athlete['profile'] ?? null;
+                    if (!empty($profilePhoto)):
+                    ?>
+                        <img src="<?= htmlspecialchars($profilePhoto) ?>"
                              alt="<?= htmlspecialchars($athlete['firstname'] ?? 'Athlete') ?>"
                              style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
                     <?php endif; ?>
