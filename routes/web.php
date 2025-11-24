@@ -239,6 +239,13 @@ return function (App $app) {
                 // Cache version changed - invalidate old caches to fix timezone parsing
                 $cacheKey = 'activities_cache_v2';
                 $cacheStartDateKey = 'activities_cache_start_date_v2';
+
+                // Clear old cache versions if they exist
+                if (isset($_SESSION['activities_cache'])) {
+                    unset($_SESSION['activities_cache']);
+                    unset($_SESSION['activities_cache_start_date']);
+                }
+
                 $needsRefetch = false;
 
                 if (!isset($_SESSION[$cacheKey]) || !isset($_SESSION[$cacheStartDateKey])) {
