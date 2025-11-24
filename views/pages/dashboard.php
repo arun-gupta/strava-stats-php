@@ -32,46 +32,46 @@
     <?php endif; ?>
 
     <!-- Summary Cards -->
-    <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+    <div style="margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem;">
         <!-- Date Range Card -->
-        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
                 📅 Date Range
             </div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #333;">
+            <div style="font-size: 1.125rem; font-weight: 600; color: #333;">
                 <?= $startDate->format('M j') ?> - <?= $endDate->format('M j, Y') ?>
             </div>
-            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+            <div style="font-size: 0.75rem; color: #666; margin-top: 0.125rem;">
                 <?= htmlspecialchars($periodLabel) ?>
             </div>
         </div>
 
         <!-- Total Activities Card -->
-        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
                 🏃 Total Activities
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #fc4c02;">
+            <div style="font-size: 1.75rem; font-weight: 700; color: #fc4c02;">
                 <?= $totalActivities ?>
             </div>
-            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+            <div style="font-size: 0.75rem; color: #666; margin-top: 0.125rem;">
                 <?= $totalActivities === 1 ? 'Activity' : 'Activities' ?> logged
             </div>
         </div>
 
         <!-- Total Moving Time Card -->
-        <div style="padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-            <div style="font-size: 0.875rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+        <div style="padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
                 ⏱️ Total Moving Time
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #fc4c02;">
+            <div style="font-size: 1.75rem; font-weight: 700; color: #fc4c02;">
                 <?php
                 $hours = floor($totalMovingTime / 3600);
                 $minutes = floor(($totalMovingTime % 3600) / 60);
                 echo $hours . 'h ' . $minutes . 'm';
                 ?>
             </div>
-            <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
+            <div style="font-size: 0.75rem; color: #666; margin-top: 0.125rem;">
                 Time in motion
             </div>
         </div>
@@ -117,9 +117,9 @@
     ?>
 
     <!-- Date Range Selector -->
-    <div style="margin-top: 2rem; padding: 1rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: center;">
-            <span style="font-weight: 600; color: #333;">📅 Time Period:</span>
+    <div style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; justify-content: center;">
+            <span style="font-weight: 600; color: #333; font-size: 0.875rem;">📅 Time Period:</span>
             <button onclick="changeDateRange(7)" class="date-range-btn <?= $is7DaysActive ? 'active' : '' ?>"
                     style="padding: 0.5rem 1rem; border: 2px solid #e2e8f0; border-radius: 6px; background: <?= $is7DaysActive ? '#fc4c02' : 'white' ?>; color: <?= $is7DaysActive ? 'white' : '#666' ?>; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 7 Days
@@ -174,15 +174,15 @@
     </div>
 
     <!-- Tab Navigation -->
-    <nav style="margin-top: 2rem;" aria-label="Dashboard sections">
-        <div role="tablist" style="display: flex; gap: 0.5rem; border-bottom: 2px solid #e2e8f0;">
+    <nav style="margin-top: 1rem;" aria-label="Dashboard sections">
+        <div role="tablist" style="display: flex; gap: 0.25rem; border-bottom: 2px solid #e2e8f0;">
             <button id="overviewTab"
                     role="tab"
                     aria-selected="true"
                     aria-controls="overviewContent"
                     class="tab-button active"
                     onclick="switchTab('overview')"
-                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid #fc4c02;
+                    style="padding: 0.625rem 1.25rem; background: none; border: none; border-bottom: 3px solid #fc4c02;
                            color: #fc4c02; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 📊 Overview
             </button>
@@ -192,7 +192,7 @@
                     aria-controls="durationContent"
                     class="tab-button"
                     onclick="switchTab('duration')"
-                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                    style="padding: 0.625rem 1.25rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 ⏱️ Duration
             </button>
@@ -202,7 +202,7 @@
                     aria-controls="heatmapContent"
                     class="tab-button"
                     onclick="switchTab('heatmap')"
-                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                    style="padding: 0.625rem 1.25rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🔥 Heatmap
             </button>
@@ -212,7 +212,7 @@
                     aria-controls="runningContent"
                     class="tab-button"
                     onclick="switchTab('running')"
-                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                    style="padding: 0.625rem 1.25rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 🏃 Running Stats
             </button>
@@ -222,7 +222,7 @@
                     aria-controls="trendsContent"
                     class="tab-button"
                     onclick="switchTab('trends')"
-                    style="padding: 0.75rem 1.5rem; background: none; border: none; border-bottom: 3px solid transparent;
+                    style="padding: 0.625rem 1.25rem; background: none; border: none; border-bottom: 3px solid transparent;
                            color: #666; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                 📈 Trends
             </button>
