@@ -401,6 +401,17 @@
                     </div>
 
                     <!-- Calendar Grid -->
+                    <!-- DEBUG INFO - Remove after fixing -->
+                    <div style="padding: 1rem; background: yellow; color: black; margin-bottom: 1rem; font-size: 0.75rem;">
+                        <strong>Debug: Activity Dates</strong><br>
+                        <?php
+                        foreach ($heatmapActivities as $activity) {
+                            echo 'Activity: ' . htmlspecialchars($activity->name) .
+                                 ' | Date: ' . $activity->startDate->format('Y-m-d H:i:s T') .
+                                 ' | Type: ' . htmlspecialchars($activity->type) . '<br>';
+                        }
+                        ?>
+                    </div>
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
                             <?php
