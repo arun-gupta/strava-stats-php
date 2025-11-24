@@ -50,17 +50,10 @@
                     // Use profile_medium from Strava API (fallback to profile if available)
                     $profilePhoto = $athlete['profile_medium'] ?? $athlete['profile'] ?? null;
                     ?>
-                    <!-- DEBUG: profilePhoto = <?= var_export($profilePhoto, true) ?> -->
-                    <!-- DEBUG: has profile_medium? <?= isset($athlete['profile_medium']) ? 'YES' : 'NO' ?> -->
-                    <!-- DEBUG: has profile? <?= isset($athlete['profile']) ? 'YES' : 'NO' ?> -->
                     <?php if ($profilePhoto): ?>
                         <img src="<?= htmlspecialchars($profilePhoto) ?>"
                              alt="<?= htmlspecialchars($athlete['firstname'] ?? 'Athlete') ?>"
-                             style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; object-fit: cover;"
-                             onerror="console.error('Failed to load profile image:', this.src); this.style.display='none';"
-                             onload="console.log('Profile image loaded successfully');">
-                    <?php else: ?>
-                        <!-- DEBUG: No profile photo found! -->
+                             style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; object-fit: cover;">
                     <?php endif; ?>
                     <span style="color: white; font-weight: 500; font-size: 0.9rem;">
                         <?= htmlspecialchars($athlete['firstname'] ?? 'Athlete') ?>
