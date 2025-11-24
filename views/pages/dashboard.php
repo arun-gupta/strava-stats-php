@@ -402,6 +402,10 @@
 
                     <!-- Calendar Grid -->
                     <!-- DEBUG: Total days = <?= count($calendarDays) ?>, First = <?= !empty($calendarDays) ? $calendarDays[0]['dateStr'] : 'none' ?>, Last = <?= !empty($calendarDays) ? end($calendarDays)['dateStr'] : 'none' ?> -->
+                    <!-- DEBUG: Days with activity: <?php
+                        $daysWithActivity = array_filter($calendarDays, function($d) { return $d['hasActivity']; });
+                        echo implode(', ', array_map(function($d) { return $d['dateStr']; }, $daysWithActivity));
+                    ?> -->
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
                             <?php
