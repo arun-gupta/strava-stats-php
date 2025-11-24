@@ -110,19 +110,37 @@ return function (App $app) {
         $hasQueryParams = isset($queryParams['start']) || isset($queryParams['range']) || isset($queryParams['days']);
 
         if (isset($queryParams['start']) && isset($queryParams['end'])) {
-            // Custom date range
-            $startDate = new DateTime($queryParams['start']);
-            $startDate->setTime(0, 0, 0);
-            $endDate = new DateTime($queryParams['end']);
-            $endDate->setTime(23, 59, 59);
-            $periodLabel = 'Custom Range';
+            // Custom date range - validate date format
+            try {
+                // Validate and sanitize date inputs
+                if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $queryParams['start']) ||
+                    !preg_match('/^\d{4}-\d{2}-\d{2}$/', $queryParams['end'])) {
+                    throw new \Exception('Invalid date format');
+                }
 
-            // Store in session
-            $_SESSION['date_range'] = [
-                'type' => 'custom',
-                'start' => $queryParams['start'],
-                'end' => $queryParams['end']
-            ];
+                $startDate = new DateTime($queryParams['start']);
+                $startDate->setTime(0, 0, 0);
+                $endDate = new DateTime($queryParams['end']);
+                $endDate->setTime(23, 59, 59);
+
+                // Validate date range is logical
+                if ($startDate > $endDate) {
+                    throw new \Exception('Start date must be before end date');
+                }
+
+                $periodLabel = 'Custom Range';
+
+                // Store in session
+                $_SESSION['date_range'] = [
+                    'type' => 'custom',
+                    'start' => $queryParams['start'],
+                    'end' => $queryParams['end']
+                ];
+            } catch (\Exception $e) {
+                // Invalid date format, fall through to default
+                $startDate = (clone $endDate)->modify('-6 days');
+                $startDate->setTime(0, 0, 0);
+            }
         } elseif (isset($queryParams['range']) && $queryParams['range'] === 'ytd') {
             // Year to date
             $startDate = new DateTime(date('Y') . '-01-01');
@@ -134,18 +152,29 @@ return function (App $app) {
                 'type' => 'ytd'
             ];
         } elseif (isset($queryParams['days'])) {
-            // Preset days
+            // Preset days - validate input
             $days = (int)$queryParams['days'];
+
+            // Whitelist allowed values
+            $allowedDays = [7, 30, 90, 180, 365];
+            if (!in_array($days, $allowedDays)) {
+                // Invalid value, default to 7 days
+                $days = 7;
+            }
+
             // For "Last N days", we want N days including today
             // Clone endDate and go back (N-1) days to get N total days
             $startDate = (clone $endDate)->modify('-' . ($days - 1) . ' days');
             $startDate->setTime(0, 0, 0);
+
             if ($days == 30) {
                 $periodLabel = 'Last 30 Days';
             } elseif ($days == 90) {
                 $periodLabel = 'Last 90 Days';
             } elseif ($days == 180) {
                 $periodLabel = 'Last 6 Months';
+            } elseif ($days == 365) {
+                $periodLabel = 'Last Year';
             } else {
                 $periodLabel = 'Last ' . $days . ' Days';
             }

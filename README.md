@@ -39,8 +39,11 @@ Analyze and visualize your Strava activity statistics with beautiful charts and 
 ### 🔒 Security & Performance
 - **OAuth2 Authentication** - Secure Strava integration with PKCE
 - **Token Refresh** - Automatic token renewal
+- **Rate Limiting** - Built-in protection against abuse (100 req/min)
 - **Rate Limit Handling** - Respects Strava API limits
+- **Security Headers** - CSP, HSTS, X-Frame-Options, and more
 - **Session Security** - HttpOnly, Secure, SameSite cookies
+- **Input Validation** - Whitelist and regex validation on all inputs
 - **Code Splitting** - Optimized JavaScript bundles (74KB gzipped total)
 
 ## 🚀 Quick Start

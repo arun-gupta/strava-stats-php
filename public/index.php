@@ -20,6 +20,20 @@ ini_set('session.gc_maxlifetime', '86400');  // 24 hour session timeout
 // Create App
 $app = AppFactory::create();
 
+// Add security headers middleware
+$app->add(new \App\Middleware\SecurityHeadersMiddleware());
+
+// Add rate limiting middleware - protect OAuth and API endpoints
+$app->add(new \App\Middleware\RateLimitMiddleware(
+    maxRequests: 100,           // 100 requests
+    windowSeconds: 60,          // per 60 seconds
+    protectedPaths: [           // Apply to specific paths
+        '/auth/',
+        '/api/',
+        '/dashboard'
+    ]
+));
+
 // Add error middleware
 $app->addErrorMiddleware(
     displayErrorDetails: $_ENV['APP_DEBUG'] === 'true',

@@ -190,7 +190,47 @@ For production, always use HTTPS:
 - [ ] PHP version is up to date with security patches
 - [ ] Dependencies are updated regularly (`composer update`, `npm update`)
 - [ ] Session cookies configured with HttpOnly, Secure, and SameSite flags (already configured)
-- [ ] Rate limiting configured if behind a reverse proxy
+- [x] Rate limiting middleware enabled (protects /auth/, /api/, /dashboard - 100 req/min)
+- [x] Security headers configured (CSP, HSTS, X-Frame-Options, etc.)
+- [x] Input validation on all user inputs (dates, query parameters)
+
+### Rate Limiting
+
+The application includes built-in rate limiting to protect against abuse and brute force attacks:
+
+- **Default Limits**: 100 requests per 60 seconds per IP address
+- **Protected Endpoints**: `/auth/`, `/api/`, `/dashboard`
+- **Configuration**: Edit `public/index.php` to adjust limits:
+  ```php
+  $app->add(new \App\Middleware\RateLimitMiddleware(
+      maxRequests: 100,        // Adjust as needed
+      windowSeconds: 60,       // Adjust as needed
+      protectedPaths: [        // Add/remove paths
+          '/auth/',
+          '/api/',
+          '/dashboard'
+      ]
+  ));
+  ```
+
+**Rate Limit Headers**: All responses include standard rate limit headers:
+- `X-RateLimit-Limit`: Maximum requests allowed in window
+- `X-RateLimit-Remaining`: Number of requests remaining
+- `X-RateLimit-Reset`: Unix timestamp when the limit resets
+
+**Rate Limit Response** (429 Too Many Requests):
+```json
+{
+  "error": "Rate limit exceeded",
+  "message": "Too many requests. Please try again later.",
+  "retry_after": 45
+}
+```
+
+**Production Recommendations**:
+- For high-traffic deployments, consider using Redis for rate limit storage instead of sessions
+- Adjust limits based on your usage patterns and server capacity
+- Monitor rate limit violations in logs to detect potential attacks
 
 ### Quick Deployment Checklist
 
