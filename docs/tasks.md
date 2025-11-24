@@ -24,9 +24,10 @@
 - WCAG-compliant accessibility
 - Full documentation and deployment guides
 
-### 📋 Optional Future Work (Phases 9-10)
-- Phase 9: Testing & Quality Assurance (unit tests, integration tests, security hardening)
-- Phase 10: Advanced Features (deployment automation, advanced analytics, social features)
+### 📋 Optional Future Work (Phases 9-11)
+- **Phase 9:** Testing (unit tests, integration tests)
+- **Phase 10:** Security & Performance (hardening, profiling, optimization)
+- **Phase 11:** Advanced Features (deployment automation, analytics, social, export)
 
 ---
 
@@ -531,9 +532,9 @@
 
 ---
 
-## Phase 9 — Testing & Quality Assurance (Optional/Future)
+## Phase 9 — Testing (Optional/Future)
 
-**Goal:** Comprehensive test coverage and quality assurance.
+**Goal:** Comprehensive test coverage.
 
 ### 9.1 Unit Testing
 - [ ] Write tests for HeatmapService
@@ -549,47 +550,57 @@
 - [ ] Test all widgets
 - [ ] Test rate limiting
 
-### 9.3 Security Hardening
+---
+
+## Phase 10 — Security & Performance (Optional/Future)
+
+**Goal:** Production hardening and optimization.
+
+### 10.1 Security Hardening
 - [ ] Security audit of authentication flow
 - [ ] Enable HTTPS enforcement (production)
 - [ ] Set security headers
 - [ ] Validate all inputs
 - [ ] Test CSRF protection
+- [ ] Implement rate limiting middleware
+- [ ] Add security scanning to CI/CD
 
-### 9.4 Performance Profiling
+### 10.2 Performance Profiling
 - [ ] Profile dashboard load time
 - [ ] Optimize slow queries
 - [ ] Meet <2s load time and <300ms filter update targets
 - [ ] Document performance metrics
 - [ ] Load testing with large datasets
+- [ ] Database query optimization
+- [ ] CDN setup for static assets
 
 ---
 
-## Phase 10 — Advanced Features (Optional/Future)
+## Phase 11 — Advanced Features (Optional/Future)
 
 **Goal:** Additional features and integrations for enhanced functionality.
 
-### 10.1 Deployment Automation
+### 11.1 Deployment Automation
 - [ ] Create Dockerfile
 - [ ] Set up CI/CD pipeline
 - [ ] Deploy to staging environment
 - [ ] Smoke test in staging
 - [ ] Deploy to production
 
-### 10.2 Advanced Analytics
+### 11.2 Advanced Analytics
 - [ ] Weekly/Monthly summary emails
 - [ ] Goal setting and tracking
 - [ ] Segment analysis (best efforts)
 - [ ] Training load metrics
 - [ ] Recovery recommendations
 
-### 10.3 Social Features
+### 11.3 Social Features
 - [ ] Compare with friends
 - [ ] Leaderboards
 - [ ] Achievement badges
 - [ ] Activity sharing
 
-### 10.4 Data Export
+### 11.4 Data Export
 - [ ] Export data to CSV
 - [ ] PDF report generation
 - [ ] Data backup/restore
