@@ -236,14 +236,16 @@ return function (App $app) {
                 $activityService = new ActivityService();
 
                 // Check if we have cached activities and if the cache is still valid
-                // Cache version changed - invalidate old caches to fix timezone parsing
-                $cacheKey = 'activities_cache_v2';
-                $cacheStartDateKey = 'activities_cache_start_date_v2';
+                // Cache version changed - now using date-only parsing (v3)
+                $cacheKey = 'activities_cache_v3';
+                $cacheStartDateKey = 'activities_cache_start_date_v3';
 
                 // Clear old cache versions if they exist
-                if (isset($_SESSION['activities_cache'])) {
+                if (isset($_SESSION['activities_cache']) || isset($_SESSION['activities_cache_v2'])) {
                     unset($_SESSION['activities_cache']);
                     unset($_SESSION['activities_cache_start_date']);
+                    unset($_SESSION['activities_cache_v2']);
+                    unset($_SESSION['activities_cache_start_date_v2']);
                 }
 
                 $needsRefetch = false;
