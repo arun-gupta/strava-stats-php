@@ -403,14 +403,23 @@
                     <!-- Calendar Grid -->
                     <!-- DEBUG INFO - Remove after fixing -->
                     <div style="padding: 1rem; background: yellow; color: black; margin-bottom: 1rem; font-size: 0.75rem;">
-                        <strong>Debug: Calendar Days with Activities</strong><br>
+                        <strong>Debug: Activity Objects</strong><br>
+                        <?php
+                        $count = 0;
+                        foreach ($activities as $activity) {
+                            if ($count++ < 7) {
+                                echo htmlspecialchars($activity->name) . ' | ' .
+                                     $activity->startDate->format('Y-m-d H:i:s T') . ' | ' .
+                                     htmlspecialchars($activity->type) . '<br>';
+                            }
+                        }
+                        ?>
+                        <br>
+                        <strong>Debug: Calendar Days</strong><br>
                         <?php
                         foreach ($calendarDays as $day) {
                             if ($day['hasActivity']) {
                                 echo 'Date: ' . $day['dateStr'] . ' | Activities: ' . $day['activityCount'] . '<br>';
-                                foreach ($day['activities'] as $act) {
-                                    echo '  - ' . htmlspecialchars($act['name']) . ' (' . htmlspecialchars($act['type']) . ')<br>';
-                                }
                             }
                         }
                         ?>
