@@ -171,6 +171,9 @@ class AuthController
             $_SESSION['expires_at'] = $tokenData['expires_at'];
             $_SESSION['athlete'] = $tokenData['athlete'] ?? [];
 
+            // Debug: Log athlete data structure to see what fields are available
+            error_log('Athlete data: ' . print_r($tokenData['athlete'] ?? [], true));
+
             // Clean up OAuth state
             unset($_SESSION['oauth_state']);
             unset($_SESSION['oauth_code_verifier']);
