@@ -523,12 +523,14 @@
 - [ ] Create deployment guide
 - [ ] Update README with screenshots
 
-### 8.7 Deployment
+### 8.7 Deployment (Future)
 - [ ] Create Dockerfile
 - [ ] Set up CI/CD pipeline
 - [ ] Deploy to staging environment
 - [ ] Smoke test in staging
 - [ ] Deploy to production
+
+**Note:** This is a future enhancement item, not part of the current development scope.
 
 ---
 
