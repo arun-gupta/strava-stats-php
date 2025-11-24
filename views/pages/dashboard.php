@@ -314,22 +314,22 @@
                 </script>
 
                 <!-- Insights Section -->
-                <div style="margin-top: 2rem; padding: 1.5rem; background: #fff9e6; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                    <h4 style="margin-top: 0; margin-bottom: 1rem; color: #92400e;">💡 Insights</h4>
-                    <div style="display: grid; gap: 1rem;">
+                <div style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem; color: #92400e;">💡 Insights</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                         <?php if ($longestDurationType): ?>
-                            <div style="padding: 1rem; background: white; border-radius: 6px;">
-                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Most Time Spent</div>
-                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                            <div style="padding: 1rem; background: #fff9e6; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                <div style="font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em;">Most Time Spent</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #fc4c02;">
                                     <?= htmlspecialchars($longestDurationType) ?>
                                 </div>
                             </div>
                         <?php endif; ?>
 
                         <?php if ($weeklyAverage > 0): ?>
-                            <div style="padding: 1rem; background: white; border-radius: 6px;">
-                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Weekly Average</div>
-                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                            <div style="padding: 1rem; background: #fff9e6; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                <div style="font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em;">Weekly Average</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #fc4c02;">
                                     <?php
                                     $avgHours = floor($weeklyAverage / 3600);
                                     $avgMinutes = round(($weeklyAverage % 3600) / 60);
@@ -340,9 +340,9 @@
                         <?php endif; ?>
 
                         <?php if ($mostActiveDay): ?>
-                            <div style="padding: 1rem; background: white; border-radius: 6px;">
-                                <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Most Active On</div>
-                                <div style="font-size: 1.25rem; font-weight: 600; color: #fc4c02;">
+                            <div style="padding: 1rem; background: #fff9e6; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                <div style="font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em;">Most Active On</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #fc4c02;">
                                     <?= htmlspecialchars($mostActiveDay) ?>s
                                 </div>
                             </div>
