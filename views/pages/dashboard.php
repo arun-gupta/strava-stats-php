@@ -762,13 +762,6 @@
         </div>
     </div>
 
-    <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #999;">
-        <h3 style="margin-top: 0;">🚧 Coming Soon</h3>
-        <ul style="margin-top: 1rem; line-height: 1.8;">
-            <li><strong>Pace Trends</strong> - Track pace improvements over time</li>
-        </ul>
-    </div>
-
     <!-- Tab Switching Script -->
     <script>
         function switchTab(tabName) {
