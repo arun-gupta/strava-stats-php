@@ -36,16 +36,19 @@ class Activity
     public static function fromStravaApi(array $data): self
     {
         // Use start_date_local which represents when the activity occurred in its local timezone
-        // This ensures activities are grouped by the day they actually happened, not browser timezone
         // start_date_local format: "2025-11-17T07:07:00" (no timezone suffix)
         $startDateStr = $data['start_date_local'] ?? $data['start_date'] ?? 'now';
 
-        // Parse without timezone conversion - treat as naive datetime
-        // We want to group by the actual day it occurred (e.g., "Nov 17" if it happened on Nov 17 locally)
-        $startDate = new DateTime($startDateStr, new \DateTimeZone('UTC'));
-
-        // Set to UTC to avoid any timezone-related date shifting when formatting
-        $startDate->setTimezone(new \DateTimeZone('UTC'));
+        // Extract just the date and time, ignoring any timezone
+        // This ensures "2025-11-17T07:07:00" stays as Nov 17, regardless of system timezone
+        if (preg_match('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $startDateStr, $matches)) {
+            // Create DateTime in UTC with the extracted date/time
+            // This treats the local time as-is without timezone conversion
+            $startDate = DateTime::createFromFormat('Y-m-d\TH:i:s', $matches[1], new \DateTimeZone('UTC'));
+        } else {
+            // Fallback for unexpected format
+            $startDate = new DateTime($startDateStr);
+        }
 
         return new self(
             id: $data['id'],
