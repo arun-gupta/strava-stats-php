@@ -253,23 +253,6 @@
                 }
             </style>
 
-            <!-- Activity Breakdown Cards -->
-            <div style="margin-top: 2rem;">
-                <h4 style="margin-bottom: 0.5rem;">Activity Breakdown by Type:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <?php foreach ($activityCounts as $type => $count): ?>
-                        <div style="padding: 1rem; background: white; border-radius: 6px; border: 1px solid #ddd;">
-                            <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">
-                                <?= htmlspecialchars($type) ?>
-                            </div>
-                            <div style="font-size: 1.5rem; color: #fc4c02; font-weight: 700;">
-                                <?= $count ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
             <!-- Pass data to JavaScript -->
             <script>
                 window.activityData = <?= json_encode($activityCounts) ?>;
