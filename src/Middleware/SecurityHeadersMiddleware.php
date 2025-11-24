@@ -38,7 +38,7 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
             "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https://*.strava.com https://strava.com https://*.cloudfront.net",
-            "connect-src 'self' https://www.strava.com https://strava.com",
+            "connect-src 'self' https://www.strava.com https://strava.com https://cdn.jsdelivr.net",
             "font-src 'self'",
             "frame-ancestors 'self'",
             "base-uri 'self'",
