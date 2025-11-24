@@ -510,6 +510,9 @@ return function (App $app) {
             $activitiesByDate[$dateStr][] = $activity;
         }
 
+        // Debug: Log activities by date
+        error_log('Activities by date: ' . print_r(array_keys($activitiesByDate), true));
+
         // Calculate time spent per day
         $timeByDate = [];
         foreach ($activitiesByDate as $dateStr => $dayActivities) {

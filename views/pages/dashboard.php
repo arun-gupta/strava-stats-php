@@ -401,6 +401,7 @@
                     </div>
 
                     <!-- Calendar Grid -->
+                    <!-- DEBUG: Total days = <?= count($calendarDays) ?>, First = <?= !empty($calendarDays) ? $calendarDays[0]['dateStr'] : 'none' ?>, Last = <?= !empty($calendarDays) ? end($calendarDays)['dateStr'] : 'none' ?> -->
                     <div style="display: flex; gap: 4px;">
                         <?php foreach ($calendarDays as $day): ?>
                             <?php
