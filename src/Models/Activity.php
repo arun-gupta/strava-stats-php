@@ -35,11 +35,22 @@ class Activity
      */
     public static function fromStravaApi(array $data): self
     {
+        // Parse start_date which comes from Strava in UTC
+        // Use start_date_local if available (preferred for user's timezone)
+        $startDateStr = $data['start_date_local'] ?? $data['start_date'] ?? 'now';
+        $startDate = new DateTime($startDateStr);
+
+        // If we used start_date (UTC), convert to user's timezone
+        if (!isset($data['start_date_local']) && isset($data['start_date'])) {
+            $userTimezone = date_default_timezone_get();
+            $startDate->setTimezone(new \DateTimeZone($userTimezone));
+        }
+
         return new self(
             id: $data['id'],
             type: $data['type'] ?? 'Unknown',
             name: $data['name'] ?? 'Untitled Activity',
-            startDate: new DateTime($data['start_date'] ?? 'now'),
+            startDate: $startDate,
             distance: (float)($data['distance'] ?? 0),
             movingTime: (int)($data['moving_time'] ?? 0),
             averageSpeed: isset($data['average_speed']) ? (float)$data['average_speed'] : null,
