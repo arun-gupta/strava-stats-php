@@ -236,8 +236,9 @@ return function (App $app) {
                 $activityService = new ActivityService();
 
                 // Check if we have cached activities and if the cache is still valid
-                $cacheKey = 'activities_cache';
-                $cacheStartDateKey = 'activities_cache_start_date';
+                // Cache version changed - invalidate old caches to fix timezone parsing
+                $cacheKey = 'activities_cache_v2';
+                $cacheStartDateKey = 'activities_cache_start_date_v2';
                 $needsRefetch = false;
 
                 if (!isset($_SESSION[$cacheKey]) || !isset($_SESSION[$cacheStartDateKey])) {
