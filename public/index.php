@@ -10,9 +10,6 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-// Set default timezone (use environment variable or default to America/Los_Angeles)
-date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'America/Los_Angeles');
-
 // Configure secure session settings
 ini_set('session.cookie_httponly', '1');  // Prevent JavaScript access to session cookie
 ini_set('session.cookie_secure', $_ENV['APP_ENV'] === 'production' ? '1' : '0');  // HTTPS only in production

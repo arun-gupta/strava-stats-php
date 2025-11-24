@@ -23,5 +23,31 @@ return function (App $app) {
             ->withStatus(200);
     });
 
+    // Timezone endpoint (public - used to set user timezone)
+    $app->post('/api/timezone', function (Request $request, Response $response) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $body = $request->getParsedBody();
+        $timezone = $body['timezone'] ?? null;
+
+        // Validate timezone
+        if ($timezone && in_array($timezone, timezone_identifiers_list())) {
+            $_SESSION['user_timezone'] = $timezone;
+            date_default_timezone_set($timezone);
+
+            $response->getBody()->write(json_encode(['success' => true]));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(200);
+        }
+
+        $response->getBody()->write(json_encode(['success' => false, 'error' => 'Invalid timezone']));
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(400);
+    });
+
     // Protected API routes will be added here with ->add(new AuthMiddleware())
 };

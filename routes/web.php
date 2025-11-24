@@ -84,6 +84,11 @@ return function (App $app) {
             session_start();
         }
 
+        // Set timezone from session if available
+        if (isset($_SESSION['user_timezone'])) {
+            date_default_timezone_set($_SESSION['user_timezone']);
+        }
+
         // Check query parameters
         $queryParams = $request->getQueryParams();
         $runningOnly = isset($queryParams['running_only']) && $queryParams['running_only'] === 'true';

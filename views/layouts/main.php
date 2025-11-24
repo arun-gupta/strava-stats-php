@@ -74,5 +74,29 @@
 
     <script type="module" src="<?= Vite::asset('resources/js/app.js') ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Timezone detection -->
+    <script>
+        // Detect user's timezone and store in session
+        (function() {
+            const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const storedTimezone = sessionStorage.getItem('user_timezone');
+
+            // Only send if timezone changed or not stored
+            if (userTimezone && userTimezone !== storedTimezone) {
+                fetch('/api/timezone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ timezone: userTimezone })
+                }).then(() => {
+                    sessionStorage.setItem('user_timezone', userTimezone);
+                }).catch(err => {
+                    console.error('Failed to set timezone:', err);
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
