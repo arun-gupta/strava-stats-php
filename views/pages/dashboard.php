@@ -1,17 +1,31 @@
 <div style="padding: 1rem 0;">
     <!-- Error Message -->
     <?php if (isset($error) && $error): ?>
-        <div style="margin-top: 2rem; padding: 1.5rem; background: #fff3f3; border-radius: 8px; border-left: 4px solid #e53e3e;">
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #fff3f3; border-radius: 8px; border-left: 4px solid #e53e3e; box-shadow: 0 2px 8px rgba(229, 62, 62, 0.1);">
             <div style="display: flex; align-items: flex-start; gap: 1rem;">
                 <div style="font-size: 1.5rem;">⚠️</div>
                 <div style="flex: 1;">
                     <h3 style="margin: 0 0 0.5rem 0; color: #c53030;">Unable to Load Activities</h3>
-                    <p style="margin: 0 0 1rem 0; color: #742a2a;"><?= htmlspecialchars($error) ?></p>
-                    <button onclick="window.location.reload()"
-                            style="padding: 8px 16px; background-color: #fc4c02; color: white; border: none;
-                                   border-radius: 4px; font-weight: 600; cursor: pointer;">
-                        Try Again
-                    </button>
+                    <p style="margin: 0 0 1rem 0; color: #742a2a; line-height: 1.6;"><?= htmlspecialchars($error) ?></p>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <button onclick="window.location.reload()"
+                                style="padding: 8px 16px; background-color: #fc4c02; color: white; border: none;
+                                       border-radius: 4px; font-weight: 600; cursor: pointer;">
+                            🔄 Refresh Page
+                        </button>
+                        <?php if (strpos($error, 'session has expired') !== false || strpos($error, 'sign in') !== false): ?>
+                            <a href="/signout"
+                               style="padding: 8px 16px; background-color: white; color: #fc4c02; border: 2px solid #fc4c02;
+                                      border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">
+                                🚪 Sign Out & Reconnect
+                            </a>
+                        <?php endif; ?>
+                        <a href="https://strava.com" target="_blank"
+                           style="padding: 8px 16px; background-color: white; color: #666; border: 2px solid #e2e8f0;
+                                  border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">
+                            🔗 Check Strava Status
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

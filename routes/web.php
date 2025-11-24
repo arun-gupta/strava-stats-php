@@ -243,8 +243,18 @@ return function (App $app) {
                     'trace' => $e->getTraceAsString()
                 ]);
 
-                // Set user-friendly error message
-                $error = 'Unable to load activities from Strava. Please try again.';
+                // Provide helpful error message based on error type
+                if (strpos($e->getMessage(), '401') !== false) {
+                    $error = 'Your session has expired. Please sign out and sign in again to reconnect with Strava.';
+                } elseif (strpos($e->getMessage(), '429') !== false) {
+                    $error = 'Strava API rate limit reached. Please wait a few minutes and try again.';
+                } elseif (strpos($e->getMessage(), 'timeout') !== false || strpos($e->getMessage(), 'timed out') !== false) {
+                    $error = 'Request timed out. Strava may be slow to respond. Please try again in a moment.';
+                } elseif (strpos($e->getMessage(), 'Failed to connect') !== false || strpos($e->getMessage(), 'network') !== false) {
+                    $error = 'Unable to connect to Strava. Please check your internet connection and try again.';
+                } else {
+                    $error = 'Unable to load activities from Strava. Please refresh the page to try again.';
+                }
             }
         }
 

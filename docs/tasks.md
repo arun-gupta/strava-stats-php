@@ -473,11 +473,15 @@
 - [x] Drop console and debugger statements in production
 - [x] **VISIBLE:** App loads and responds quickly (73.59KB gzipped for Chart.js, 0.83KB for app)
 
-### 8.3 Error Handling Polish
-- [ ] Review all error messages for clarity
-- [ ] Add helpful recovery actions
-- [ ] Test all error scenarios
-- [ ] **VISIBLE:** Errors are clear and actionable
+### 8.3 Error Handling Polish ✅
+- [x] Review all error messages for clarity
+- [x] Add specific error messages based on error type (401, 429, timeout, network)
+- [x] Add helpful recovery actions with multiple action buttons
+- [x] Contextual error handling (session expired shows sign out button)
+- [x] Enhanced error page with visual improvements and quick tips
+- [x] Add links to Strava status page for network/API errors
+- [x] Test all error scenarios (auth, network, rate limit, timeout)
+- [x] **VISIBLE:** Errors are clear and actionable with helpful recovery paths
 
 ### 8.4 Accessibility Review
 - [ ] Add ARIA labels where needed
