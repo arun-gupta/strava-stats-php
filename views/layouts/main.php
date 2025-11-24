@@ -77,13 +77,24 @@
 
     <!-- Timezone detection -->
     <script>
-        // Detect user's timezone and store in session
+        // Detect user's timezone and store in cookie for server-side access
         (function() {
             const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const storedTimezone = sessionStorage.getItem('user_timezone');
 
-            // Only send if timezone changed or not stored
-            if (userTimezone && userTimezone !== storedTimezone) {
+            // Check if timezone cookie exists
+            const getCookie = (name) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            };
+
+            const currentCookie = getCookie('user_timezone');
+
+            // Set cookie and reload if timezone not set or changed
+            if (userTimezone && userTimezone !== currentCookie) {
+                document.cookie = `user_timezone=${userTimezone}; path=/; max-age=31536000; SameSite=Lax`;
+
+                // Send to server API as well
                 fetch('/api/timezone', {
                     method: 'POST',
                     headers: {
@@ -91,7 +102,10 @@
                     },
                     body: JSON.stringify({ timezone: userTimezone })
                 }).then(() => {
-                    sessionStorage.setItem('user_timezone', userTimezone);
+                    // Reload page to use correct timezone on server
+                    if (!currentCookie) {
+                        window.location.reload();
+                    }
                 }).catch(err => {
                     console.error('Failed to set timezone:', err);
                 });

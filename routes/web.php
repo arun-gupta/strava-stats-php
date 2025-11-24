@@ -84,9 +84,16 @@ return function (App $app) {
             session_start();
         }
 
-        // Set timezone from session if available
-        if (isset($_SESSION['user_timezone'])) {
-            date_default_timezone_set($_SESSION['user_timezone']);
+        // Set timezone from cookie (preferred) or session
+        $timezone = null;
+        if (isset($_COOKIE['user_timezone'])) {
+            $timezone = $_COOKIE['user_timezone'];
+        } elseif (isset($_SESSION['user_timezone'])) {
+            $timezone = $_SESSION['user_timezone'];
+        }
+
+        if ($timezone && in_array($timezone, timezone_identifiers_list())) {
+            date_default_timezone_set($timezone);
         }
 
         // Check query parameters
