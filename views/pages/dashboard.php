@@ -403,12 +403,15 @@
                     <!-- Calendar Grid -->
                     <!-- DEBUG INFO - Remove after fixing -->
                     <div style="padding: 1rem; background: yellow; color: black; margin-bottom: 1rem; font-size: 0.75rem;">
-                        <strong>Debug: Activity Dates</strong><br>
+                        <strong>Debug: Calendar Days with Activities</strong><br>
                         <?php
-                        foreach ($heatmapActivities as $activity) {
-                            echo 'Activity: ' . htmlspecialchars($activity->name) .
-                                 ' | Date: ' . $activity->startDate->format('Y-m-d H:i:s T') .
-                                 ' | Type: ' . htmlspecialchars($activity->type) . '<br>';
+                        foreach ($calendarDays as $day) {
+                            if ($day['hasActivity']) {
+                                echo 'Date: ' . $day['dateStr'] . ' | Activities: ' . $day['activityCount'] . '<br>';
+                                foreach ($day['activities'] as $act) {
+                                    echo '  - ' . htmlspecialchars($act['name']) . ' (' . htmlspecialchars($act['type']) . ')<br>';
+                                }
+                            }
                         }
                         ?>
                     </div>
