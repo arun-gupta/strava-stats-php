@@ -308,30 +308,6 @@
                     </div>
                 </div>
 
-                <!-- Duration Breakdown Cards -->
-                <div style="margin-top: 2rem;">
-                    <h4 style="margin-bottom: 1rem;">Duration Breakdown:</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                        <?php foreach ($movingTimeByType as $type => $seconds): ?>
-                            <?php
-                            $hours = floor($seconds / 3600);
-                            $minutes = floor(($seconds % 3600) / 60);
-                            ?>
-                            <div style="padding: 1rem; background: white; border-radius: 6px; border: 1px solid #ddd;">
-                                <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">
-                                    <?= htmlspecialchars($type) ?>
-                                </div>
-                                <div style="font-size: 1.5rem; color: #fc4c02; font-weight: 700;">
-                                    <?= $hours ?>h <?= $minutes ?>m
-                                </div>
-                                <div style="font-size: 0.875rem; color: #666; margin-top: 0.25rem;">
-                                    Moving time
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-
                 <!-- Pass duration data to JavaScript -->
                 <script>
                     window.durationData = <?= json_encode($movingTimeByType) ?>;
