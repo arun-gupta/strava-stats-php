@@ -182,13 +182,58 @@ For production, always use HTTPS:
 ### Security Checklist
 
 - [ ] `APP_DEBUG` is set to `false`
-- [ ] Strong `SESSION_SECRET` is configured
+- [ ] Strong `SESSION_SECRET` is configured (generate with `openssl rand -base64 32`)
 - [ ] HTTPS is enabled with valid SSL certificate
-- [ ] File permissions are properly set
-- [ ] `.env` file is not publicly accessible
-- [ ] Web server is configured to deny access to sensitive files
+- [ ] File permissions are properly set (755 for directories, 644 for files)
+- [ ] `.env` file is not publicly accessible (should be outside web root or denied by server)
+- [ ] Web server is configured to deny access to sensitive files (`.git/`, `composer.json`, etc.)
 - [ ] PHP version is up to date with security patches
-- [ ] Dependencies are updated regularly
+- [ ] Dependencies are updated regularly (`composer update`, `npm update`)
+- [ ] Session cookies configured with HttpOnly, Secure, and SameSite flags (already configured)
+- [ ] Rate limiting configured if behind a reverse proxy
+
+### Quick Deployment Checklist
+
+**Pre-Deployment:**
+1. Test locally with production settings
+2. Run `composer install --optimize-autoloader --no-dev`
+3. Run `npm run build` for production assets
+4. Set environment variables in `.env`
+5. Generate strong `SESSION_SECRET`
+
+**Deployment:**
+1. Upload files to server (exclude `node_modules/`, `.git/`)
+2. Configure web server (Nginx/Apache)
+3. Set up SSL certificate (Let's Encrypt recommended)
+4. Update Strava app callback URL to production domain
+5. Set proper file permissions
+
+**Post-Deployment:**
+1. Test OAuth flow end-to-end
+2. Verify all dashboard features work
+3. Check logs for errors
+4. Monitor `/healthz` endpoint
+5. Set up automated backups for `.env` file
+
+### Updating the Application
+
+To update to the latest version:
+
+```bash
+# 1. Pull latest changes
+git pull origin main
+
+# 2. Update dependencies
+composer install --optimize-autoloader --no-dev
+npm install
+
+# 3. Rebuild assets
+npm run build
+
+# 4. Clear any caches (if applicable)
+# 5. Restart PHP-FPM if needed
+sudo systemctl restart php8.1-fpm
+```
 
 ## Troubleshooting
 
