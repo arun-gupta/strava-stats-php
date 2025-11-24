@@ -1,4 +1,4 @@
-<div style="padding: 1rem 0;">
+<div>
     <!-- Error Message -->
     <?php if (isset($error) && $error): ?>
         <div style="margin-top: 2rem; padding: 1.5rem; background: #fff3f3; border-radius: 8px; border-left: 4px solid #e53e3e; box-shadow: 0 2px 8px rgba(229, 62, 62, 0.1);">
