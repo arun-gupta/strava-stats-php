@@ -36,7 +36,7 @@
 
     <header>
         <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <h1><a href="/" style="color: white; text-decoration: none;">Strava Activity Analyzer</a></h1>
+            <h1><a href="/" style="color: white; text-decoration: none;">Strava Activity Analyzer (PHP)</a></h1>
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <a href="https://github.com/arun-gupta/strava-stats-php" target="_blank" rel="noopener noreferrer"
                    style="display: flex; align-items: center; color: white; text-decoration: none; transition: opacity 0.2s;"

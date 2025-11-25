@@ -35,15 +35,16 @@ class Activity
      */
     public static function fromStravaApi(array $data): self
     {
-        // Strava's start_date_local contains the activity's local date/time
-        // We just need the DATE portion to determine which day it occurred on
+        // Strava's start_date_local contains the activity's local date/time in the timezone where it was performed
+        // We extract ONLY the date portion (YYYY-MM-DD) and ignore time/timezone completely
+        // This ensures an activity logged on a specific calendar date appears on that date, period.
         $startDateStr = $data['start_date_local'] ?? $data['start_date'] ?? 'now';
 
-        // Extract only the date (YYYY-MM-DD) and set time to noon UTC
-        // This prevents timezone shifts from changing the date
+        // Extract only the date (YYYY-MM-DD) - we only care about the calendar date
         if (preg_match('/^(\d{4}-\d{2}-\d{2})/', $startDateStr, $matches)) {
-            // Use the date at noon UTC to avoid any timezone-related date shifting
-            $startDate = DateTime::createFromFormat('Y-m-d H:i:s', $matches[1] . ' 12:00:00', new \DateTimeZone('UTC'));
+            // Create a date-only object by treating it as a naive date (no timezone conversion)
+            // We'll format this as Y-m-d for comparisons, so timezone is irrelevant
+            $startDate = new DateTime($matches[1]);
         } else {
             // Fallback for unexpected format
             $startDate = new DateTime($startDateStr);

@@ -1,4 +1,4 @@
-# Strava Activity Analyzer
+# Strava Activity Analyzer (PHP)
 
 Analyze and visualize your Strava activity statistics with beautiful charts and insights. Built with PHP and Chart.js, featuring real-time data from your Strava account.
 
